@@ -21,7 +21,7 @@ sys.path.append('/path/to/ise/')
 #### Usage
 ```python
 from ise.cream import ERS
-ise = ERS(ise_node='192.168.200.13', ers_user='user', ers_pass='pass', verify=False, disable_warnings=True)
+ise = ERS(ise_node='10.8.2.61', ers_user='ers', ers_pass='82oi7yh74ehtaqfeA', verify=False, disable_warnings=True)
 ```
 
 #### Methods return a result dictionary
@@ -191,12 +191,12 @@ ise.get_device_groups()['response']
 
 #### Add a device
 ```python
-ise.add_device(name='TEST_R1', 
-               ip_address='1.1.1.1', 
-               radius_key='blah', 
-               snmp_ro='blah', 
-               dev_group='TEST_NDG_TYPE#TEST_NDG', 
-               dev_location='Location#All Locations#TEST_LOC', 
+ise.add_device(name='TEST_R1',
+               ip_address='1.1.1.1',
+               radius_key='blah',
+               snmp_ro='blah',
+               dev_group='TEST_NDG_TYPE#TEST_NDG',
+               dev_location='Location#All Locations#TEST_LOC',
                dev_type='Device Type#All Device Types')
 
 {'response': 'TEST_R1 Added Successfully', 'success': True, 'error': ''}
@@ -207,4 +207,4 @@ ise.add_device(name='TEST_R1',
 ise.delete_device(device='TEST_R1')['response']
 
 {'response': 'TEST_R1 Deleted Successfully', 'error': '', 'success': True}
-``` 
+```
