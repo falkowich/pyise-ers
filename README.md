@@ -34,18 +34,21 @@ ise = ERS(ise_node='10.8.2.61', ers_user='ers', ers_pass='82oi7yh74ehtaqfeA', ve
 ```
 
 #### Testing
-Testing has been completed on ISE v2.0
+Testing has been completed on ISE v2.2.0.470
 
 #### Get a list of identity groups
 ```python
 ise.get_identity_groups()['response']
 
-[('ALL_ACCOUNTS (default)',
-  '10ac3e70-6d90-11e5-978e-005056bf2f0a',
-  'Default ALL_ACCOUNTS (default) User Group'),
- ('Employee',
-  '10a42820-6d90-11e5-978e-005056bf2f0a',
-  'Default Employee User Group'),
+[('NetworkAdmin',
+  '5f0b74f0-14e9-11e5-a7a6-00505683258b',
+  'Group for Network Admins with CLI access to network equipment'),
+ ('OWN_ACCOUNTS (default)',
+  'cecdab40-8d30-11e5-82ce-005056834dc2',
+  'Default OWN_ACCOUNTS (default) User Group'),
+ ('GuestType_Contractor (default)',
+  'c9b6b890-8d30-11e5-82ce-005056834dc2',
+  'Identity group mirroring the guest type '),
  ...]
 ```
 
@@ -53,158 +56,153 @@ ise.get_identity_groups()['response']
 ```python
 ise.get_identity_group(group='Employee')['response']
 
-{'@xmlns:ns4': 'identity.ers.ise.cisco.com',
- 'parent': 'NAC Group:NAC:IdentityGroups:User Identity Groups',
- '@xmlns:ers': 'ers.ise.cisco.com',
- 'link': {'@href': 'https://192.168.200.13:9060/ers/config/identitygroup/10a42820-6d90-11e5-978e-005056bf2f0a',
-  '@rel': 'self',
-  '@type': 'application/xml'},
- '@xmlns:xs': 'http://www.w3.org/2001/XMLSchema',
- '@id': '10a42820-6d90-11e5-978e-005056bf2f0a',
- '@description': 'Default Employee User Group',
- '@name': 'Employee'}
+{'description': 'Default Employee User Group',
+ 'id': 'f80e5ce0-f42e-11e2-bd54-005056bf2f0a',
+ 'link': {'href': 'https://10.8.2.61:9060/ers/config/identitygroup/f80e5ce0-f42e-11e2-bd54-005056bf2f0a',
+          'rel': 'self',
+          'type': 'application/xml'},
+ 'name': 'Employee',
+ 'parent': 'NAC Group:NAC:IdentityGroups:User Identity Groups'}
+
 ```
 
 #### Get details about an endpoint
 ```python
-ise.get_endpoint_group(group='Android')['response']
+ise.get_endpoint_group(group='Resurs')['response']
 
-{'systemDefined': 'true',
- 'link': {'@href': 'https://192.168.200.13:9060/ers/config/endpointgroup/265079a0-6d8e-11e5-978e-005056bf2f0a',
-  '@type': 'application/xml',
-  '@rel': 'self'},
- '@id': '265079a0-6d8e-11e5-978e-005056bf2f0a',
- '@xmlns:ns4': 'identity.ers.ise.cisco.com',
- '@xmlns:xs': 'http://www.w3.org/2001/XMLSchema',
- '@description': 'Identity Group for Profile: Android',
- '@xmlns:ers': 'ers.ise.cisco.com',
- '@name': 'Android'}
+ {'description': '',
+ 'id': 'bf6bdcf0-14ed-11e5-a7a6-00505683258b',
+ 'link': {'href': 'https://10.8.2.61:9060/ers/config/endpointgroup/bf6bdcf0-14ed-11e5-a7a6-00505683258b',
+          'rel': 'self',
+          'type': 'application/xml'},
+ 'name': 'Resurs',
+ 'systemDefined': False}
+
 ```
 
 #### Get endpoint identity groups
 ```python
 ise.get_endpoint_groups()['response']
 
-[('Android',
-  '265079a0-6d8e-11e5-978e-005056bf2f0a',
-  'Identity Group for Profile: Android'),
- ('Apple-iDevice',
-  '32c8eb40-6d8e-11e5-978e-005056bf2f0a',
-  'Identity Group for Profile: Apple-iDevice'),
-  ...]
+  [('Cisco-IP-Phone',
+    '265079a0-6d8e-11e5-978e-005056bf2f0a',
+    'Identity Group for Profile: Cisco-IP-Phone'),
+   ('Resurs', '32c8eb40-6d8e-11e5-978e-005056bf2f0a', ''),
+   ...]
+
 ```
 
 #### Get a list of internal users
 ```python
 ise.get_users()['response']
 
-[('Test2', '85fd1eb0-c6fa-11e5-b6b6-000c297b78b4')]
+[('test01', '85fd1eb0-c6fa-11e5-b6b6-000c297b78b4'),
+ ('test02', '54fd1eb0-c5fb-54e5-b6b6-00204597b28b1'),
+ ...]
+
 ```
 
 #### Get details about an internal user
 ```python
-ise.get_user(user_id='Test2')['response']
+ise.get_user(user_id='test02')['response']
 
-{'enablePassword': '*******',
- 'enabled': 'true',
- 'changePassword': 'true',
+{'changePassword': False,
+ 'customAttributes': {},
+ 'enablePassword': '*******',
+ 'enabled': True,
+ 'expiryDateEnabled': False,
+ 'id': '54fd1eb0-c5fb-54e5-b6b6-00204597b28b1',
+ 'identityGroups': '5f0b74f0-14e9-11e5-a7a6-00505683258b',
+ 'link': {'href': 'https://10.8.2.61:9060/ers/config/internaluser/a837bd55-f2b7-41e3-b0ff-c5ddf9af398c',
+          'rel': 'self',
+          'type': 'application/xml'},
+ 'name': 'test02',
  'password': '*******',
- 'lastName': None,
- '@xmlns:xs': 'http://www.w3.org/2001/XMLSchema',
- '@description': '',
- 'email': None,
- '@name': 'Test2',
- '@xmlns:ers': 'ers.ise.cisco.com',
- '@id': '85fd1eb0-c6fa-11e5-b6b6-000c297b78b4',
- '@xmlns:ns4': 'identity.ers.ise.cisco.com',
- 'firstName': None,
- 'customAttributes': None,
- 'identityGroups': '10ac3e70-6d90-11e5-978e-005056bf2f0a',
- 'link': {'@type': 'application/xml',
-  '@href': 'https://192.168.200.13:9060/ers/config/internaluser/85fd1eb0-c6fa-11e5-b6b6-000c297b78b4',
-  '@rel': 'self'}}
+ 'passwordIDStore': 'Internal Users'}
+
 ```
 
 #### Add an internal user
 ```python
-ise.add_user(user_id='Test1', password='Testing1', user_group_oid='10ac3e70-6d90-11e5-978e-005056bf2f0a')
+ise.add_user(user_id='test11', password='TeStInG11', user_group_oid='5f0b74f0-14e9-11e5-a7a6-00505683258b')
 
-{'success': True, 'response': 'Test1 Added Successfully', 'error': ''}
+{'error': '', 'response': 'test11 Added Successfully', 'success': True}
+
 ```
 
 #### Delete an internal user
 ```python
-ise.delete_user(user_id='Test1')
+ise.delete_user(user_id='test11')
 
-{'response': 'Test1 Deleted Successfully', 'error': '', 'success': True}
+{'error': '', 'response': 'test11 Deleted Successfully', 'success': True}
+
 ```
 
 #### Get a list of devices
 ```python
 ise.get_devices()['response']
 
-[('TEST_R3', '3d52aca0-c5bc-11e5-a0ed-000c297b78b4'),
- ('TEST_R4', '2d80d6d0-c5bc-11e5-a0ed-000c297b78b4')]
+[('TestDevice01', '6680f410-5277-11e5-9a52-05505683258b'),
+ ('TestDevice02', '64d9b32-5c56-11e5-9a52-00502683258b'),
+ ...]
+
 ```
 
 #### Get details about a device
 ```python
-ise.get_device(device='TEST_R3')['response']
+ise.get_device(device='TestDevice02')['response']
 
-{'@xmlns:ers': 'ers.ise.cisco.com',
- '@xmlns:ns4': 'network.ers.ise.cisco.com',
- 'coaPort': '0',
- '@name': 'TEST_R3',
- 'link': {'@type': 'application/xml',
-  '@href': 'https://192.168.200.13:9060/ers/config/networkdevice/3d52aca0-c5bc-11e5-a0ed-000c297b78b4',
-  '@rel': 'self'},
- '@id': '3d52aca0-c5bc-11e5-a0ed-000c297b78b4',
- 'profileName': 'Cisco',
- 'NetworkDeviceGroupList': {'NetworkDeviceGroup': ['TEST_NDG_TYPE#TEST_NDG',
-   'Location#All Locations#TEST_LOC',
-   'Device Type#All Device Types']},
- '@xmlns:xs': 'http://www.w3.org/2001/XMLSchema',
- 'authenticationSettings': {'enableKeyWrap': 'false',
-  'networkProtocol': 'RADIUS',
-  'radiusSharedSecret': '******',
-  'keyInputFormat': 'ASCII'},
- 'NetworkDeviceIPList': {'NetworkDeviceIP': {'mask': '32',
-   'ipaddress': '1.1.1.5'}},
- 'snmpsettings': {'linkTrapQuery': 'true',
-  'originatingPolicyServicesNode': 'Auto',
-  'roCommunity': 'blah',
-  'version': 'TWO_C',
-  'macTrapQuery': 'true',
-  'pollingInterval': '28800'}}
+{'NetworkDeviceGroupList': ['Stage#Stage',
+                            'Device Type#All Device Types#Linux',
+                            'Location#All Locations'],
+ 'NetworkDeviceIPList': [{'ipaddress': '10.8.1.55', 'mask': 32}],
+ 'authenticationSettings': {'enableKeyWrap': False,
+                            'keyInputFormat': 'ASCII',
+                            'networkProtocol': 'RADIUS',
+                            'radiusSharedSecret': '******'},
+ 'coaPort': 0,
+ 'id': '74d9b830-5c76-11e5-9a52-00505683258b',
+ 'link': {'href': 'https://10.8.2.61:9060/ers/config/networkdevice/74d9b830-5c76-11e5-9a52-00505683258b',
+          'rel': 'self',
+          'type': 'application/xml'},
+ 'modelName': 'Linux',
+ 'name': 'TestDevice02',
+ 'profileName': 'Cisco'}
+
 ```
 
 #### Get a list of device groups
 ```python
 ise.get_device_groups()['response']
 
-[('Device Type#All Device Types', 'dbf56650-6d8c-11e5-978e-005056bf2f0a'),
- ('Device Type#All Device Types#TEST_DEV_TYPE', '21be2c40-c4ee-11e5-a0ed-000c297b78b4'),
- ('Location#All Locations', 'db800f40-6d8c-11e5-978e-005056bf2f0a'),
- ('Location#All Locations#TEST_LOC', 'db804ce0-c4ed-11e5-a0ed-000c297b78b4'),
- ('TEST_NDG_TYPE#TEST_NDG', 'c33127e0-c4ed-11e5-a0ed-000c297b78b4')]
+[('Device Type#All Device Types', '526240e0-f42e-11e2-bd54-005056bf2f0a'),
+ ('Device Type#All Device Types#Switch', 'e25bd190-14e6-11e5-a7a6-00505683258b'),
+ ('Device Type#All Device Types#Wism', 'e6b085b0-14e6-11e5-a7a6-00505683258b'),
+ ('IPSEC#Is IPSEC Device', '0d3f19b0-30c1-11e7-88b5-005056834dc2'),
+ ('IPSEC#Is IPSEC Device#No', '0dac0c50-30c1-11e7-88b5-005056834dc2'),
+ ('IPSEC#Is IPSEC Device#Yes', '0d74f6c0-30c1-11e7-88b5-005056834dc2'),
+ ('Location#All Locations', '522b7970-f42e-11e2-bd54-005056bf2f0a'),
+ ...]
+
 ```
 
 #### Add a device
 ```python
-ise.add_device(name='TEST_R1',
-               ip_address='1.1.1.1',
-               radius_key='blah',
-               snmp_ro='blah',
-               dev_group='TEST_NDG_TYPE#TEST_NDG',
-               dev_location='Location#All Locations#TEST_LOC',
-               dev_type='Device Type#All Device Types')
+ise.add_device(name='testdevice03',
+               ip_address='192.168.10.10',
+               radius_key='foo',
+               snmp_ro='bar',
+               dev_group='Stage#Stage#Closed',
+               dev_location='Location#All Locations#Site21',
+               dev_type='Device Type#All Device Types#Switch')
 
-{'response': 'TEST_R1 Added Successfully', 'success': True, 'error': ''}
+{'error': '', 'response': 'testdevice03 Added Successfully', 'success': True}
+
 ```
 
 #### Delete a device
 ```python
-ise.delete_device(device='TEST_R1')['response']
+ise.delete_device(device='testdevice03')
 
-{'response': 'TEST_R1 Deleted Successfully', 'error': '', 'success': True}
+{'error': '', 'response': 'testdevice03 Deleted Successfully', 'success': True}
 ```

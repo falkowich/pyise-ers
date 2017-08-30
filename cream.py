@@ -6,7 +6,6 @@ import os
 import re
 
 import requests
-import xmltodict
 
 base_dir = os.path.dirname(__file__)
 
@@ -77,6 +76,7 @@ class ERS(object):
         if resp.status_code == 200:
             result['success'] = True
             result['response'] = [(i['name'], i['id'], i['description']) for i in resp.json()['SearchResult']['resources']]
+
             return result
         else:
             result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
@@ -224,7 +224,7 @@ class ERS(object):
         self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
 
         resp = self.ise.get('{0}/config/identitygroup'.format(self.url_base))
-        print('RESP: {}'.format(resp))
+
         if resp.status_code == 200:
             result['success'] = True
             result['response'] = [(i['name'], i['id'], i['description'])
@@ -285,7 +285,7 @@ class ERS(object):
         self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
 
         resp = self.ise.get('{0}/config/internaluser'.format(self.url_base))
-        print(resp)
+
         result = {
             'success': False,
             'response': '',
@@ -478,7 +478,7 @@ class ERS(object):
         self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
 
         resp = self.ise.get('{0}/config/networkdevicegroup/{1}'.format(self.url_base, device_group_oid))
-        print(('{0}/config/networkdevicegroup/{1}'.format(self.url_base, device_group_oid)))
+
         result = {
             'success': False,
             'response': '',
@@ -553,7 +553,7 @@ class ERS(object):
 
         resp = self.ise.get('{0}/config/networkdevice?filter=name.EQ.{1}'.format(self.url_base, device))
         found_device = resp.json()
-        print('{0}/config/networkdevice?filter=name.EQ.{1}'.format(self.url_base, device))
+
         if found_device['SearchResult']['total'] == 1:
             resp = self.ise.get('{0}/config/networkdevice/{1}'.format(
                     self.url_base, found_device['SearchResult']['resources'][0]['id']))
@@ -663,12 +663,10 @@ class ERS(object):
 
         resp = self.ise.get('{0}/config/networkdevice?filter=name.EQ.{1}'.format(self.url_base, device))
         found_device = resp.json()
-
         if found_device['SearchResult']['total'] == 1:
             device_oid = found_device['SearchResult']['resources'][0]['id']
-            resp = self.ise.delete(
-                    '{0}/config/networkdevice/{1}'.format(self.url_base, device_oid), timeout=self.timeout)
-
+            resp = self.ise.delete('{0}/config/networkdevice/{1}'.format(self.url_base, device_oid), timeout=self.timeout)
+            
             if resp.status_code == 204:
                 result['success'] = True
                 result['response'] = '{0} Deleted Successfully'.format(device)
