@@ -1,13 +1,5 @@
 """
 Class to configure Cisco ISE via the ERS API
-
-Required:
-requests
- - http://docs.python-requests.org/en/latest/
-xmltodict
- - https://github.com/martinblech/xmltodict
-
-Version: 0.1.4
 """
 import json
 import os
@@ -49,25 +41,10 @@ class ERS(object):
         self.disable_warnings = disable_warnings
         self.timeout = timeout
         self.ise.headers.update({'Connection': 'keep_alive'})
-        #print('URL: {}'.format(self.url_base))
-        #print('ISE: {}'.format(self.ise))
-        #print('ISE.AUTH: {}'.format(self.ise.verify))
-        #print('ISE.HEADERS.UPDATE: {}'.format(self.ise.headers.update))
 
         if self.disable_warnings:
             requests.packages.urllib3.disable_warnings()
 
-    @staticmethod
-    def _to_json(content):
-        """
-        ISE API uses xml, this method will convert the xml to json.
-        Why? JSON when you can, XML when you must!
-        :param content: xml to convert to json
-        :return: json result
-        """
-        #print(content)
-        #print(json.loads(json.dumps(content)))
-        return json.loads(content)
 
     @staticmethod
     def _mac_test(mac):
@@ -94,23 +71,15 @@ class ERS(object):
         }
 
         self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
-        #print('ISE.HEADERS.UPDATE2: {}'.format(self.ise.headers.update))
 
         resp = self.ise.get('{0}/config/endpointgroup'.format(self.url_base))
-        #print('URL: {}'.format('{0}/config/endpointgroup'.format(self.url_base)))
-        #print('RESP: {}'.format(resp))
 
         if resp.status_code == 200:
-            #print('RESULT: {}'.format(result))
-            #print(json.loads(resp.text))
             result['success'] = True
-            #print(ERS._to_json(resp.text)['SearchResult']['resources'])
-            result['response'] = [(i['name'], i['id'], i['description']) for i in ERS._to_json(resp.text)['SearchResult']['resources']]
-            #for i in (ERS._to_json(resp.text)['searchResult']['resources']['resource'])
-            #print(i)
+            result['response'] = [(i['name'], i['id'], i['description']) for i in resp.json()['SearchResult']['resources']]
             return result
         else:
-            result['response'] = ERS._to_json(resp.text)['ERSResponse']['messages']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -129,26 +98,20 @@ class ERS(object):
         }
 
         resp = self.ise.get('{0}/config/endpointgroup?filter=name.EQ.{1}'.format(self.url_base, group))
-        found_group = ERS._to_json(resp.text)
-        #print(found_group['SearchResult']['total'])
+        found_group = resp.json()
 
         if found_group['SearchResult']['total'] == 1:
-            #print('GROUP FOIUND')
-            #print(found_group['SearchResult']['resources'][0]['id'])
             resp = self.ise.get('{0}/config/endpointgroup/{1}'.format(self.url_base, found_group['SearchResult']['resources'][0]['id']))
-            #print(resp.status_code)
             if resp.status_code == 200:
-                #print('VAFAN')
                 result['success'] = True
-                result['response'] = ERS._to_json(resp.text)['EndPointGroup']
-                #print(ERS._to_json(resp.text)['EndPointGroup'])
+                result['response'] = resp.json()['EndPointGroup']
                 return result
             elif resp.status_code == 404:
                 result['response'] = '{0} not found'.format(group)
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = ERS._to_json(resp.text)['ERSResponse']['messages']['title']
+                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
                 result['error'] = resp.status_code
                 return result
         elif found_group['SearchResult']['total'] == 0:
@@ -176,7 +139,7 @@ class ERS(object):
             'error': '',
         }
 
-        json_res = ERS._to_json(resp.text)['SearchResult']
+        json_res = resp.json()['SearchResult']
 
         if resp.status_code == 200 and int(json_res['total']) > 1:
             result['success'] = True
@@ -196,7 +159,7 @@ class ERS(object):
             return result
 
         else:
-            result['response'] = ERS._to_json(resp.text)['ErsResponse']['messages']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -220,21 +183,21 @@ class ERS(object):
             }
 
             resp = self.ise.get('{0}/config/endpoint?filter=mac.EQ.{1}'.format(self.url_base, mac_address))
-            found_endpoint = ERS._to_json(resp.text)
+            found_endpoint = resp.json()
 
             if found_endpoint['SearchResult']['total'] == 1:
                 resp = self.ise.get('{0}/config/endpoint/{1}'.format(
                         self.url_base, found_endpoint['SearchResult']['resources'][0]['id']))
                 if resp.status_code == 200:
                     result['success'] = True
-                    result['response'] = ERS._to_json(resp.text)['ERSEndPoint']
+                    result['response'] = resp.json()['ERSEndPoint']
                     return result
                 elif resp.status_code == 404:
                     result['response'] = '{0} not found'.format(mac_address)
                     result['error'] = resp.status_code
                     return result
                 else:
-                    result['response'] = ERS._to_json(resp.text)['ErsResponse']['messages']['title']
+                    result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
                     result['error'] = resp.status_code
                     return result
             elif found_endpoint['SearchResult']['total'] == 0:
@@ -265,10 +228,10 @@ class ERS(object):
         if resp.status_code == 200:
             result['success'] = True
             result['response'] = [(i['name'], i['id'], i['description'])
-                                  for i in ERS._to_json(resp.text)['SearchResult']['resources']]
+                                  for i in resp.json()['SearchResult']['resources']]
             return result
         else:
-            result['response'] = ERS._to_json(resp.text)['WrsResponse']['messages']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -287,21 +250,21 @@ class ERS(object):
         }
 
         resp = self.ise.get('{0}/config/identitygroup?filter=name.EQ.{1}'.format(self.url_base, group))
-        found_group = ERS._to_json(resp.text)
+        found_group = resp.json()
 
         if found_group['SearchResult']['total'] == 1:
             resp = self.ise.get('{0}/config/identitygroup/{1}'.format(
                     self.url_base, found_group['SearchResult']['resources'][0]['id']))
             if resp.status_code == 200:
                 result['success'] = True
-                result['response'] = ERS._to_json(resp.text)['IdentityGroup']
+                result['response'] = resp.json()['IdentityGroup']
                 return result
             elif resp.status_code == 404:
                 result['response'] = '{0} not found'.format(group)
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = ERS._to_json(resp.text)['ErsResponse']['messages']['title']
+                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
                 result['error'] = resp.status_code
                 return result
         elif found_group['SearchResult']['total'] == 0:
@@ -329,8 +292,7 @@ class ERS(object):
             'error': '',
         }
 
-        json_res = ERS._to_json(resp.text)['SearchResult']
-        #print('json_res')
+        json_res = resp.json()['SearchResult']
 
         if resp.status_code == 200 and int(json_res['total']) > 1:
             result['success'] = True
@@ -350,7 +312,7 @@ class ERS(object):
             return result
 
         else:
-            result['response'] = ERS._to_json(resp.text)['ErsResponse']['messages']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -369,21 +331,21 @@ class ERS(object):
         }
 
         resp = self.ise.get('{0}/config/internaluser?filter=name.EQ.{1}'.format(self.url_base, user_id))
-        found_user = ERS._to_json(resp.text)
+        found_user = resp.json()
 
         if found_user['SearchResult']['total'] == 1:
             resp = self.ise.get('{0}/config/internaluser/{1}'.format(
                     self.url_base, found_user['SearchResult']['resources'][0]['id']))
             if resp.status_code == 200:
                 result['success'] = True
-                result['response'] = ERS._to_json(resp.text)['InternalUser']
+                result['response'] = resp.json()['InternalUser']
                 return result
             elif resp.status_code == 404:
                 result['response'] = '{0} not found'.format(user_id)
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = ERS._to_json(resp.text)['ErsResponse']['messages']['title']
+                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
                 result['error'] = resp.status_code
                 return result
         elif found_user['SearchResult']['total'] == 0:
@@ -427,20 +389,16 @@ class ERS(object):
         data = { "InternalUser" : { 'name': user_id, 'password': password, 'enablePassword': enable,
                                    'firstName': first_name, 'lastName': last_name, 'email': email,
                                    'description': description, 'identityGroups': user_group_oid }}
-        
-        
-        
-        #data = { "InternalUser" : { 'name': user_id, 'password': password, 'identityGroups': user_group_oid }}
-        #print(data)
+
+
+
         resp = self.ise.post('{0}/config/internaluser'.format(self.url_base), data=json.dumps(data), timeout=self.timeout)
-        #print(result)
         if resp.status_code == 201:
             result['success'] = True
             result['response'] = '{0} Added Successfully'.format(user_id)
             return result
         else:
-            result['response'] = ERS._to_json(resp.text)['ERSResponse']['messages'][0]['title']
-            #print(ERS._to_json(resp.text)['ERSResponse']['messages'][0]['title'])
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -450,7 +408,7 @@ class ERS(object):
         :param user_id: User ID
         :return: Result dictionary
         """
-        self.ise.headers.update({'Accept': 'application/vnd.com.cisco.ise.identity.internaluser.1.0+xml'})
+        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
 
         result = {
             'success': False,
@@ -459,10 +417,10 @@ class ERS(object):
         }
 
         resp = self.ise.get('{0}/config/internaluser?filter=name.EQ.{1}'.format(self.url_base, user_id))
-        found_user = ERS._to_json(resp.text)
+        found_user = resp.json()
 
-        if found_user['ns3:searchResult']['@total'] == '1':
-            user_oid = found_user['ns3:searchResult']['resources']['resource']['@id']
+        if found_user['SearchResult']['total'] == 1:
+            user_oid = found_user['SearchResult']['resources'][0]['id']
             resp = self.ise.delete('{0}/config/internaluser/{1}'.format(self.url_base, user_oid), timeout=self.timeout)
 
             if resp.status_code == 204:
@@ -474,15 +432,15 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = ERS._to_json(resp.text)['ns3:ersResponse']['messages']['message']['title']
+                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
                 result['error'] = resp.status_code
                 return result
-        elif found_user['ns3:searchResult']['@total'] == '0':
+        elif found_user['SearchResult']['total'] == 0:
             result['response'] = '{0} not found'.format(user_id)
             result['error'] = 404
             return result
         else:
-            result['response'] = ERS._to_json(resp.text)['ns3:ersResponse']['messages']['message']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -497,17 +455,17 @@ class ERS(object):
             'error': '',
         }
 
-        self.ise.headers.update({'Accept': 'application/vnd.com.cisco.ise.network.networkdevicegroup.1.0+xml'})
+        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
 
         resp = self.ise.get('{0}/config/networkdevicegroup'.format(self.url_base))
 
         if resp.status_code == 200:
             result['success'] = True
-            result['response'] = [(i['@name'], i['@id'])
-                                  for i in ERS._to_json(resp.text)['ns3:searchResult']['resources']['resource']]
+            result['response'] = [(i['name'], i['id'])
+                                  for i in resp.json()['SearchResult']['resources']]
             return result
         else:
-            result['response'] = ERS._to_json(resp.text)['ns3:ersResponse']['messages']['message']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -517,10 +475,10 @@ class ERS(object):
         :param device_group_oid: oid of the device group
         :return: result dictionary
         """
-        self.ise.headers.update({'Accept': 'application/vnd.com.cisco.ise.network.networkdevicegroup.1.0+xml'})
+        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
 
         resp = self.ise.get('{0}/config/networkdevicegroup/{1}'.format(self.url_base, device_group_oid))
-
+        print(('{0}/config/networkdevicegroup/{1}'.format(self.url_base, device_group_oid)))
         result = {
             'success': False,
             'response': '',
@@ -529,14 +487,14 @@ class ERS(object):
 
         if resp.status_code == 200:
             result['success'] = True
-            result['response'] = ERS._to_json(resp.text)['ns4:networkdevicegroup']
+            result['response'] = resp.json()['NetworkDeviceGroup']
             return result
         elif resp.status_code == 404:
             result['response'] = '{0} not found'.format(device_group_oid)
             result['error'] = resp.status_code
             return result
         else:
-            result['response'] = ERS._to_json(resp.text)['ns3:ersResponse']['messages']['message']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -545,7 +503,7 @@ class ERS(object):
         Get a list of devices
         :return: result dictionary
         """
-        self.ise.headers.update({'Accept': 'application/vnd.com.cisco.ise.network.networkdevice.1.0+xml'})
+        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
 
         resp = self.ise.get('{0}/config/networkdevice'.format(self.url_base))
 
@@ -555,27 +513,27 @@ class ERS(object):
             'error': '',
         }
 
-        json_res = ERS._to_json(resp.text)['ns3:searchResult']
+        json_res = resp.json()['SearchResult']
 
-        if resp.status_code == 200 and int(json_res['@total']) > 1:
+        if resp.status_code == 200 and int(json_res['total']) > 1:
             result['success'] = True
-            result['response'] = [(i['@name'], i['@id'])
-                                  for i in json_res['resources']['resource']]
+            result['response'] = [(i['name'], i['id'])
+                                  for i in json_res['resources']]
             return result
 
-        elif resp.status_code == 200 and int(json_res['@total']) == 1:
+        elif resp.status_code == 200 and int(json_res['total']) == 1:
             result['success'] = True
-            result['response'] = [(json_res['resources']['resource']['@name'],
-                                   json_res['resources']['resource']['@id'])]
+            result['response'] = [(json_res['resources'][0]['name'],
+                                   json_res['resources'][0]['id'])]
             return result
 
-        elif resp.status_code == 200 and int(json_res['@total']) == 0:
+        elif resp.status_code == 200 and int(json_res['total']) == 0:
             result['success'] = True
             result['response'] = []
             return result
 
         else:
-            result['response'] = ERS._to_json(resp.text)['ns3:ersResponse']['messages']['message']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -585,7 +543,7 @@ class ERS(object):
         :param device: User ID
         :return: result dictionary
         """
-        self.ise.headers.update({'Accept': 'application/vnd.com.cisco.ise.network.networkdevice.1.0+xml'})
+        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
 
         result = {
             'success': False,
@@ -594,29 +552,29 @@ class ERS(object):
         }
 
         resp = self.ise.get('{0}/config/networkdevice?filter=name.EQ.{1}'.format(self.url_base, device))
-        found_device = ERS._to_json(resp.text)
-
-        if found_device['ns3:searchResult']['@total'] == '1':
+        found_device = resp.json()
+        print('{0}/config/networkdevice?filter=name.EQ.{1}'.format(self.url_base, device))
+        if found_device['SearchResult']['total'] == 1:
             resp = self.ise.get('{0}/config/networkdevice/{1}'.format(
-                    self.url_base, found_device['ns3:searchResult']['resources']['resource']['@id']))
+                    self.url_base, found_device['SearchResult']['resources'][0]['id']))
             if resp.status_code == 200:
                 result['success'] = True
-                result['response'] = ERS._to_json(resp.text)['ns4:networkdevice']
+                result['response'] = resp.json()['NetworkDevice']
                 return result
             elif resp.status_code == 404:
                 result['response'] = '{0} not found'.format(device)
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = ERS._to_json(resp.text)['ns3:ersResponse']['messages']['message']['title']
+                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
                 result['error'] = resp.status_code
                 return result
-        elif found_device['ns3:searchResult']['@total'] == '0':
+        elif found_device['SearchResult']['total'] == 0:
                 result['response'] = '{0} not found'.format(device)
                 result['error'] = 404
                 return result
         else:
-            result['response'] = ERS._to_json(resp.text)['ns3:ersResponse']['messages']['message']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -629,6 +587,7 @@ class ERS(object):
                    dev_location,
                    dev_type,
                    description='',
+                   snmp_v='TWO_C',
                    dev_profile='Cisco'):
         """
         Add a device
@@ -651,18 +610,40 @@ class ERS(object):
 
         self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
 
-        data = open(os.path.join(base_dir, 'xml/device_add.xml'), 'r').read().format(
-            name, ip_address, radius_key, snmp_ro, dev_group, dev_location, dev_type, description, dev_profile
-        )
 
-        resp = self.ise.post('{0}/config/networkdevice'.format(self.url_base), data=data, timeout=self.timeout)
+        data = { 'NetworkDevice' : { 'name': name,
+                    'description': description,
+                    'authenticationSettings' : {
+                        'networkProtocol': 'RADIUS',
+                        'radiusSharedSecret': radius_key,
+                        'enableKeyWrap' : 'false',
+                    },
+                    'snmpsettings' : {
+                        'version': 'TWO_C',
+                        'roCommunity': snmp_ro,
+                        'pollingInterval': 3600,
+                        'linkTrapQuery': 'true',
+                        'macTrapQuery': 'true',
+                        'originatingPolicyServicesNode': 'Auto'
+                    },
+                    'profileName': dev_profile,
+                    'coaPort': 1700,
+                    'NetworkDeviceIPList': [ {
+                        'ipaddress': ip_address,
+                        'mask': 32
+                    } ],
+                    'NetworkDeviceGroupList': [dev_group, dev_type, dev_location, 'IPSEC#Is IPSEC Device#No']
+                    }
+                }
+
+        resp = self.ise.post('{0}/config/networkdevice'.format(self.url_base), data=json.dumps(data), timeout=self.timeout)
 
         if resp.status_code == 201:
             result['success'] = True
             result['response'] = '{0} Added Successfully'.format(name)
             return result
         else:
-            result['response'] = ERS._to_json(resp.text)['ns3:ersResponse']['messages']['message']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
 
@@ -672,7 +653,7 @@ class ERS(object):
         :param device: Device ID
         :return: Result dictionary
         """
-        self.ise.headers.update({'Accept': 'application/vnd.com.cisco.ise.network.networkdevice.1.0+xml'})
+        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
 
         result = {
             'success': False,
@@ -681,10 +662,10 @@ class ERS(object):
         }
 
         resp = self.ise.get('{0}/config/networkdevice?filter=name.EQ.{1}'.format(self.url_base, device))
-        found_device = ERS._to_json(resp.text)
+        found_device = resp.json()
 
-        if found_device['ns3:searchResult']['@total'] == '1':
-            device_oid = found_device['ns3:searchResult']['resources']['resource']['@id']
+        if found_device['SearchResult']['total'] == 1:
+            device_oid = found_device['SearchResult']['resources'][0]['id']
             resp = self.ise.delete(
                     '{0}/config/networkdevice/{1}'.format(self.url_base, device_oid), timeout=self.timeout)
 
@@ -697,14 +678,14 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = ERS._to_json(resp.text)['ns3:ersResponse']['messages']['message']['title']
+                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
                 result['error'] = resp.status_code
                 return result
-        elif found_device['ns3:searchResult']['@total'] == '0':
+        elif found_device['SearchResult']['total'] == 0:
                 result['response'] = '{0} not found'.format(device)
                 result['error'] = 404
                 return result
         else:
-            result['response'] = ERS._to_json(resp.text)['ns3:ersResponse']['messages']['message']['title']
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
