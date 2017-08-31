@@ -210,6 +210,98 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
 
+
+    def add_endpoint(self,
+                    name,
+                    mac,
+                    group_id,
+                    static_profile_assigment='false',
+                    static_group_assignment='true',
+                    profile_id='',
+                    description=''):
+        """
+        Add a user to the local user store
+        :param name: Name
+        :param mac: Macaddress
+        :param group_id: OID of group to add endpoint in
+        :param static_profile_assigment: Set static profile
+        :param static_group_assignment: Set static group
+        :param profile_id: OID of profile
+        :param description: User description
+        :return: result dictionary
+        """
+
+        is_valid = ERS._mac_test(mac)
+        if not is_valid:
+            raise InvalidMacAddress('{0}. Must be in the form of AA:BB:CC:00:11:22'.format(mac))
+        else:
+            self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+
+            result = {
+                'success': False,
+                'response': '',
+                'error': '',
+            }
+
+            data = { "ERSEndPoint" : { 'name': name, 'description': description, 'mac': mac,
+                                       'profileId': profile_id, 'staticProfileAssignment': static_profile_assigment,
+                                       'groupId': group_id, 'staticGroupAssignment': static_group_assignment,
+                                        'customAttributes': {'customAttributes': {'key1': 'value1'} } } }
+
+            resp = self.ise.post('{0}/config/endpoint'.format(self.url_base), data=json.dumps(data), timeout=self.timeout)
+            if resp.status_code == 201:
+                result['success'] = True
+                result['response'] = '{0} Added Successfully'.format(name)
+                return result
+            else:
+                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
+                result['error'] = resp.status_code
+                return result
+
+
+    def delete_endpoint(self, mac):
+        """
+        Delete an endpoint
+        :param mac: Endpoint Macaddress
+        :return: Result dictionary
+        """
+        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        resp = self.ise.get('{0}/config/endpoint?filter=mac.EQ.{1}'.format(self.url_base, mac))
+        found_endpoint = resp.json()
+        if found_endpoint['SearchResult']['total'] == 1:
+            endpoint_oid = found_endpoint['SearchResult']['resources'][0]['id']
+            resp = self.ise.delete('{0}/config/endpoint/{1}'.format(self.url_base, endpoint_oid), timeout=self.timeout)
+
+            if resp.status_code == 204:
+                result['success'] = True
+                result['response'] = '{0} Deleted Successfully'.format(mac)
+                return result
+            elif resp.status_code == 404:
+                result['response'] = '{0} not found'.format(mac)
+                result['error'] = resp.status_code
+                return result
+            else:
+                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
+                result['error'] = resp.status_code
+                return result
+        elif found_endpoint['SearchResult']['total'] == 0:
+                result['response'] = '{0} not found'.format(mac)
+                result['error'] = 404
+                return result
+        else:
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
+            result['error'] = resp.status_code
+            return result
+
+
+
     def get_identity_groups(self):
         """
         Get all identity groups
@@ -666,7 +758,7 @@ class ERS(object):
         if found_device['SearchResult']['total'] == 1:
             device_oid = found_device['SearchResult']['resources'][0]['id']
             resp = self.ise.delete('{0}/config/networkdevice/{1}'.format(self.url_base, device_oid), timeout=self.timeout)
-            
+
             if resp.status_code == 204:
                 result['success'] = True
                 result['response'] = '{0} Deleted Successfully'.format(device)

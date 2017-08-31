@@ -92,6 +92,19 @@ ise.get_endpoint_groups()['response']
 
 ```
 
+#### Add endpoint
+```python
+ise.add_endpoint(name='test02', mac='AA:BB:CC:00:11:24', group_id='bf6bdcf0-14ed-11e5-a7a6-00505683258b', description='test02')
+{'response': 'test02 Added Successfully', 'success': True, 'error': ''}
+```
+
+#### Delete endpoint
+```python
+ise.delete_endpoint(mac='AA:BB:CC:00:11:27')
+{'error': '', 'response': 'AA:BB:CC:00:11:27 Deleted Successfully', 'success': True}
+
+```
+
 #### Get a list of internal users
 ```python
 ise.get_users()['response']
