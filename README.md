@@ -21,7 +21,7 @@ sys.path.append('/path/to/ise/')
 #### Usage
 ```python
 from ise.cream import ERS
-ise = ERS(ise_node='10.8.2.61', ers_user='ers', ers_pass='82oi7yh74ehtaqfeA', verify=False, disable_warnings=True)
+ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True)
 ```
 
 #### Methods return a result dictionary
