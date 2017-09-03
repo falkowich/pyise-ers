@@ -1,5 +1,8 @@
 ### ISE
-Python module to manage Cisco ISE via the REST API
+Python module to manage Cisco ISE via the REST API.  
+All initial work is done by https://github.com/bobthebutcher and https://github.com/mpenning.  
+I forked and updated so it worked with ISE 2.2.x and changed all functions to json calls.  
+
 
 #### Enable REST API
 http://www.cisco.com/c/en/us/td/docs/security/ise/2-0/api_ref_guide/api_ref_book/ise_api_ref_ers1.html#pgfId-1079790
@@ -9,7 +12,7 @@ Need to add an ISE Administrator with the "ERS-Admin" or "ERS-Operator" group as
 ```bash
 mkdir path/to/ise
 cd path/to/ise
-git clone https://github.com/bobthebutcher/ise.git
+git clone https://github.com/falkowich/ise.git
 ```
 
 #### Add to path
@@ -34,7 +37,7 @@ ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verif
 ```
 
 #### Testing
-Testing has been completed on ISE v2.2.0.470
+Testing has been completed on ISE v2.2.0.470 and with python 3.5.2
 
 #### Get a list of identity groups
 ```python
