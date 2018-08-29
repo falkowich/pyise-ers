@@ -44,7 +44,6 @@ class ERS(object):
         if self.disable_warnings:
             requests.packages.urllib3.disable_warnings()
 
-
     @staticmethod
     def _mac_test(mac):
         """
@@ -57,6 +56,12 @@ class ERS(object):
             return True
         else:
             return False
+
+    @staticmethod
+    def _pass_ersresponse(result, resp):
+        result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
+        result['error'] = resp.status_code
+        return result
 
     def get_endpoint_groups(self):
         """
@@ -79,9 +84,7 @@ class ERS(object):
 
             return result
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def get_endpoint_group(self, group):
         """
@@ -111,18 +114,14 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-                result['error'] = resp.status_code
-                return result
+                return ERS._pass_ersresponse(result, resp)
         elif found_group['SearchResult']['total'] == 0:
             result['response'] = '{0} not found'.format(group)
             result['error'] = 404
             return result
 
         else:
-            result['response'] = '{0} not found'.format(group)
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def get_endpoints(self):
         """
@@ -159,9 +158,7 @@ class ERS(object):
             return result
 
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def get_endpoint(self, mac_address):
         """
@@ -197,9 +194,7 @@ class ERS(object):
                     result['error'] = resp.status_code
                     return result
                 else:
-                    result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-                    result['error'] = resp.status_code
-                    return result
+                    return ERS._pass_ersresponse(result, resp)
             elif found_endpoint['SearchResult']['total'] == 0:
                 result['response'] = '{0} not found'.format(mac_address)
                 result['error'] = 404
@@ -254,9 +249,7 @@ class ERS(object):
                 result['response'] = '{0} Added Successfully'.format(name)
                 return result
             else:
-                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-                result['error'] = resp.status_code
-                return result
+                return ERS._pass_ersresponse(result, resp)
 
 
     def delete_endpoint(self, mac):
@@ -288,17 +281,13 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-                result['error'] = resp.status_code
-                return result
+                return ERS._pass_ersresponse(result, resp)
         elif found_endpoint['SearchResult']['total'] == 0:
                 result['response'] = '{0} not found'.format(mac)
                 result['error'] = 404
                 return result
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
 
 
@@ -323,9 +312,7 @@ class ERS(object):
                                   for i in resp.json()['SearchResult']['resources']]
             return result
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def get_identity_group(self, group):
         """
@@ -356,9 +343,7 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-                result['error'] = resp.status_code
-                return result
+                return ERS._pass_ersresponse(result, resp)
         elif found_group['SearchResult']['total'] == 0:
             result['response'] = '{0} not found'.format(group)
             result['error'] = 404
@@ -404,9 +389,7 @@ class ERS(object):
             return result
 
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def get_user(self, user_id):
         """
@@ -437,9 +420,7 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-                result['error'] = resp.status_code
-                return result
+                return ERS._pass_ersresponse(result, resp)
         elif found_user['SearchResult']['total'] == 0:
             result['response'] = '{0} not found'.format(user_id)
             result['error'] = 404
@@ -490,9 +471,7 @@ class ERS(object):
             result['response'] = '{0} Added Successfully'.format(user_id)
             return result
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def delete_user(self, user_id):
         """
@@ -524,17 +503,13 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-                result['error'] = resp.status_code
-                return result
+                return ERS._pass_ersresponse(result, resp)
         elif found_user['SearchResult']['total'] == 0:
             result['response'] = '{0} not found'.format(user_id)
             result['error'] = 404
             return result
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def get_device_groups(self):
         """
@@ -557,9 +532,7 @@ class ERS(object):
                                   for i in resp.json()['SearchResult']['resources']]
             return result
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def get_device_group(self, device_group_oid):
         """
@@ -586,9 +559,7 @@ class ERS(object):
             result['error'] = resp.status_code
             return result
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def get_devices(self):
         """
@@ -625,9 +596,7 @@ class ERS(object):
             return result
 
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def get_device(self, device):
         """
@@ -658,17 +627,13 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-                result['error'] = resp.status_code
-                return result
+                return ERS._pass_ersresponse(result, resp)
         elif found_device['SearchResult']['total'] == 0:
                 result['response'] = '{0} not found'.format(device)
                 result['error'] = 404
                 return result
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def add_device(self,
                    name,
@@ -735,9 +700,7 @@ class ERS(object):
             result['response'] = '{0} Added Successfully'.format(name)
             return result
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
 
     def delete_device(self, device):
         """
@@ -768,14 +731,10 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
             else:
-                result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-                result['error'] = resp.status_code
-                return result
+                return ERS._pass_ersresponse(result, resp)
         elif found_device['SearchResult']['total'] == 0:
                 result['response'] = '{0} not found'.format(device)
                 result['error'] = 404
                 return result
         else:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-            result['error'] = resp.status_code
-            return result
+            return ERS._pass_ersresponse(result, resp)
