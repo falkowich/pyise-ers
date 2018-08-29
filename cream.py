@@ -65,6 +65,13 @@ class ERS(object):
         return result
 
     def _get_groups(self, url, size: int = 20, page: int = 1):
+        """
+        Generic method for requesting group lists
+        :param url: Base URL for requesting lists
+        :param size: size of the page to return. Default: 20
+        :param page: page to return. Default: 1
+        :return: result dictionary
+        """
         result = {
             'success': False,
             'response': '',
