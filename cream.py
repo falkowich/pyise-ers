@@ -4,6 +4,7 @@ Class to configure Cisco ISE via the ERS API
 import json
 import os
 import re
+from furl import furl
 
 import requests
 
@@ -63,28 +64,36 @@ class ERS(object):
         result['error'] = resp.status_code
         return result
 
-    def get_endpoint_groups(self):
-        """
-        Get all endpoint identity groups
-        :return: result dictionary
-        """
+    def _get_groups(self, url, size: int = 20, page: int = 1):
         result = {
             'success': False,
             'response': '',
             'error': '',
         }
 
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        # https://github.com/gruns/furl
+        f = furl(url)
+        # TODO test for valid size 1<=x>=100
+        f.args['size'] = size
+        # TODO test for valid page number?
+        f.args['page'] = page
 
-        resp = self.ise.get('{0}/config/endpointgroup'.format(self.url_base))
+        self.ise.headers.update({'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+        resp = self.ise.get(f.url)
 
         if resp.status_code == 200:
             result['success'] = True
             result['response'] = [(i['name'], i['id'], i['description']) for i in resp.json()['SearchResult']['resources']]
-
             return result
         else:
             return ERS._pass_ersresponse(result, resp)
+
+    def get_endpoint_groups(self):
+        """
+        Get all endpoint identity groups
+        :return: result dictionary
+        """
+        return self._get_groups('{0}/config/endpointgroup'.format(self.url_base))
 
     def get_endpoint_group(self, group):
         """
@@ -296,23 +305,7 @@ class ERS(object):
         Get all identity groups
         :return: result dictionary
         """
-        result = {
-            'success': False,
-            'response': '',
-            'error': '',
-        }
-
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
-
-        resp = self.ise.get('{0}/config/identitygroup'.format(self.url_base))
-
-        if resp.status_code == 200:
-            result['success'] = True
-            result['response'] = [(i['name'], i['id'], i['description'])
-                                  for i in resp.json()['SearchResult']['resources']]
-            return result
-        else:
-            return ERS._pass_ersresponse(result, resp)
+        return self._get_groups('{0}/config/identitygroup'.format(self.url_base))
 
     def get_identity_group(self, group):
         """
@@ -516,23 +509,7 @@ class ERS(object):
         Get a list tuples of device groups
         :return:
         """
-        result = {
-            'success': False,
-            'response': '',
-            'error': '',
-        }
-
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
-
-        resp = self.ise.get('{0}/config/networkdevicegroup'.format(self.url_base))
-
-        if resp.status_code == 200:
-            result['success'] = True
-            result['response'] = [(i['name'], i['id'])
-                                  for i in resp.json()['SearchResult']['resources']]
-            return result
-        else:
-            return ERS._pass_ersresponse(result, resp)
+        return self._get_groups('{0}/config/networkdevicegroup'.format(self.url_base))
 
     def get_device_group(self, device_group_oid):
         """
