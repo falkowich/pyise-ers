@@ -95,6 +95,49 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
+    def _get_objects(self, url, filter: str = None, size: int = 20, page: int = 1):
+        """
+        Generic method for requesting objects lists
+        :param url: Base URL for requesting lists
+        :param filter: argument side of a ERS filter string. Default: None
+        :param size: size of the page to return. Default: 20
+        :param page: page to return. Default: 1
+        :return: result dictionary
+        """
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        self.ise.headers.update({'Accept': 'application/json', 'Content-Type': 'application/json'})
+
+        f = furl(url)
+        # TODO test for valid size 1<=x>=100
+        f.args['size'] = size
+        # TODO test for valid page number?
+        f.args['page'] = page
+        # TODO add filter valication
+        if filter:
+            f.args['filter'] = filter
+
+        resp = self.ise.get(f.url)
+
+        if resp.status_code == 200:
+            json_res = resp.json()['SearchResult']
+            if int(json_res['total']) >= 1:
+                result['success'] = True
+                result['response'] = [(i['name'], i['id'])
+                                      for i in json_res['resources']]
+                return result
+
+            elif int(json_res['total']) == 0:
+                result['success'] = True
+                result['response'] = []
+                return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
     def get_endpoint_groups(self):
         """
         Get all endpoint identity groups
@@ -144,37 +187,7 @@ class ERS(object):
         Get all endpoints
         :return: result dictionary
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
-
-        resp = self.ise.get('{0}/config/endpoint'.format(self.url_base))
-
-        result = {
-            'success': False,
-            'response': '',
-            'error': '',
-        }
-
-        json_res = resp.json()['SearchResult']
-
-        if resp.status_code == 200 and int(json_res['total']) > 1:
-            result['success'] = True
-            result['response'] = [(i['name'], i['id'])
-                                  for i in json_res['resources']]
-            return result
-
-        elif resp.status_code == 200 and int(json_res['total']) == 1:
-            result['success'] = True
-            result['response'] = [(json_res['resources'][0]['name'],
-                                   json_res['resources'][0]['id'])]
-            return result
-
-        elif resp.status_code == 200 and int(json_res['total']) == 0:
-            result['success'] = True
-            result['response'] = []
-            return result
-
-        else:
-            return ERS._pass_ersresponse(result, resp)
+        return self._get_objects('{0}/config/endpoint'.format(self.url_base))
 
     def get_endpoint(self, mac_address):
         """
@@ -359,37 +372,7 @@ class ERS(object):
         Get all internal users
         :return: List of tuples of user details
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
-
-        resp = self.ise.get('{0}/config/internaluser'.format(self.url_base))
-
-        result = {
-            'success': False,
-            'response': '',
-            'error': '',
-        }
-
-        json_res = resp.json()['SearchResult']
-
-        if resp.status_code == 200 and int(json_res['total']) > 1:
-            result['success'] = True
-            result['response'] = [(i['name'], i['id'])
-                                  for i in json_res['resources']]
-            return result
-
-        elif resp.status_code == 200 and int(json_res['total']) == 1:
-            result['success'] = True
-            result['response'] = [(json_res['resources'][0]['name'],
-                                   json_res['resources'][0]['id'])]
-            return result
-
-        elif resp.status_code == 200 and int(json_res['total']) == 0:
-            result['success'] = True
-            result['response'] = []
-            return result
-
-        else:
-            return ERS._pass_ersresponse(result, resp)
+        return self._get_objects('{0}/config/internaluser'.format(self.url_base))
 
     def get_user(self, user_id):
         """
@@ -550,37 +533,7 @@ class ERS(object):
         Get a list of devices
         :return: result dictionary
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
-
-        resp = self.ise.get('{0}/config/networkdevice'.format(self.url_base))
-
-        result = {
-            'success': False,
-            'response': '',
-            'error': '',
-        }
-
-        json_res = resp.json()['SearchResult']
-
-        if resp.status_code == 200 and int(json_res['total']) > 1:
-            result['success'] = True
-            result['response'] = [(i['name'], i['id'])
-                                  for i in json_res['resources']]
-            return result
-
-        elif resp.status_code == 200 and int(json_res['total']) == 1:
-            result['success'] = True
-            result['response'] = [(json_res['resources'][0]['name'],
-                                   json_res['resources'][0]['id'])]
-            return result
-
-        elif resp.status_code == 200 and int(json_res['total']) == 0:
-            result['success'] = True
-            result['response'] = []
-            return result
-
-        else:
-            return ERS._pass_ersresponse(result, resp)
+        self._get_objects('{0}/config/networkdevice'.format(self.url_base))
 
     def get_device(self, device):
         """
