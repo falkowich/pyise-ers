@@ -37,7 +37,8 @@ class ERS(object):
         self.url_base = 'https://{0}:9060/ers'.format(self.ise_node)
         self.ise = requests.session()
         self.ise.auth = (self.user_name, self.user_pass)
-        self.ise.verify = verify  # http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification
+        # http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification
+        self.ise.verify = verify
         self.disable_warnings = disable_warnings
         self.timeout = timeout
         self.ise.headers.update({'Connection': 'keep_alive'})
@@ -85,12 +86,14 @@ class ERS(object):
         # TODO test for valid page number?
         f.args['page'] = page
 
-        self.ise.headers.update({'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
         resp = self.ise.get(f.url)
 
         if resp.status_code == 200:
             result['success'] = True
-            result['response'] = [(i['name'], i['id'], i['description']) for i in resp.json()['SearchResult']['resources']]
+            result['response'] = [(i['name'], i['id'], i['description'])
+                                  for i in resp.json()['SearchResult']['resources']]
             return result
         else:
             return ERS._pass_ersresponse(result, resp)
@@ -110,7 +113,8 @@ class ERS(object):
             'error': '',
         }
 
-        self.ise.headers.update({'Accept': 'application/json', 'Content-Type': 'application/json'})
+        self.ise.headers.update(
+            {'Accept': 'application/json', 'Content-Type': 'application/json'})
 
         f = furl(url)
         # TODO test for valid size 1<=x>=100
@@ -151,7 +155,8 @@ class ERS(object):
         :param group: Name of the identity group
         :return: result dictionary
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
         result = {
             'success': False,
@@ -159,11 +164,13 @@ class ERS(object):
             'error': '',
         }
 
-        resp = self.ise.get('{0}/config/endpointgroup?filter=name.EQ.{1}'.format(self.url_base, group))
+        resp = self.ise.get(
+            '{0}/config/endpointgroup?filter=name.EQ.{1}'.format(self.url_base, group))
         found_group = resp.json()
 
         if found_group['SearchResult']['total'] == 1:
-            resp = self.ise.get('{0}/config/endpointgroup/{1}'.format(self.url_base, found_group['SearchResult']['resources'][0]['id']))
+            resp = self.ise.get('{0}/config/endpointgroup/{1}'.format(
+                self.url_base, found_group['SearchResult']['resources'][0]['id']))
             if resp.status_code == 200:
                 result['success'] = True
                 result['response'] = resp.json()['EndPointGroup']
@@ -198,9 +205,11 @@ class ERS(object):
         is_valid = ERS._mac_test(mac_address)
 
         if not is_valid:
-            raise InvalidMacAddress('{0}. Must be in the form of AA:BB:CC:00:11:22'.format(mac_address))
+            raise InvalidMacAddress(
+                '{0}. Must be in the form of AA:BB:CC:00:11:22'.format(mac_address))
         else:
-            self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+            self.ise.headers.update(
+                {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
             result = {
                 'success': False,
@@ -208,12 +217,13 @@ class ERS(object):
                 'error': '',
             }
 
-            resp = self.ise.get('{0}/config/endpoint?filter=mac.EQ.{1}'.format(self.url_base, mac_address))
+            resp = self.ise.get(
+                '{0}/config/endpoint?filter=mac.EQ.{1}'.format(self.url_base, mac_address))
             found_endpoint = resp.json()
 
             if found_endpoint['SearchResult']['total'] == 1:
                 resp = self.ise.get('{0}/config/endpoint/{1}'.format(
-                        self.url_base, found_endpoint['SearchResult']['resources'][0]['id']))
+                    self.url_base, found_endpoint['SearchResult']['resources'][0]['id']))
                 if resp.status_code == 200:
                     result['success'] = True
                     result['response'] = resp.json()['ERSEndPoint']
@@ -234,15 +244,14 @@ class ERS(object):
                 result['error'] = resp.status_code
                 return result
 
-
     def add_endpoint(self,
-                    name,
-                    mac,
-                    group_id,
-                    static_profile_assigment='false',
-                    static_group_assignment='true',
-                    profile_id='',
-                    description=''):
+                     name,
+                     mac,
+                     group_id,
+                     static_profile_assigment='false',
+                     static_group_assignment='true',
+                     profile_id='',
+                     description=''):
         """
         Add a user to the local user store
         :param name: Name
@@ -257,9 +266,11 @@ class ERS(object):
 
         is_valid = ERS._mac_test(mac)
         if not is_valid:
-            raise InvalidMacAddress('{0}. Must be in the form of AA:BB:CC:00:11:22'.format(mac))
+            raise InvalidMacAddress(
+                '{0}. Must be in the form of AA:BB:CC:00:11:22'.format(mac))
         else:
-            self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+            self.ise.headers.update(
+                {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
             result = {
                 'success': False,
@@ -267,12 +278,13 @@ class ERS(object):
                 'error': '',
             }
 
-            data = { "ERSEndPoint" : { 'name': name, 'description': description, 'mac': mac,
-                                       'profileId': profile_id, 'staticProfileAssignment': static_profile_assigment,
-                                       'groupId': group_id, 'staticGroupAssignment': static_group_assignment,
-                                        'customAttributes': {'customAttributes': {'key1': 'value1'} } } }
+            data = {"ERSEndPoint": {'name': name, 'description': description, 'mac': mac,
+                                    'profileId': profile_id, 'staticProfileAssignment': static_profile_assigment,
+                                    'groupId': group_id, 'staticGroupAssignment': static_group_assignment,
+                                    'customAttributes': {'customAttributes': {'key1': 'value1'}}}}
 
-            resp = self.ise.post('{0}/config/endpoint'.format(self.url_base), data=json.dumps(data), timeout=self.timeout)
+            resp = self.ise.post('{0}/config/endpoint'.format(self.url_base),
+                                 data=json.dumps(data), timeout=self.timeout)
             if resp.status_code == 201:
                 result['success'] = True
                 result['response'] = '{0} Added Successfully'.format(name)
@@ -280,14 +292,14 @@ class ERS(object):
             else:
                 return ERS._pass_ersresponse(result, resp)
 
-
     def delete_endpoint(self, mac):
         """
         Delete an endpoint
         :param mac: Endpoint Macaddress
         :return: Result dictionary
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
         result = {
             'success': False,
@@ -295,11 +307,13 @@ class ERS(object):
             'error': '',
         }
 
-        resp = self.ise.get('{0}/config/endpoint?filter=mac.EQ.{1}'.format(self.url_base, mac))
+        resp = self.ise.get(
+            '{0}/config/endpoint?filter=mac.EQ.{1}'.format(self.url_base, mac))
         found_endpoint = resp.json()
         if found_endpoint['SearchResult']['total'] == 1:
             endpoint_oid = found_endpoint['SearchResult']['resources'][0]['id']
-            resp = self.ise.delete('{0}/config/endpoint/{1}'.format(self.url_base, endpoint_oid), timeout=self.timeout)
+            resp = self.ise.delete(
+                '{0}/config/endpoint/{1}'.format(self.url_base, endpoint_oid), timeout=self.timeout)
 
             if resp.status_code == 204:
                 result['success'] = True
@@ -312,13 +326,11 @@ class ERS(object):
             else:
                 return ERS._pass_ersresponse(result, resp)
         elif found_endpoint['SearchResult']['total'] == 0:
-                result['response'] = '{0} not found'.format(mac)
-                result['error'] = 404
-                return result
+            result['response'] = '{0} not found'.format(mac)
+            result['error'] = 404
+            return result
         else:
             return ERS._pass_ersresponse(result, resp)
-
-
 
     def get_identity_groups(self):
         """
@@ -333,7 +345,8 @@ class ERS(object):
         :param group: Name of the identity group
         :return: result dictionary
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
         result = {
             'success': False,
@@ -341,12 +354,13 @@ class ERS(object):
             'error': '',
         }
 
-        resp = self.ise.get('{0}/config/identitygroup?filter=name.EQ.{1}'.format(self.url_base, group))
+        resp = self.ise.get(
+            '{0}/config/identitygroup?filter=name.EQ.{1}'.format(self.url_base, group))
         found_group = resp.json()
 
         if found_group['SearchResult']['total'] == 1:
             resp = self.ise.get('{0}/config/identitygroup/{1}'.format(
-                    self.url_base, found_group['SearchResult']['resources'][0]['id']))
+                self.url_base, found_group['SearchResult']['resources'][0]['id']))
             if resp.status_code == 200:
                 result['success'] = True
                 result['response'] = resp.json()['IdentityGroup']
@@ -380,7 +394,8 @@ class ERS(object):
         :param user_id: User ID
         :return: result dictionary
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
         result = {
             'success': False,
@@ -388,12 +403,13 @@ class ERS(object):
             'error': '',
         }
 
-        resp = self.ise.get('{0}/config/internaluser?filter=name.EQ.{1}'.format(self.url_base, user_id))
+        resp = self.ise.get(
+            '{0}/config/internaluser?filter=name.EQ.{1}'.format(self.url_base, user_id))
         found_user = resp.json()
 
         if found_user['SearchResult']['total'] == 1:
             resp = self.ise.get('{0}/config/internaluser/{1}'.format(
-                    self.url_base, found_user['SearchResult']['resources'][0]['id']))
+                self.url_base, found_user['SearchResult']['resources'][0]['id']))
             if resp.status_code == 200:
                 result['success'] = True
                 result['response'] = resp.json()['InternalUser']
@@ -440,15 +456,15 @@ class ERS(object):
             'error': '',
         }
 
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
-        data = { "InternalUser" : { 'name': user_id, 'password': password, 'enablePassword': enable,
-                                   'firstName': first_name, 'lastName': last_name, 'email': email,
-                                   'description': description, 'identityGroups': user_group_oid }}
+        data = {"InternalUser": {'name': user_id, 'password': password, 'enablePassword': enable,
+                                 'firstName': first_name, 'lastName': last_name, 'email': email,
+                                 'description': description, 'identityGroups': user_group_oid}}
 
-
-
-        resp = self.ise.post('{0}/config/internaluser'.format(self.url_base), data=json.dumps(data), timeout=self.timeout)
+        resp = self.ise.post('{0}/config/internaluser'.format(self.url_base),
+                             data=json.dumps(data), timeout=self.timeout)
         if resp.status_code == 201:
             result['success'] = True
             result['response'] = '{0} Added Successfully'.format(user_id)
@@ -462,7 +478,8 @@ class ERS(object):
         :param user_id: User ID
         :return: Result dictionary
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
         result = {
             'success': False,
@@ -470,12 +487,14 @@ class ERS(object):
             'error': '',
         }
 
-        resp = self.ise.get('{0}/config/internaluser?filter=name.EQ.{1}'.format(self.url_base, user_id))
+        resp = self.ise.get(
+            '{0}/config/internaluser?filter=name.EQ.{1}'.format(self.url_base, user_id))
         found_user = resp.json()
 
         if found_user['SearchResult']['total'] == 1:
             user_oid = found_user['SearchResult']['resources'][0]['id']
-            resp = self.ise.delete('{0}/config/internaluser/{1}'.format(self.url_base, user_oid), timeout=self.timeout)
+            resp = self.ise.delete(
+                '{0}/config/internaluser/{1}'.format(self.url_base, user_oid), timeout=self.timeout)
 
             if resp.status_code == 204:
                 result['success'] = True
@@ -507,9 +526,11 @@ class ERS(object):
         :param device_group_oid: oid of the device group
         :return: result dictionary
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
-        resp = self.ise.get('{0}/config/networkdevicegroup/{1}'.format(self.url_base, device_group_oid))
+        resp = self.ise.get(
+            '{0}/config/networkdevicegroup/{1}'.format(self.url_base, device_group_oid))
 
         result = {
             'success': False,
@@ -541,7 +562,8 @@ class ERS(object):
         :param device: User ID
         :return: result dictionary
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
         result = {
             'success': False,
@@ -549,12 +571,13 @@ class ERS(object):
             'error': '',
         }
 
-        resp = self.ise.get('{0}/config/networkdevice?filter=name.EQ.{1}'.format(self.url_base, device))
+        resp = self.ise.get(
+            '{0}/config/networkdevice?filter=name.EQ.{1}'.format(self.url_base, device))
         found_device = resp.json()
 
         if found_device['SearchResult']['total'] == 1:
             resp = self.ise.get('{0}/config/networkdevice/{1}'.format(
-                    self.url_base, found_device['SearchResult']['resources'][0]['id']))
+                self.url_base, found_device['SearchResult']['resources'][0]['id']))
             if resp.status_code == 200:
                 result['success'] = True
                 result['response'] = resp.json()['NetworkDevice']
@@ -566,9 +589,9 @@ class ERS(object):
             else:
                 return ERS._pass_ersresponse(result, resp)
         elif found_device['SearchResult']['total'] == 0:
-                result['response'] = '{0} not found'.format(device)
-                result['error'] = 404
-                return result
+            result['response'] = '{0} not found'.format(device)
+            result['error'] = 404
+            return result
         else:
             return ERS._pass_ersresponse(result, resp)
 
@@ -602,35 +625,36 @@ class ERS(object):
             'error': '',
         }
 
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
-
-        data = { 'NetworkDevice' : { 'name': name,
-                    'description': description,
-                    'authenticationSettings' : {
-                        'networkProtocol': 'RADIUS',
-                        'radiusSharedSecret': radius_key,
-                        'enableKeyWrap' : 'false',
-                    },
-                    'snmpsettings' : {
-                        'version': 'TWO_C',
-                        'roCommunity': snmp_ro,
-                        'pollingInterval': 3600,
-                        'linkTrapQuery': 'true',
-                        'macTrapQuery': 'true',
-                        'originatingPolicyServicesNode': 'Auto'
-                    },
-                    'profileName': dev_profile,
-                    'coaPort': 1700,
-                    'NetworkDeviceIPList': [ {
-                        'ipaddress': ip_address,
-                        'mask': 32
-                    } ],
-                    'NetworkDeviceGroupList': [dev_group, dev_type, dev_location, 'IPSEC#Is IPSEC Device#No']
-                    }
+        data = {'NetworkDevice': {'name': name,
+                                  'description': description,
+                                  'authenticationSettings': {
+                                      'networkProtocol': 'RADIUS',
+                                      'radiusSharedSecret': radius_key,
+                                      'enableKeyWrap': 'false',
+                                  },
+                                  'snmpsettings': {
+                                      'version': 'TWO_C',
+                                      'roCommunity': snmp_ro,
+                                      'pollingInterval': 3600,
+                                      'linkTrapQuery': 'true',
+                                      'macTrapQuery': 'true',
+                                      'originatingPolicyServicesNode': 'Auto'
+                                  },
+                                  'profileName': dev_profile,
+                                  'coaPort': 1700,
+                                  'NetworkDeviceIPList': [{
+                                      'ipaddress': ip_address,
+                                      'mask': 32
+                                  }],
+                                  'NetworkDeviceGroupList': [dev_group, dev_type, dev_location, 'IPSEC#Is IPSEC Device#No']
+                                  }
                 }
 
-        resp = self.ise.post('{0}/config/networkdevice'.format(self.url_base), data=json.dumps(data), timeout=self.timeout)
+        resp = self.ise.post('{0}/config/networkdevice'.format(self.url_base),
+                             data=json.dumps(data), timeout=self.timeout)
 
         if resp.status_code == 201:
             result['success'] = True
@@ -645,7 +669,8 @@ class ERS(object):
         :param device: Device ID
         :return: Result dictionary
         """
-        self.ise.headers.update({'ACCEPT':'application/json', 'Content-Type':'application/json'})
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
         result = {
             'success': False,
@@ -653,11 +678,13 @@ class ERS(object):
             'error': '',
         }
 
-        resp = self.ise.get('{0}/config/networkdevice?filter=name.EQ.{1}'.format(self.url_base, device))
+        resp = self.ise.get(
+            '{0}/config/networkdevice?filter=name.EQ.{1}'.format(self.url_base, device))
         found_device = resp.json()
         if found_device['SearchResult']['total'] == 1:
             device_oid = found_device['SearchResult']['resources'][0]['id']
-            resp = self.ise.delete('{0}/config/networkdevice/{1}'.format(self.url_base, device_oid), timeout=self.timeout)
+            resp = self.ise.delete(
+                '{0}/config/networkdevice/{1}'.format(self.url_base, device_oid), timeout=self.timeout)
 
             if resp.status_code == 204:
                 result['success'] = True
@@ -670,8 +697,8 @@ class ERS(object):
             else:
                 return ERS._pass_ersresponse(result, resp)
         elif found_device['SearchResult']['total'] == 0:
-                result['response'] = '{0} not found'.format(device)
-                result['error'] = 404
-                return result
+            result['response'] = '{0} not found'.format(device)
+            result['error'] = 404
+            return result
         else:
             return ERS._pass_ersresponse(result, resp)
