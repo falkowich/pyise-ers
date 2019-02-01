@@ -189,10 +189,19 @@ class ERS(object):
             result['error'] = 404
             return result
 
+    def get_endpoints(self, groupID=None):
+        """
+        Get all endpoints
+        :param groupID: List only endpoints in a specific GroupID. Default: None
+        :return: result dictionary
+        """
+        if group:
+            filter = 'groupId.EQ.{1}'.format(groupID)
         else:
-            return ERS._pass_ersresponse(result, resp)
+            filter = None
 
-    def get_endpoints(self):
+        return self._get_objects('{0}/config/endpoint'.format(self.url_base), filter)
+
         """
         Get all endpoints
         :return: result dictionary
