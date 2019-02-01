@@ -172,22 +172,11 @@ class ERS(object):
         found_group = resp.json()
 
         if found_group['SearchResult']['total'] == 1:
-            resp = self.ise.get('{0}/config/endpointgroup/{1}'.format(
-                self.url_base, found_group['SearchResult']['resources'][0]['id']))
-            if resp.status_code == 200:
-                result['success'] = True
-                result['response'] = resp.json()['EndPointGroup']
-                return result
-            elif resp.status_code == 404:
-                result['response'] = '{0} not found'.format(group)
-                result['error'] = resp.status_code
-                return result
-            else:
-                return ERS._pass_ersresponse(result, resp)
-        elif found_group['SearchResult']['total'] == 0:
-            result['response'] = '{0} not found'.format(group)
-            result['error'] = 404
+            result = self.get_object('{0}/config/endpointgroup'.format(self.url_base), found_group['SearchResult']['resources'][0]['id'], "EndPointGroup")
+
             return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
 
     def get_endpoints(self, groupID=None):
         """
@@ -202,11 +191,33 @@ class ERS(object):
 
         return self._get_objects('{0}/config/endpoint'.format(self.url_base), filter)
 
+    def get_object(self, url: str, objectid: str, objecttype: str):
         """
-        Get all endpoints
+        Generic method for requesting objects lists
+        :param url: Base URL for requesting lists
+        :param objectid: ID retreved from previous search.
+        :param objecttype: "ERSEndPoint", etc...
         :return: result dictionary
         """
-        return self._get_objects('{0}/config/endpoint'.format(self.url_base))
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        self.ise.headers.update(
+            {'Accept': 'application/json', 'Content-Type': 'application/json'})
+
+        f = furl(url)
+        f.path /= objectid
+        resp = self.ise.get(f.url)
+
+        if resp.status_code == 200:
+            result['success'] = True
+            result['response'] = json_res = resp.json()[objecttype]
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
 
     def get_endpoint(self, mac_address):
         """
