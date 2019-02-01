@@ -65,7 +65,7 @@ class ERS(object):
         result['error'] = resp.status_code
         return result
 
-    def _get_groups(self, url, size: int = 20, page: int = 1):
+    def _get_groups(self, url, filter: str = None, size: int = 20, page: int = 1):
         """
         Generic method for requesting group lists
         :param url: Base URL for requesting lists
@@ -85,6 +85,9 @@ class ERS(object):
         f.args['size'] = size
         # TODO test for valid page number?
         f.args['page'] = page
+        # TODO add filter valication
+        if filter:
+            f.args['filter'] = filter
 
         self.ise.headers.update(
             {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
