@@ -355,12 +355,13 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_identity_groups(self):
+    def get_identity_groups(self, filter=None):
         """
         Get all identity groups
+        :param filter: ISE style filter syntax. Default: None
         :return: result dictionary
         """
-        return self._get_groups('{0}/config/identitygroup'.format(self.url_base))
+        return self._get_groups('{0}/config/identitygroup'.format(self.url_base), filter=filter)
 
     def get_identity_group(self, group):
         """
