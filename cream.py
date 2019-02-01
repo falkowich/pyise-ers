@@ -245,18 +245,8 @@ class ERS(object):
             found_endpoint = resp.json()
 
             if found_endpoint['SearchResult']['total'] == 1:
-                resp = self.ise.get('{0}/config/endpoint/{1}'.format(
-                    self.url_base, found_endpoint['SearchResult']['resources'][0]['id']))
-                if resp.status_code == 200:
-                    result['success'] = True
-                    result['response'] = resp.json()['ERSEndPoint']
-                    return result
-                elif resp.status_code == 404:
-                    result['response'] = '{0} not found'.format(mac_address)
-                    result['error'] = resp.status_code
-                    return result
-                else:
-                    return ERS._pass_ersresponse(result, resp)
+                result = get_object('{0}/config/endpoint/'.format(self.url_base), found_endpoint['SearchResult']['resources'][0]['id'], 'ERSEndPoint')
+                return result
             elif found_endpoint['SearchResult']['total'] == 0:
                 result['response'] = '{0} not found'.format(mac_address)
                 result['error'] = 404
@@ -383,18 +373,9 @@ class ERS(object):
         found_group = resp.json()
 
         if found_group['SearchResult']['total'] == 1:
-            resp = self.ise.get('{0}/config/identitygroup/{1}'.format(
-                self.url_base, found_group['SearchResult']['resources'][0]['id']))
-            if resp.status_code == 200:
-                result['success'] = True
-                result['response'] = resp.json()['IdentityGroup']
-                return result
-            elif resp.status_code == 404:
-                result['response'] = '{0} not found'.format(group)
-                result['error'] = resp.status_code
-                return result
-            else:
-                return ERS._pass_ersresponse(result, resp)
+            result = get_object('{0}/config/identitygroup/'.format(
+                self.url_base), found_group['SearchResult']['resources'][0]['id'], 'IdentityGroup')
+            return result
         elif found_group['SearchResult']['total'] == 0:
             result['response'] = '{0} not found'.format(group)
             result['error'] = 404
@@ -431,19 +412,10 @@ class ERS(object):
             '{0}/config/internaluser?filter=name.EQ.{1}'.format(self.url_base, user_id))
         found_user = resp.json()
 
-        if found_user['SearchResult']['total'] == 1:
-            resp = self.ise.get('{0}/config/internaluser/{1}'.format(
-                self.url_base, found_user['SearchResult']['resources'][0]['id']))
-            if resp.status_code == 200:
-                result['success'] = True
-                result['response'] = resp.json()['InternalUser']
-                return result
-            elif resp.status_code == 404:
-                result['response'] = '{0} not found'.format(user_id)
-                result['error'] = resp.status_code
-                return result
-            else:
-                return ERS._pass_ersresponse(result, resp)
+        if found_group['SearchResult']['total'] == 1:
+            result = get_object('{0}/config/internaluser/'.format(
+                self.url_base), found_group['SearchResult']['resources'][0]['id'], 'InternalUser')
+            return result
         elif found_user['SearchResult']['total'] == 0:
             result['response'] = '{0} not found'.format(user_id)
             result['error'] = 404
@@ -553,25 +525,7 @@ class ERS(object):
         self.ise.headers.update(
             {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
-        resp = self.ise.get(
-            '{0}/config/networkdevicegroup/{1}'.format(self.url_base, device_group_oid))
-
-        result = {
-            'success': False,
-            'response': '',
-            'error': '',
-        }
-
-        if resp.status_code == 200:
-            result['success'] = True
-            result['response'] = resp.json()['NetworkDeviceGroup']
-            return result
-        elif resp.status_code == 404:
-            result['response'] = '{0} not found'.format(device_group_oid)
-            result['error'] = resp.status_code
-            return result
-        else:
-            return ERS._pass_ersresponse(result, resp)
+        return get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')
 
     def get_devices(self):
         """
@@ -600,18 +554,8 @@ class ERS(object):
         found_device = resp.json()
 
         if found_device['SearchResult']['total'] == 1:
-            resp = self.ise.get('{0}/config/networkdevice/{1}'.format(
-                self.url_base, found_device['SearchResult']['resources'][0]['id']))
-            if resp.status_code == 200:
-                result['success'] = True
-                result['response'] = resp.json()['NetworkDevice']
-                return result
-            elif resp.status_code == 404:
-                result['response'] = '{0} not found'.format(device)
-                result['error'] = resp.status_code
-                return result
-            else:
-                return ERS._pass_ersresponse(result, resp)
+            result = get_object('{0}/config/networkdevice/'.format(self.url_base), found_endpoint['SearchResult']['resources'][0]['id'], 'NetworkDevice')
+            return result
         elif found_device['SearchResult']['total'] == 0:
             result['response'] = '{0} not found'.format(device)
             result['error'] = 404
