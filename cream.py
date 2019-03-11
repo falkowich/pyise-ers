@@ -1,6 +1,4 @@
-"""
-Class to configure Cisco ISE via the ERS API
-"""
+"""Class to configure Cisco ISE via the ERS API."""
 import json
 import os
 import re
@@ -22,7 +20,8 @@ class InvalidMacAddress(Exception):
 class ERS(object):
     def __init__(self, ise_node, ers_user, ers_pass, verify=False, disable_warnings=False, timeout=2):
         """
-        Class to interact with Cisco ISE via the ERS API
+        Class to interact with Cisco ISE via the ERS API.
+
         :param ise_node: IP Address of the primary admin ISE node
         :param ers_user: ERS username
         :param ers_pass: ERS password
@@ -49,11 +48,11 @@ class ERS(object):
     @staticmethod
     def _mac_test(mac):
         """
-        Test for valid mac address
+        Test for valid mac address.
+
         :param mac: MAC address in the form of AA:BB:CC:00:11:22
         :return: True/False
         """
-
         if re.search(r'([0-9A-F]{2}[:]){5}([0-9A-F]){2}', mac.upper()) is not None:
             return True
         else:
@@ -67,7 +66,8 @@ class ERS(object):
 
     def _get_groups(self, url, filter: str = None, size: int = 20, page: int = 1):
         """
-        Generic method for requesting group lists
+        Get generic group lists.
+
         :param url: Base URL for requesting lists
         :param size: size of the page to return. Default: 20
         :param page: page to return. Default: 1
@@ -103,7 +103,8 @@ class ERS(object):
 
     def _get_objects(self, url, filter: str = None, size: int = 20, page: int = 1):
         """
-        Generic method for requesting objects lists
+        Generic method for requesting objects lists.
+
         :param url: Base URL for requesting lists
         :param filter: argument side of a ERS filter string. Default: None
         :param size: size of the page to return. Default: 20
@@ -130,6 +131,7 @@ class ERS(object):
 
         resp = self.ise.get(f.url)
 
+        # TODO add dynamic paging?
         if resp.status_code == 200:
             json_res = resp.json()['SearchResult']
             if int(json_res['total']) >= 1:
@@ -147,14 +149,16 @@ class ERS(object):
 
     def get_endpoint_groups(self):
         """
-        Get all endpoint identity groups
+        Get all endpoint identity groups.
+
         :return: result dictionary
         """
         return self._get_groups('{0}/config/endpointgroup'.format(self.url_base))
 
     def get_endpoint_group(self, group):
         """
-        Get endpoint identity group details
+        Get endpoint identity group details.
+
         :param group: Name of the identity group
         :return: result dictionary
         """
@@ -180,7 +184,8 @@ class ERS(object):
 
     def get_endpoints(self, groupID=None):
         """
-        Get all endpoints
+        Get all endpoints.
+
         :param groupID: List only endpoints in a specific GroupID. Default: None
         :return: result dictionary
         """
@@ -193,7 +198,8 @@ class ERS(object):
 
     def get_object(self, url: str, objectid: str, objecttype: str):
         """
-        Generic method for requesting objects lists
+        Get generic object lists.
+
         :param url: Base URL for requesting lists
         :param objectid: ID retreved from previous search.
         :param objecttype: "ERSEndPoint", etc...
@@ -221,7 +227,8 @@ class ERS(object):
 
     def get_endpoint(self, mac_address):
         """
-        Get endpoint details
+        Get endpoint details.
+
         :param mac_address: MAC address of the endpoint
         :return: result dictionary
         """
@@ -267,7 +274,8 @@ class ERS(object):
                      description='',
                      customAttributes={}):
         """
-        Add a user to the local user store
+        Add a user to the local user store.
+
         :param name: Name
         :param mac: Macaddress
         :param group_id: OID of group to add endpoint in
@@ -278,7 +286,6 @@ class ERS(object):
         :param customAttributes: key value pairs of custom attributes
         :return: result dictionary
         """
-
         is_valid = ERS._mac_test(mac)
         if not is_valid:
             raise InvalidMacAddress(
@@ -309,7 +316,8 @@ class ERS(object):
 
     def delete_endpoint(self, mac):
         """
-        Delete an endpoint
+        Delete an endpoint.
+
         :param mac: Endpoint Macaddress
         :return: Result dictionary
         """
@@ -349,7 +357,8 @@ class ERS(object):
 
     def get_identity_groups(self, filter=None):
         """
-        Get all identity groups
+        Get all identity groups.
+
         :param filter: ISE style filter syntax. Default: None
         :return: result dictionary
         """
@@ -357,7 +366,8 @@ class ERS(object):
 
     def get_identity_group(self, group):
         """
-        Get identity group details
+        Get identity group details.
+
         :param group: Name of the identity group
         :return: result dictionary
         """
@@ -390,14 +400,16 @@ class ERS(object):
 
     def get_users(self):
         """
-        Get all internal users
+        Get all internal users.
+
         :return: List of tuples of user details
         """
         return self._get_objects('{0}/config/internaluser'.format(self.url_base))
 
     def get_user(self, user_id):
         """
-        Get user detailed info
+        Get user detailed info.
+
         :param user_id: User ID
         :return: result dictionary
         """
@@ -437,7 +449,8 @@ class ERS(object):
                  email='',
                  description=''):
         """
-        Add a user to the local user store
+        Add a user to the local user store.
+
         :param user_id: User ID
         :param password: User password
         :param user_group_oid: OID of group to add user to
@@ -472,7 +485,8 @@ class ERS(object):
 
     def delete_user(self, user_id):
         """
-        Delete a user
+        Delete a user.
+
         :param user_id: User ID
         :return: Result dictionary
         """
@@ -513,14 +527,16 @@ class ERS(object):
 
     def get_device_groups(self):
         """
-        Get a list tuples of device groups
+        Get a list tuples of device groups.
+
         :return:
         """
         return self._get_groups('{0}/config/networkdevicegroup'.format(self.url_base))
 
     def get_device_group(self, device_group_oid):
         """
-        Get a device group details
+        Get a device group details.
+
         :param device_group_oid: oid of the device group
         :return: result dictionary
         """
@@ -531,14 +547,16 @@ class ERS(object):
 
     def get_devices(self):
         """
-        Get a list of devices
+        Get a list of devices.
+
         :return: result dictionary
         """
         self._get_objects('{0}/config/networkdevice'.format(self.url_base))
 
     def get_device(self, device):
         """
-        Get device detailed info
+        Get device detailed info.
+
         :param device: User ID
         :return: result dictionary
         """
@@ -577,7 +595,8 @@ class ERS(object):
                    snmp_v='TWO_C',
                    dev_profile='Cisco'):
         """
-        Add a device
+        Add a device.
+
         :param name: name of device
         :param ip_address: IP address of device
         :param radius_key: Radius shared secret
@@ -635,7 +654,8 @@ class ERS(object):
 
     def delete_device(self, device):
         """
-        Delete a device
+        Delete a device.
+
         :param device: Device ID
         :return: Result dictionary
         """
