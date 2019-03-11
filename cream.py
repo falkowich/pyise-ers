@@ -264,7 +264,8 @@ class ERS(object):
                      static_profile_assigment='false',
                      static_group_assignment='true',
                      profile_id='',
-                     description=''):
+                     description='',
+                     customAttributes={}):
         """
         Add a user to the local user store
         :param name: Name
@@ -274,6 +275,7 @@ class ERS(object):
         :param static_group_assignment: Set static group
         :param profile_id: OID of profile
         :param description: User description
+        :param customAttributes: key value pairs of custom attributes
         :return: result dictionary
         """
 
@@ -294,7 +296,7 @@ class ERS(object):
             data = {"ERSEndPoint": {'name': name, 'description': description, 'mac': mac,
                                     'profileId': profile_id, 'staticProfileAssignment': static_profile_assigment,
                                     'groupId': group_id, 'staticGroupAssignment': static_group_assignment,
-                                    'customAttributes': {'customAttributes': {'key1': 'value1'}}}}
+                                    'customAttributes': {'customAttributes': customAttributes}}}
 
             resp = self.ise.post('{0}/config/endpoint'.format(self.url_base),
                                  data=json.dumps(data), timeout=self.timeout)
