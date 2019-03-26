@@ -272,6 +272,7 @@ class ERS(object):
                      static_group_assignment='true',
                      profile_id='',
                      description='',
+                     portalUser='',
                      customAttributes={}):
         """
         Add a user to the local user store.
@@ -283,6 +284,7 @@ class ERS(object):
         :param static_group_assignment: Set static group
         :param profile_id: OID of profile
         :param description: User description
+        :param portaluser: Portal username
         :param customAttributes: key value pairs of custom attributes
         :return: result dictionary
         """
@@ -302,7 +304,7 @@ class ERS(object):
 
             data = {"ERSEndPoint": {'name': name, 'description': description, 'mac': mac,
                                     'profileId': profile_id, 'staticProfileAssignment': static_profile_assigment,
-                                    'groupId': group_id, 'staticGroupAssignment': static_group_assignment,
+                                    'groupId': group_id, 'staticGroupAssignment': static_group_assignment, 'portalUser' : portalUser,
                                     'customAttributes': {'customAttributes': customAttributes}}}
 
             resp = self.ise.post('{0}/config/endpoint'.format(self.url_base),
