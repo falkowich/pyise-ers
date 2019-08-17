@@ -1,6 +1,0 @@
-{
-    "python.pythonPath": "/home/falk/.local/share/virtualenvs/ise-B3LG4bZL/bin/python",
-    "python.linting.pylintEnabled": false,
-    "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true
-}
