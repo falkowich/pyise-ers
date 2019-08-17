@@ -61,7 +61,7 @@ target/
 output.py
 
 # vscode settings
-.vscode
+settings.json
 
 # test config stuff
 config.py
