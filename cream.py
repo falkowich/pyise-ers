@@ -176,7 +176,7 @@ class ERS(object):
         found_group = resp.json()
 
         if found_group['SearchResult']['total'] == 1:
-            result = self.get_object('{0}/config/endpointgroup'.format(self.url_base), found_group['SearchResult']['resources'][0]['id'], "EndPointGroup")
+            result = self.get_object('{0}/config/endpointgroup'.format(self.url_base), found_group['SearchResult']['resources'][0]['id'], "EndPointGroup")  # noqa E501
 
             return result
         else:
@@ -252,7 +252,7 @@ class ERS(object):
             found_endpoint = resp.json()
 
             if found_endpoint['SearchResult']['total'] == 1:
-                result = self.get_object('{0}/config/endpoint/'.format(self.url_base), found_endpoint['SearchResult']['resources'][0]['id'], 'ERSEndPoint')
+                result = self.get_object('{0}/config/endpoint/'.format(self.url_base), found_endpoint['SearchResult']['resources'][0]['id'], 'ERSEndPoint')  # noqa E501
                 return result
             elif found_endpoint['SearchResult']['total'] == 0:
                 result['response'] = '{0} not found'.format(mac_address)
@@ -304,8 +304,10 @@ class ERS(object):
 
             data = {"ERSEndPoint": {'name': name, 'description': description, 'mac': mac,
                                     'profileId': profile_id, 'staticProfileAssignment': static_profile_assigment,
-                                    'groupId': group_id, 'staticGroupAssignment': static_group_assignment, 'portalUser' : portalUser,
-                                    'customAttributes': {'customAttributes': customAttributes}}}
+                                    'groupId': group_id, 'staticGroupAssignment': static_group_assignment,
+                                    'portalUser': portalUser, 'customAttributes': {'customAttributes': customAttributes}
+                                    }
+                    }
 
             resp = self.ise.post('{0}/config/endpoint'.format(self.url_base),
                                  data=json.dumps(data), timeout=self.timeout)
@@ -545,7 +547,7 @@ class ERS(object):
         self.ise.headers.update(
             {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
-        return self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')
+        return self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
 
     def get_devices(self):
         """
@@ -557,9 +559,9 @@ class ERS(object):
 
     def get_device(self, device):
         """
-        Get device detailed info.
+        Get a device detailed info.
 
-        :param device: User ID
+        :param device: device_name
         :return: result dictionary
         """
         self.ise.headers.update(
@@ -576,7 +578,7 @@ class ERS(object):
         found_device = resp.json()
 
         if found_device['SearchResult']['total'] == 1:
-            result = self.get_object('{0}/config/networkdevice/'.format(self.url_base), found_device['SearchResult']['resources'][0]['id'], 'NetworkDevice')
+            result = self.get_object('{0}/config/networkdevice/'.format(self.url_base), found_device['SearchResult']['resources'][0]['id'], 'NetworkDevice')  # noqa E501
             return result
         elif found_device['SearchResult']['total'] == 0:
             result['response'] = '{0} not found'.format(device)
@@ -640,7 +642,10 @@ class ERS(object):
                                       'ipaddress': ip_address,
                                       'mask': 32
                                   }],
-                                  'NetworkDeviceGroupList': [dev_group, dev_type, dev_location, 'IPSEC#Is IPSEC Device#No']
+                                  'NetworkDeviceGroupList': [
+                                      dev_group, dev_type, dev_location,
+                                      'IPSEC#Is IPSEC Device#No'
+                                    ]
                                   }
                 }
 
@@ -658,7 +663,7 @@ class ERS(object):
         """
         Delete a device.
 
-        :param device: Device ID
+        :param device: device_name
         :return: Result dictionary
         """
         self.ise.headers.update(

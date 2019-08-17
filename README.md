@@ -1,23 +1,39 @@
-## ISE
+# ISE
+
 Python module to manage Cisco ISE via the REST API.
 
-#### History  
+## History
+
 All initial work is done by https://github.com/bobthebutcher and https://github.com/mpenning.  
 I forked from them and updated so it worked with ISE 2.2.x and changed all functions to json calls.  
 
-#### Status
-Tested and used in our environment at work. But as usual it's up to you to test thus out in a test environment so everything works as intended.
+* Merged back from the work that https://github.com/karrots has done efter I paused the updates.  
+* Converted to pipenv packages instead of requests.txt
+* Updated to ISE 2.4.x
+
+## Status
+
+Tested and used in our environment at work. But as usual it's up to you to test this out in a test environment so everything works as intended.
 
 Is you have any suggestions or find a bug, create a issue and I'll try to fix it :)
 
-#### Testing
-Testing has been completed on ISE v2.2.0.470 and with python 3.5.2
+## Testing
+
+Testing has been completed on ISE v2.4.0.357 and with python 3.7.3  
+Until a mock of ERS-API is done, a simple test is in test/test_ers.py  
+To run tests:
+
+* make a copy of config-DEFAULT.py to config.py
+* edit uri with settings to your test ise
+* run python test-ers.py
 
 ### Enable REST API
+
 http://www.cisco.com/c/en/us/td/docs/security/ise/2-0/api_ref_guide/api_ref_book/ise_api_ref_ers1.html#pgfId-1079790
 Need to add an ISE Administrator with the "ERS-Admin" or "ERS-Operator" group assignment is required to use the API.
 
 ### Installation
+
 ```bash
 mkdir path/to/ise
 cd path/to/ise
@@ -25,18 +41,21 @@ git clone https://github.com/falkowich/ise.git
 ```
 
 #### Add to path
+
 ```python
 import sys
 sys.path.append('/path/to/ise/')
 ```
 
 ### Usage
+
 ```python
 from ise.cream import ERS
 ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True)
 ```
 
 #### Methods return a result dictionary
+
 ```python
 {
     'success': True/False,
@@ -46,6 +65,7 @@ ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verif
 ```
 
 #### Get a list of identity groups
+
 ```python
 ise.get_identity_groups()['response']
 
@@ -62,6 +82,7 @@ ise.get_identity_groups()['response']
 ```
 
 #### Get details about an identity group
+
 ```python
 ise.get_identity_group(group='Employee')['response']
 
@@ -76,6 +97,7 @@ ise.get_identity_group(group='Employee')['response']
 ```
 
 #### Get details about an endpoint
+
 ```python
 ise.get_endpoint_group(group='Resurs')['response']
 
@@ -90,6 +112,7 @@ ise.get_endpoint_group(group='Resurs')['response']
 ```
 
 #### Get endpoint identity groups
+
 ```python
 ise.get_endpoint_groups()['response']
 
@@ -102,12 +125,14 @@ ise.get_endpoint_groups()['response']
 ```
 
 #### Add endpoint
+
 ```python
 ise.add_endpoint(name='test02', mac='AA:BB:CC:00:11:24', group_id='bf6bdcf0-14ed-11e5-a7a6-00505683258b', description='test02')
 {'response': 'test02 Added Successfully', 'success': True, 'error': ''}
 ```
 
 #### Delete endpoint
+
 ```python
 ise.delete_endpoint(mac='AA:BB:CC:00:11:27')
 {'error': '', 'response': 'AA:BB:CC:00:11:27 Deleted Successfully', 'success': True}
@@ -115,6 +140,7 @@ ise.delete_endpoint(mac='AA:BB:CC:00:11:27')
 ```
 
 #### Get a list of internal users
+
 ```python
 ise.get_users()['response']
 
@@ -125,6 +151,7 @@ ise.get_users()['response']
 ```
 
 #### Get details about an internal user
+
 ```python
 ise.get_user(user_id='test02')['response']
 
@@ -145,6 +172,7 @@ ise.get_user(user_id='test02')['response']
 ```
 
 #### Add an internal user
+
 ```python
 ise.add_user(user_id='test11', password='TeStInG11', user_group_oid='5f0b74f0-14e9-11e5-a7a6-00505683258b')
 
@@ -153,6 +181,7 @@ ise.add_user(user_id='test11', password='TeStInG11', user_group_oid='5f0b74f0-14
 ```
 
 #### Delete an internal user
+
 ```python
 ise.delete_user(user_id='test11')
 
@@ -161,6 +190,7 @@ ise.delete_user(user_id='test11')
 ```
 
 #### Get a list of devices
+
 ```python
 ise.get_devices()['response']
 
@@ -171,6 +201,7 @@ ise.get_devices()['response']
 ```
 
 #### Get details about a device
+
 ```python
 ise.get_device(device='TestDevice02')['response']
 
@@ -194,6 +225,7 @@ ise.get_device(device='TestDevice02')['response']
 ```
 
 #### Get a list of device groups
+
 ```python
 ise.get_device_groups()['response']
 
@@ -209,6 +241,7 @@ ise.get_device_groups()['response']
 ```
 
 #### Add a device
+
 ```python
 ise.add_device(name='testdevice03',
                ip_address='192.168.10.10',
@@ -223,6 +256,7 @@ ise.add_device(name='testdevice03',
 ```
 
 #### Delete a device
+
 ```python
 ise.delete_device(device='testdevice03')
 
