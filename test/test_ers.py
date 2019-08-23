@@ -52,8 +52,8 @@ def delete_endpoint(endpoint):
         print('delete_endpoint » OK')
 
 
-def get_endpoint_groups():
-    test = ise.get_endpoint_groups()
+def get_endpoint_groups(size):
+    test = ise.get_endpoint_groups(size)
     if test['error']:
         print(test['response'])
     else:
@@ -197,7 +197,7 @@ if __name__ == "__main__":
     delete_endpoint(endpoint)
 
     # EndpointGroup tests
-    get_endpoint_groups()
+    get_endpoint_groups(21)
     get_endpoint_group(endpoint_group)
 
     # User tests
@@ -216,3 +216,4 @@ if __name__ == "__main__":
     get_device(device)
     delete_device(device)
     #  get_object()  # TODO
+

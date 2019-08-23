@@ -147,13 +147,14 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_endpoint_groups(self):
+    def get_endpoint_groups(self, size):
         """
         Get all endpoint identity groups.
-
+        
+        :param size: Size of the number of identity groups before pagination starts
         :return: result dictionary
         """
-        return self._get_groups('{0}/config/endpointgroup'.format(self.url_base))
+        return self._get_groups('{0}/config/endpointgroup'.format(self.url_base), size=size)
 
     def get_endpoint_group(self, group):
         """
