@@ -1,3 +1,7 @@
+
+[![Python 3](https://pyup.io/repos/github/falkowich/ise/python-3-shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Updates](https://pyup.io/repos/github/falkowich/ise/shield.svg)](https://pyup.io/repos/github/falkowich/ise/)
+
+
 # ISE
 
 Python module to manage Cisco ISE via the REST API.
