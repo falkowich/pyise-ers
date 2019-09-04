@@ -1,5 +1,5 @@
-,
-[![Python 3](https://pyup.io/repos/github/falkowich/ise/python-3-shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Updates](https://pyup.io/repos/github/falkowich/ise/shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Known Vulnerabilities](https://snyk.io/test/github/falkowich/ise/badge.svg)](https://snyk.io/test/github/falkowich/ise)
+
+[![Python 3](https://pyup.io/repos/github/falkowich/ise/python-3-shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Updates](https://pyup.io/repos/github/falkowich/ise/shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Known Vulnerabilities](https://snyk.io/test/github/falkowich/ise/badge.svg?style=flat-square)](https://snyk.io/test/github/falkowich/ise)
 
 
 # ISE
