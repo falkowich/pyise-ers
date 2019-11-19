@@ -4,6 +4,7 @@ from setuptools import find_packages, setup
 setup(
     name='ISE',
     version='1.0.0',
+    py_modules=['ise'],
     url='',
     license='LICENSE.md',
     maintainer='Jonathan Karras',
