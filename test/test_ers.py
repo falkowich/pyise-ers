@@ -4,7 +4,7 @@
 import sys
 sys.path.append('./')
 
-from cream import ERS  # noqa E402
+from ise import ERS  # noqa E402
 from pprint import pprint  # noqa E402
 from config import uri, endpoint, endpoint_group, user, identity_group, device  # noqa E402
 
@@ -216,4 +216,3 @@ if __name__ == "__main__":
     get_device(device)
     delete_device(device)
     #  get_object()  # TODO
-
