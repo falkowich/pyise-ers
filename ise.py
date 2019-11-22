@@ -557,7 +557,7 @@ class ERS(object):
 
         :return: result dictionary
         """
-        self._get_objects('{0}/config/networkdevice'.format(self.url_base))
+        return self._get_objects('{0}/config/networkdevice'.format(self.url_base))
 
     def get_device(self, device):
         """
