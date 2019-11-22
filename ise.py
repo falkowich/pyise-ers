@@ -599,7 +599,10 @@ class ERS(object):
                    dev_type,
                    description='',
                    snmp_v='TWO_C',
-                   dev_profile='Cisco'):
+                   dev_profile='Cisco',
+                   tacacs_shared_secret=None,
+                   tacas_connect_mode_options='ON_LEGACY'
+                   ):
         """
         Add a device.
 
@@ -650,6 +653,12 @@ class ERS(object):
                                     ]
                                   }
                 }
+
+        if tacacs_shared_secret is not None:
+            data['NetworkDevice']['tacacsSettings'] = {
+              'sharedSecret': tacacs_shared_secret,
+              'connectModeOptions': tacas_connect_mode_options
+            }
 
         resp = self.ise.post('{0}/config/networkdevice'.format(self.url_base),
                              data=json.dumps(data), timeout=self.timeout)
