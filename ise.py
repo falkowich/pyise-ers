@@ -551,13 +551,13 @@ class ERS(object):
 
         return self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
 
-    def get_devices(self):
+    def get_devices(self, filter=None):
         """
         Get a list of devices.
 
         :return: result dictionary
         """
-        return self._get_objects('{0}/config/networkdevice'.format(self.url_base))
+        return self._get_objects('{0}/config/networkdevice'.format(self.url_base), filter)
 
     def get_device(self, device):
         """
