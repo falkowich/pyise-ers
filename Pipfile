@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 flake8 = "*"
 pytest = "*"
+ptpython = "*"
 
 [packages]
 requests = ">=2.22.0"

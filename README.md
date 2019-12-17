@@ -15,6 +15,10 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
 * Converted to pipenv packages instead of requests.txt
 * Updated to ISE 2.4.x
 
+* Merged back from the work that https://github.com/msom has done with some good device fixes.
+  * *One big thing is that module is now renamed from ise.cream to just ise.*
+
+
 ## Status
 
 Tested and used in our environment at work. But as usual it's up to you to test this out in a test environment so everything works as intended.
