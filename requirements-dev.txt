@@ -10,5 +10,7 @@
 # `Pipfile.lock` and then regenerate `requirements*.txt`.
 ################################################################################
 
-furl>=2.0.0
-requests>=2.22.0
+flake8
+pipenv-to-requirements
+ptpython
+pytest
