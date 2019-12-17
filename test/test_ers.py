@@ -6,9 +6,9 @@ sys.path.append('./')
 
 from ise import ERS  # noqa E402
 from pprint import pprint  # noqa E402
-from config import uri, endpoint, endpoint_group, user, identity_group, device  # noqa E402
+from config import uri, endpoint, endpoint_group, user, identity_group, device, device_group  # noqa E402
 
-ise = ERS(ise_node=uri['ise_node'], ers_user=uri['ers_user'], ers_pass=uri['ers_pass'], verify=False, disable_warnings=True)  # noqa: E501
+ise = ERS(ise_node=uri['ise_node'], ers_user=uri['ers_user'], ers_pass=uri['ers_pass'], verify=False, disable_warnings=True, timeout=30)  # noqa: E501
 
 
 def test_groups():
@@ -28,8 +28,8 @@ def add_endpoint(endpoint):
         print('add_endpoint » OK')
 
 
-def get_endpoints(endpoint):
-    test = ise.get_endpoints()
+def get_endpoints():
+    test = ise.get_endpoints(size=100, page=1)
     if test['error']:
         print(test['response'])
     else:
@@ -53,7 +53,7 @@ def delete_endpoint(endpoint):
 
 
 def get_endpoint_groups(size):
-    test = ise.get_endpoint_groups(size)
+    test = ise.get_endpoint_groups(size=100, page=1)
     if test['error']:
         print(test['response'])
     else:
@@ -69,7 +69,7 @@ def get_endpoint_group(endpoint_group):
 
 
 def get_identity_groups():
-    test = ise.get_identity_groups()
+    test = ise.get_identity_groups(size=100, page=1)
     if test['error']:
         print(test['response'])
     else:
@@ -104,7 +104,7 @@ def add_user(user, identity_group_id):
 
 
 def get_users():
-    test = ise.get_users()
+    test = ise.get_users(size=100, page=1)
     if test['error']:
         print(test['response'])
     else:
@@ -128,7 +128,7 @@ def delete_user(user):
 
 
 def get_device_groups():
-    test = ise.get_device_groups()
+    test = ise.get_device_groups(size=100, page=1)
     if test['error']:
         print(test['response'])
     else:
@@ -139,7 +139,7 @@ def get_device_groups():
 
 
 def get_device_group(device_group):
-    test = ise.get_device_group(device_group)
+    test = ise.get_device_group(device_group['oid'])
     if test['error']:
         print(test['response'])
     else:
@@ -167,9 +167,11 @@ def add_device(device):
 
 
 def get_devices():
-    test_get = ise.get_devices()
-
-    print(test_get)
+    test_get = ise.get_devices(size=100, page=1)
+    if test_get['error']:
+        print(test_get['response'])
+    else:
+        print('get_devices » OK')
 
 
 def get_device(device):
@@ -192,7 +194,7 @@ if __name__ == "__main__":
 
     # Endpoint tests
     add_endpoint(endpoint)
-    get_endpoints(endpoint)
+    get_endpoints()
     get_endpoint(endpoint)
     delete_endpoint(endpoint)
 
@@ -209,10 +211,10 @@ if __name__ == "__main__":
     delete_user(user)
 
     # Device tests
-    device_group = get_device_groups()
+    get_device_groups()
     get_device_group(device_group)
     add_device(device)
-    # get_devices()  # TODO
+    get_devices()
     get_device(device)
     delete_device(device)
     #  get_object()  # TODO

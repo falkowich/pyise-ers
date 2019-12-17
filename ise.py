@@ -137,6 +137,11 @@ class ERS(object):
             json_res = resp.json()['SearchResult']
             if int(json_res['total']) >= 1:
                 result['success'] = True
+                if json_res.get('nextPage'):
+                    result['nextPage'] = json_res['nextPage']['href'].split('=')[-1]
+                if json_res.get('previousPage'):
+                    result['prev'] = json_res['previousPage']['href'].split('=')[-1]
+                result['total'] = json_res['total']
                 result['response'] = [(i['name'], i['id'])
                                       for i in json_res['resources']]
                 return result
@@ -144,18 +149,19 @@ class ERS(object):
             elif int(json_res['total']) == 0:
                 result['success'] = True
                 result['response'] = []
+                result['total'] = json_res['total']
                 return result
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_endpoint_groups(self, size):
+    def get_endpoint_groups(self, size=20, page=1):
         """
         Get all endpoint identity groups.
 
         :param size: Size of the number of identity groups before pagination starts
         :return: result dictionary
         """
-        return self._get_groups('{0}/config/endpointgroup'.format(self.url_base), size=size)
+        return self._get_groups('{0}/config/endpointgroup'.format(self.url_base), size=size, page=page)
 
     def get_endpoint_group(self, group):
         """
@@ -184,7 +190,7 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_endpoints(self, groupID=None):
+    def get_endpoints(self, groupID=None, size=20, page=1):
         """
         Get all endpoints.
 
@@ -196,7 +202,7 @@ class ERS(object):
         else:
             filter = None
 
-        return self._get_objects('{0}/config/endpoint'.format(self.url_base), filter)
+        return self._get_objects('{0}/config/endpoint'.format(self.url_base), filter=filter, size=size, page=page)
 
     def get_object(self, url: str, objectid: str, objecttype: str):
         """
@@ -361,14 +367,14 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_identity_groups(self, filter=None):
+    def get_identity_groups(self, filter=None, size=20, page=1):
         """
         Get all identity groups.
 
         :param filter: ISE style filter syntax. Default: None
         :return: result dictionary
         """
-        return self._get_groups('{0}/config/identitygroup'.format(self.url_base), filter=filter)
+        return self._get_groups('{0}/config/identitygroup'.format(self.url_base), filter=filter, size=size, page=page)
 
     def get_identity_group(self, group):
         """
@@ -404,13 +410,13 @@ class ERS(object):
             result['error'] = resp.status_code
             return result
 
-    def get_users(self):
+    def get_users(self, size=20, page=1):
         """
         Get all internal users.
 
         :return: List of tuples of user details
         """
-        return self._get_objects('{0}/config/internaluser'.format(self.url_base))
+        return self._get_objects('{0}/config/internaluser'.format(self.url_base), size=size, page=page)
 
     def get_user(self, user_id):
         """
@@ -531,13 +537,13 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_device_groups(self):
+    def get_device_groups(self, size=20, page=1):
         """
         Get a list tuples of device groups.
 
         :return:
         """
-        return self._get_groups('{0}/config/networkdevicegroup'.format(self.url_base))
+        return self._get_groups('{0}/config/networkdevicegroup'.format(self.url_base), size=size, page=page)
 
     def get_device_group(self, device_group_oid):
         """
@@ -551,13 +557,13 @@ class ERS(object):
 
         return self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
 
-    def get_devices(self, filter=None):
+    def get_devices(self, filter=None, size=20, page=1):
         """
         Get a list of devices.
 
         :return: result dictionary
         """
-        return self._get_objects('{0}/config/networkdevice'.format(self.url_base), filter)
+        return self._get_objects('{0}/config/networkdevice'.format(self.url_base), filter=filter, size=size, page=page)
 
     def get_device(self, device):
         """

@@ -1,21 +1,21 @@
 uri = {
-    'ise_node': 'ip',
-    'ers_user': 'ers_admin',
-    'ers_pass': 'super-secret-test-password'
+    'ise_node': 'ip or fqdn',
+    'ers_user': 'ers-user',
+    'ers_pass': 'super-secret-password'
 }
 
 endpoint = {
-    'name': 'test-endpoint',
+    'name': 'test-endpoints',
     'mac': 'AA:BB:CC:00:11:22',
     'group-id': 'aa0e8b20-8bff-11e6-996c-525400b48521'
 }
 
 endpoint_group = {
-    'name': 'Unknown'
+    'name': 'Blacklist'
 }
 
 user = {
-    'user_id': 'test-user',
+    'user_id': 'test-users',
     'password': 'TestUser123',
     'user_group_oid': 'Employee',
     'enable': 'TestUser123',
@@ -29,6 +29,9 @@ identity_group = {
     'name': 'Employee'
 }
 
+device_group = {
+    'oid': '70c79c30-8bff-11e6-996c-525400b48521'
+}
 
 device = {
     'name': 'test-device',
@@ -36,9 +39,9 @@ device = {
 
     'radius_key': 'test-radius-key',
     'snmp_ro': 'snmp-ro-pass',
-    'dev_group': 'NetworkDevice#NetworkDevice#test-group',
-    'dev_location': 'Location#All Locations#test-location',
-    'dev_type': 'Device Type#All Device Types#test-type',
+    'dev_group': 'Stage#Stage#Closed',
+    'dev_location': 'Location#All Locations#Somewhere',
+    'dev_type': 'Device Type#All Device Types#Something',
     'description': 'test-description',
     'snmp_v': 'TWO_C',
     'dev_profile': 'Cisco'
