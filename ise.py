@@ -18,7 +18,7 @@ class InvalidMacAddress(Exception):
 
 
 class ERS(object):
-    def __init__(self, ise_node, ers_user, ers_pass, verify=False, disable_warnings=False, timeout=2):
+    def __init__(self, ise_node, ers_user, ers_pass, verify=False, disable_warnings=False, timeout=2, protocol='https'):
         """
         Class to interact with Cisco ISE via the ERS API.
 
@@ -32,8 +32,9 @@ class ERS(object):
         self.ise_node = ise_node
         self.user_name = ers_user
         self.user_pass = ers_pass
+        self.protocol = protocol
 
-        self.url_base = 'https://{0}:9060/ers'.format(self.ise_node)
+        self.url_base = '{0}://{1}:9060/ers'.format(self.protocol, self.ise_node)
         self.ise = requests.session()
         self.ise.auth = (self.user_name, self.user_pass)
         # http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification
@@ -150,7 +151,7 @@ class ERS(object):
     def get_endpoint_groups(self, size):
         """
         Get all endpoint identity groups.
-        
+
         :param size: Size of the number of identity groups before pagination starts
         :return: result dictionary
         """
@@ -550,13 +551,13 @@ class ERS(object):
 
         return self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
 
-    def get_devices(self):
+    def get_devices(self, filter=None):
         """
         Get a list of devices.
 
         :return: result dictionary
         """
-        self._get_objects('{0}/config/networkdevice'.format(self.url_base))
+        return self._get_objects('{0}/config/networkdevice'.format(self.url_base), filter)
 
     def get_device(self, device):
         """
@@ -598,7 +599,10 @@ class ERS(object):
                    dev_type,
                    description='',
                    snmp_v='TWO_C',
-                   dev_profile='Cisco'):
+                   dev_profile='Cisco',
+                   tacacs_shared_secret=None,
+                   tacas_connect_mode_options='ON_LEGACY'
+                   ):
         """
         Add a device.
 
@@ -649,6 +653,12 @@ class ERS(object):
                                     ]
                                   }
                 }
+
+        if tacacs_shared_secret is not None:
+            data['NetworkDevice']['tacacsSettings'] = {
+              'sharedSecret': tacacs_shared_secret,
+              'connectModeOptions': tacas_connect_mode_options
+            }
 
         resp = self.ise.post('{0}/config/networkdevice'.format(self.url_base),
                              data=json.dumps(data), timeout=self.timeout)
