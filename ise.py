@@ -198,7 +198,7 @@ class ERS(object):
         :return: result dictionary
         """
         if groupID:
-            filter = 'groupId.EQ.{1}'.format(groupID)
+            filter = f"groupId.EQ.{groupID}"
         else:
             filter = None
 
