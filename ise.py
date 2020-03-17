@@ -194,10 +194,9 @@ class ERS(object):
 
         # If it's a valid OID, perform a more direct GET-call
         if self._oid_test(group):
-            resp = self.ise.get('{0}/config/endpointgroup/{1}'.format(self.url_base, group))
             result = self.get_object(
                 '{0}/config/endpointgroup'.format(self.url_base),
-                resp.json()['EndPointGroup']['id'],
+                group,
                 'EndPointGroup'
             )
             return result
