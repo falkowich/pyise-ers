@@ -20,14 +20,14 @@ jobs:
     - name: Build
       run: |
         python setup.py sdist bdist_wheel
-    - name: Publish distribution of django-guid to Test PyPI 📦
+    - name: Publish distribution of ise to Test PyPI 📦
       # If it's a push, and the push includes a tag with `-rc` in it, release to TestPyPi
       if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && contains(github.ref, '-rc')
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.test_pypi_password }}
         repository_url: https://test.pypi.org/legacy/
-    - name: Publish distribution of django-guid to PyPI 📦
+    - name: Publish distribution of ise to PyPI 📦
       # If it's a push, and the push does _not_ contain `-rc` in it, release to production PyPi
       if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && !contains(github.ref, '-rc')
       uses: pypa/gh-action-pypi-publish@master
