@@ -7,13 +7,13 @@ Python module to manage Cisco ISE via the REST API.
 
 ## History
 
-All initial work is done by ![https://github.com/bobthebutcher](https://github.com/bobthebutcher) and ![https://github.com/mpenning](https://github.com/mpenning.).  
+All initial work is done by [https://github.com/bobthebutcher](https://github.com/bobthebutcher) and [https://github.com/mpenning](https://github.com/mpenning.).  
 I forked from them and updated so it worked with ISE 2.2.x and changed all functions to json calls.  
 
-* Merged back from the work that ![https://github.com/karrots](https://github.com/karrots) has done efter I paused the updates.  
+* Merged back from the work that [https://github.com/karrots](https://github.com/karrots) has done efter I paused the updates.  
 * Converted to pipenv packages instead of requirements.txt
 * Updated to ISE 2.4.x
-* Merged back from the work that ![https://github.com/msom](https://github.com/msom) has done with some good device fixes.
+* Merged back from the work that [https://github.com/msom](https://github.com/msom) has done with some good device fixes.
   * *One big thing is that module is now renamed from ise.cream to just ise.*
 
 ## Status
@@ -34,7 +34,7 @@ To run tests:
 
 ### Enable REST API
 
-![http://www.cisco.com/c/en/us/td/docs/security/ise/2-0/api_ref_guide/api_ref_book/ise_api_ref_ers1.html#pgfId-1079790](http://www.cisco.com/c/en/us/td/docs/security/ise/2-0/api_ref_guide/api_ref_book/ise_api_ref_ers1.html#pgfId-1079790)
+[http://www.cisco.com/c/en/us/td/docs/security/ise/2-0/api_ref_guide/api_ref_book/ise_api_ref_ers1.html#pgfId-1079790](http://www.cisco.com/c/en/us/td/docs/security/ise/2-0/api_ref_guide/api_ref_book/ise_api_ref_ers1.html#pgfId-1079790)
 Need to add an ISE Administrator with the "ERS-Admin" or "ERS-Operator" group assignment is required to use the API.
 
 ### Installation
