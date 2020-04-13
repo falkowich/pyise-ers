@@ -88,7 +88,6 @@ class ERS(object):
             else:
                 print(e)
                 sys.exit(1)
-        
 
     def _get_groups(self, url, filter: str = None, size: int = 20, page: int = 1):
         """

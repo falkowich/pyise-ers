@@ -1,22 +1,20 @@
 
 [![Python 3](https://pyup.io/repos/github/falkowich/ise/python-3-shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Updates](https://pyup.io/repos/github/falkowich/ise/shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Known Vulnerabilities](https://snyk.io/test/github/falkowich/ise/badge.svg?style=plastic)](https://snyk.io/test/github/falkowich/ise) [![Maintainability](https://api.codeclimate.com/v1/badges/b377fd23b5de7444c258/maintainability)](https://codeclimate.com/github/falkowich/ise/maintainability) ![Publish PyPI and TestPyPI](https://github.com/falkowich/ise/workflows/Publish%20ise%20to%20PyPI%20and%20TestPyPI%20%F0%9F%93%A6/badge.svg)
 
-
 # ISE
 
 Python module to manage Cisco ISE via the REST API.
 
 ## History
 
-All initial work is done by https://github.com/bobthebutcher and https://github.com/mpenning.  
+All initial work is done by ![https://github.com/bobthebutcher](https://github.com/bobthebutcher) and ![https://github.com/mpenning](https://github.com/mpenning.).  
 I forked from them and updated so it worked with ISE 2.2.x and changed all functions to json calls.  
 
-* Merged back from the work that https://github.com/karrots has done efter I paused the updates.  
+* Merged back from the work that ![https://github.com/karrots](https://github.com/karrots) has done efter I paused the updates.  
 * Converted to pipenv packages instead of requirements.txt
 * Updated to ISE 2.4.x
-* Merged back from the work that https://github.com/msom has done with some good device fixes.
+* Merged back from the work that ![https://github.com/msom](https://github.com/msom) has done with some good device fixes.
   * *One big thing is that module is now renamed from ise.cream to just ise.*
-
 
 ## Status
 
@@ -36,10 +34,18 @@ To run tests:
 
 ### Enable REST API
 
-http://www.cisco.com/c/en/us/td/docs/security/ise/2-0/api_ref_guide/api_ref_book/ise_api_ref_ers1.html#pgfId-1079790
+![http://www.cisco.com/c/en/us/td/docs/security/ise/2-0/api_ref_guide/api_ref_book/ise_api_ref_ers1.html#pgfId-1079790](http://www.cisco.com/c/en/us/td/docs/security/ise/2-0/api_ref_guide/api_ref_book/ise_api_ref_ers1.html#pgfId-1079790)
 Need to add an ISE Administrator with the "ERS-Admin" or "ERS-Operator" group assignment is required to use the API.
 
 ### Installation
+
+#### From PyPi
+
+```bash
+pip install ISE
+```
+
+#### From Repository
 
 ```bash
 mkdir path/to/ise
@@ -47,7 +53,7 @@ cd path/to/ise
 git clone https://github.com/falkowich/ise.git
 ```
 
-#### Add to path
+##### Add to path
 
 ```python
 import sys
