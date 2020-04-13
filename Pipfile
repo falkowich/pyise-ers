@@ -10,8 +10,8 @@ ptpython = "*"
 pipenv-to-requirements = "*"
 
 [packages]
-requests = ">=2.22.0"
-furl = ">=2.0.0"
+requests = "*"
+furl = "*"
 
 [requires]
 python_version = "3.7"

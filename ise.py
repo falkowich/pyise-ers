@@ -1,5 +1,6 @@
 """Class to configure Cisco ISE via the ERS API."""
 import json
+import sys
 import os
 import re
 from furl import furl
@@ -35,7 +36,7 @@ class ERS(object):
         self.protocol = protocol
 
         self.url_base = '{0}://{1}:9060/ers'.format(self.protocol, self.ise_node)
-        self.ise = requests.session()
+        self.ise = requests.sessions.Session()
         self.ise.auth = (self.user_name, self.user_pass)
         # http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification
         self.ise.verify = verify
@@ -73,9 +74,21 @@ class ERS(object):
 
     @staticmethod
     def _pass_ersresponse(result, resp):
-        result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-        result['error'] = resp.status_code
-        return result
+        try:
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
+            result['error'] = resp.status_code
+            return result
+
+        except ValueError as e:
+            if '<title>HTTP Status 401 – Unauthorized</title>' in resp.text:
+                result['response'] = 'Unauthorized'
+                result['error'] = resp.status_code
+                print('HTTP Status 401 - Unauthorized')
+                sys.exit(1)
+            else:
+                print(e)
+                sys.exit(1)
+        
 
     def _get_groups(self, url, filter: str = None, size: int = 20, page: int = 1):
         """
