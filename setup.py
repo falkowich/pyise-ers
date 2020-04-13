@@ -14,7 +14,7 @@ setup(
     maintainer='Andreas Falk',
     maintainer_email='falk@sadsloth.net',
     description='Python module to manage Cisco ISE via the ERS API',
-    long_description='README.md',
+    long_description=readme,
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
