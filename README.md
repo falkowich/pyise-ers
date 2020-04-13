@@ -1,5 +1,5 @@
 
-[![Python 3](https://pyup.io/repos/github/falkowich/ise/python-3-shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Updates](https://pyup.io/repos/github/falkowich/ise/shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Known Vulnerabilities](https://snyk.io/test/github/falkowich/ise/badge.svg?style=plastic)](https://snyk.io/test/github/falkowich/ise) [![Maintainability](https://api.codeclimate.com/v1/badges/b377fd23b5de7444c258/maintainability)](https://codeclimate.com/github/falkowich/ise/maintainability)
+[![Python 3](https://pyup.io/repos/github/falkowich/ise/python-3-shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Updates](https://pyup.io/repos/github/falkowich/ise/shield.svg)](https://pyup.io/repos/github/falkowich/ise/) [![Known Vulnerabilities](https://snyk.io/test/github/falkowich/ise/badge.svg?style=plastic)](https://snyk.io/test/github/falkowich/ise) [![Maintainability](https://api.codeclimate.com/v1/badges/b377fd23b5de7444c258/maintainability)](https://codeclimate.com/github/falkowich/ise/maintainability) ![Publish PyPI and TestPyPI](https://github.com/falkowich/ise/workflows/Publish%20ise%20to%20PyPI%20and%20TestPyPI%20%F0%9F%93%A6/badge.svg)
 
 
 # ISE
