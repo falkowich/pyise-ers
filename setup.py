@@ -11,16 +11,16 @@ setup(
     url='https://github.com/falkowich/ise',
     download_url='https://pypi.python.org/pypi/ise',
     license='LICENSE.md',
-    maintainer='Jonathan Karras',
-    maintainer_email='jonathankarras@weber.edu',
-    description='API wrapper for ISE',
-    long_description=readme,
+    maintainer='Andreas Falk',
+    maintainer_email='falk@sadsloth.net',
+    description='Python module to manage Cisco ISE via the ERS API',
+    long_description='README.md',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'furl>=1.2.1',
-        'requests>=2.18.4'
+        'furl>=2.1.0',
+        'requests>=2.23.0'
     ],
     extras_require={
         'test': [

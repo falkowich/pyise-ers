@@ -8,7 +8,8 @@ from ise import ERS  # noqa E402
 from pprint import pprint  # noqa E402
 from config import uri, endpoint, endpoint_group, user, identity_group, device, device_group  # noqa E402
 
-ise = ERS(ise_node=uri['ise_node'], ers_user=uri['ers_user'], ers_pass=uri['ers_pass'], verify=False, disable_warnings=True, timeout=30)  # noqa: E501
+ise = ERS(ise_node=uri['ise_node'], ers_user=uri['ers_user'], ers_pass=uri['ers_pass'], verify=False, disable_warnings=True, timeout=15)  # noqa: E501
+
 
 
 def test_groups():

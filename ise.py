@@ -1,5 +1,6 @@
 """Class to configure Cisco ISE via the ERS API."""
 import json
+import sys
 import os
 import re
 from furl import furl
@@ -35,7 +36,7 @@ class ERS(object):
         self.protocol = protocol
 
         self.url_base = '{0}://{1}:9060/ers'.format(self.protocol, self.ise_node)
-        self.ise = requests.session()
+        self.ise = requests.sessions.Session()
         self.ise.auth = (self.user_name, self.user_pass)
         # http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification
         self.ise.verify = verify
@@ -60,10 +61,34 @@ class ERS(object):
             return False
 
     @staticmethod
+    def _oid_test(id):
+        """
+        Test for a valid OID
+        :param id: OID in the form of abcd1234-ef56-7890-abcd1234ef56
+        :return: True/False
+        """
+        if re.match(r'^([a-f0-9]{8}-([a-f0-9]{4}-){3}[a-z0-9]{12})$', id):
+            return True
+        else:
+            return False
+
+    @staticmethod
     def _pass_ersresponse(result, resp):
-        result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
-        result['error'] = resp.status_code
-        return result
+        try:
+            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
+            result['error'] = resp.status_code
+            return result
+
+        except ValueError as e:
+            if '<title>HTTP Status 401 – Unauthorized</title>' in resp.text:
+                result['response'] = 'Unauthorized'
+                result['error'] = resp.status_code
+                print('HTTP Status 401 - Unauthorized')
+                sys.exit(1)
+            else:
+                print(e)
+                sys.exit(1)
+        
 
     def _get_groups(self, url, filter: str = None, size: int = 20, page: int = 1):
         """
@@ -98,6 +123,7 @@ class ERS(object):
             result['success'] = True
             result['response'] = [(i['name'], i['id'], i['description'])
                                   for i in resp.json()['SearchResult']['resources']]
+            result['total'] = resp.json()['SearchResult']['total']
             return result
         else:
             return ERS._pass_ersresponse(result, resp)
@@ -179,9 +205,19 @@ class ERS(object):
             'error': '',
         }
 
-        resp = self.ise.get(
-            '{0}/config/endpointgroup?filter=name.EQ.{1}'.format(self.url_base, group))
-        found_group = resp.json()
+        # If it's a valid OID, perform a more direct GET-call
+        if self._oid_test(group):
+            result = self.get_object(
+                '{0}/config/endpointgroup'.format(self.url_base),
+                group,
+                'EndPointGroup'
+            )
+            return result
+        # If not valid OID, perform regular search
+        else:
+            resp = self.ise.get(
+                '{0}/config/endpointgroup?filter=name.EQ.{1}'.format(self.url_base, group))
+            found_group = resp.json()
 
         if found_group['SearchResult']['total'] == 1:
             result = self.get_object('{0}/config/endpointgroup'.format(self.url_base), found_group['SearchResult']['resources'][0]['id'], "EndPointGroup")  # noqa E501
