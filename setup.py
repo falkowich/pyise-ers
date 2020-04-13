@@ -1,11 +1,15 @@
 from setuptools import find_packages, setup
 
+with open('README.md') as readme_file:
+    readme = readme_file.read()
+
 
 setup(
     name='ISE',
     version='1.1.0',
     py_modules=['ise'],
     url='https://github.com/falkowich/ise',
+    download_url='https://pypi.python.org/pypi/ise',
     license='LICENSE.md',
     maintainer='Andreas Falk',
     maintainer_email='falk@sadsloth.net',
