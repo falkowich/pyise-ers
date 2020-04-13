@@ -10,6 +10,7 @@ ptpython = "*"
 pipenv-to-requirements = "*"
 setuptools = "*"
 wheel = "*"
+twine = "*"
 
 [packages]
 requests = "*"
