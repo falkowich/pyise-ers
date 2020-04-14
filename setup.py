@@ -7,15 +7,15 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='ISE',
-    version='1.1.0',
+    name='cisco-ise',
+    version='0.1.0',
     py_modules=['ise'],
     url='https://github.com/falkowich/ise',
-    download_url='https://pypi.python.org/pypi/ise',
+    download_url='https://pypi.python.org/pypi/cisco-ise',
     license='LICENSE.md',
     maintainer='Andreas Falk',
     maintainer_email='falk@sadsloth.net',
-    description='Python module to manage Cisco ISE via the ERS API',
+    description='Python wrapper for Cisco ISE ERS API',
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=find_packages(),
