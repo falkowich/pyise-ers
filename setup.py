@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='ISE',
-    version='0.1.0',
+    version='0.1.0.1',
     py_modules=['ise'],
     url='https://github.com/falkowich/ise',
     download_url='https://pypi.python.org/pypi/ise',
@@ -19,6 +19,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=find_packages(),
+    python_requires='>=3.6',
     include_package_data=True,
     zip_safe=False,
     install_requires=[
