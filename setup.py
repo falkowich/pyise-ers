@@ -7,7 +7,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='cisco-ise',
+    name='ISE',
     version='0.1.0',
     py_modules=['ise'],
     url='https://github.com/falkowich/ise',
