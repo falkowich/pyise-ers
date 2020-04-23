@@ -10,7 +10,7 @@
 # `Pipfile.lock` and then regenerate `requirements*.txt`.
 ################################################################################
 
-flake8
+flake8==3.7.9
 pipenv-to-requirements
 ptpython
 pytest
