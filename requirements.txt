@@ -10,5 +10,5 @@
 # `Pipfile.lock` and then regenerate `requirements*.txt`.
 ################################################################################
 
-furl
+furl==2.1.0
 requests
