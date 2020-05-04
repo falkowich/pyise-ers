@@ -78,16 +78,14 @@ class ERS(object):
             result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
-
-        except ValueError as e:
+        except ValueError:
             if '<title>HTTP Status 401 – Unauthorized</title>' in resp.text:
                 result['response'] = 'Unauthorized'
                 result['error'] = resp.status_code
-                print('HTTP Status 401 - Unauthorized')
-                sys.exit(1)
+                return result
             else:
-                print(e)
-                sys.exit(1)
+                result['error'] = resp.status_code
+                return result
 
     def _get_groups(self, url, filter: str = None, size: int = 20, page: int = 1):
         """
