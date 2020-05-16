@@ -330,8 +330,12 @@ class ERS(object):
             return result
         # If not valid OID, perform regular search
         else:
-            resp = self.ise.get(
-                '{0}/config/sgt?filter=name.EQ.{1}'.format(self.url_base, sgt))
+            if isinstance(sgt, int):
+                resp = self.ise.get(
+                    '{0}/config/sgt?filter=value.EQ.{1}'.format(self.url_base, sgt))
+            else:
+                resp = self.ise.get(
+                    '{0}/config/sgt?filter=name.EQ.{1}'.format(self.url_base, sgt))
             found_group = resp.json()
 
         if found_group['SearchResult']['total'] == 1:
@@ -688,7 +692,12 @@ class ERS(object):
             return result
         # If not valid OID, perform regular search
         else:
-            if src_sgt and dst_sgt:
+            if emc:
+                resp = self.ise.get(
+                    '{0}/config/egressmatrixcell?filter=description.EQ.{1}'.format(
+                        self.url_base, emc))
+                found_group = resp.json()
+            elif src_sgt and dst_sgt:
                 srcsgtval = self.get_sgt(src_sgt)["response"]["value"]
                 dstsgtval = self.get_sgt(dst_sgt)["response"]["value"]
                 resp = self.ise.get(
@@ -711,13 +720,11 @@ class ERS(object):
                              destination_sgt,
                              default_rule,
                              acls=None,
-                             name=None,
                              description=None,
                              return_object=False):
         """
         Add TrustSec Egress Matrix Cell Policy.
 
-        :param name: Name
         :param description: Description
         :param source_sgt: Source SGT name or Object ID
         :param destination_sgt: Destination SGT name or Object ID
@@ -760,11 +767,21 @@ class ERS(object):
                 'error': '',
             }
 
-            data = {"EgressMatrixCell": {'name': name, 'description': description,
+            newacls = []
+            if acls:
+                for a in acls:
+                    if self._oid_test(a):
+                        newacls.append(a)
+                    else:
+                        newacl = self.get_sgacl(a)["response"].get("id", None)
+                        if newacl:
+                            newacls.append(newacl)
+
+            data = {"EgressMatrixCell": {'description': description,
                                          'sourceSgtId': src_sgt,
                                          'destinationSgtId': dst_sgt,
                                          'defaultRule': default_rule, "matrixCellStatus": "ENABLED",
-                                         'sgacls': acls if acls else []}}
+                                         'sgacls': newacls}}
 
             resp = self._request('{0}/config/egressmatrixcell'.format(self.url_base), method='post',
                                  data=json.dumps(data))
@@ -773,7 +790,7 @@ class ERS(object):
                 if return_object:
                     result['response'] = self.get_egressmatrixcell(None, src_sgt=src_sgt, dst_sgt=dst_sgt)["response"]
                 else:
-                    result['response'] = '{0} Added Successfully'.format(name)
+                    result['response'] = '{0} Added Successfully'.format(description)
                 return result
             else:
                 return ERS._pass_ersresponse(result, resp)
@@ -784,14 +801,12 @@ class ERS(object):
                                 destination_sgt,
                                 default_rule,
                                 acls=None,
-                                name=None,
                                 description=None,
                                 return_object=False):
         """
         Update TrustSec Egress Matrix Cell Policy.
 
         :param emc: Object ID of egress matrix cell
-        :param name: Name
         :param description: Description
         :param source_sgt: Source SGT name or Object ID
         :param destination_sgt: Destination SGT name or Object ID
@@ -816,13 +831,23 @@ class ERS(object):
                 'error': '',
             }
 
+            newacls = []
+            if acls:
+                for a in acls:
+                    if self._oid_test(a):
+                        newacls.append(a)
+                    else:
+                        newacl = self.get_sgacl(a)["response"].get("id", None)
+                        if newacl:
+                            newacls.append(newacl)
+
             src_sgt = self.get_sgt(source_sgt)["response"]["id"]
             dst_sgt = self.get_sgt(destination_sgt)["response"]["id"]
-            data = {"EgressMatrixCell": {'id': emc, 'name': name, 'description': description,
+            data = {"EgressMatrixCell": {'id': emc, 'description': description,
                                          'sourceSgtId': src_sgt,
                                          'destinationSgtId': dst_sgt,
                                          'defaultRule': default_rule, "matrixCellStatus": "ENABLED",
-                                         'sgacls': acls if acls else []}}
+                                         'sgacls': newacls}}
 
             resp = self._request(('{0}/config/egressmatrixcell/' + emc).format(self.url_base), method='put',
                                  data=json.dumps(data))
