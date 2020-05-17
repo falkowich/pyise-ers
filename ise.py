@@ -1,9 +1,9 @@
 """Class to configure Cisco ISE via the ERS API."""
 import json
-import sys
 import os
 import re
 from furl import furl
+from datetime import datetime, timedelta
 
 import requests
 
@@ -19,7 +19,8 @@ class InvalidMacAddress(Exception):
 
 
 class ERS(object):
-    def __init__(self, ise_node, ers_user, ers_pass, verify=False, disable_warnings=False, timeout=2, protocol='https'):
+    def __init__(self, ise_node, ers_user, ers_pass, verify=False, disable_warnings=False, use_csrf=False, timeout=2,
+                 protocol='https'):
         """
         Class to interact with Cisco ISE via the ERS API.
 
@@ -41,6 +42,9 @@ class ERS(object):
         # http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification
         self.ise.verify = verify
         self.disable_warnings = disable_warnings
+        self.use_csrf = use_csrf
+        self.csrf = None
+        self.csrf_expires = None
         self.timeout = timeout
         self.ise.headers.update({'Connection': 'keep_alive'})
 
@@ -55,7 +59,33 @@ class ERS(object):
         :param mac: MAC address in the form of AA:BB:CC:00:11:22
         :return: True/False
         """
-        if re.search(r'([0-9A-F]{2}[:]){5}([0-9A-F]){2}', mac.upper()) is not None:
+        if mac and re.search(r'([0-9A-F]{2}[:]){5}([0-9A-F]){2}', mac.upper()) is not None:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def _sgt_name_test(name):
+        """
+        Test for valid name.
+
+        :param name: Name; must not be null, must be <= 32 char, alphanumeric + _ only.
+        :return: True/False
+        """
+        if name and re.search(r'^[a-zA-Z0-9_]*$', name) is not None and len(name) <= 32:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def _sgacl_name_test(name):
+        """
+        Test for valid name.
+
+        :param name: Name; must start with letter; alphanumeric + _ only.
+        :return: True/False
+        """
+        if name and re.search(r'^[a-zA-Z][a-zA-Z0-9_]*$', name) is not None:
             return True
         else:
             return False
@@ -67,7 +97,7 @@ class ERS(object):
         :param id: OID in the form of abcd1234-ef56-7890-abcd1234ef56
         :return: True/False
         """
-        if re.match(r'^([a-f0-9]{8}-([a-f0-9]{4}-){3}[a-z0-9]{12})$', id):
+        if id and re.match(r'^([a-f0-9]{8}-([a-f0-9]{4}-){3}[a-z0-9]{12})$', id):
             return True
         else:
             return False
@@ -75,7 +105,11 @@ class ERS(object):
     @staticmethod
     def _pass_ersresponse(result, resp):
         try:
-            result['response'] = resp.json()['ERSResponse']['messages'][0]['title']
+            rj = resp.json()
+            if "SearchResult" in rj:
+                result['response'] = None
+            else:
+                result['response'] = rj['ERSResponse']['messages'][0]['title']
             result['error'] = resp.status_code
             return result
         except ValueError:
@@ -86,6 +120,25 @@ class ERS(object):
             else:
                 result['error'] = resp.status_code
                 return result
+
+    def _request(self, url, method="get", data=None):
+        if self.use_csrf:
+            if not self.csrf_expires or not self.csrf or datetime.utcfromtimestamp(0) > self.csrf_expires:
+                self.ise.headers.update({'ACCEPT': 'application/json', 'Content-Type': 'application/json',
+                                         'X-CSRF-TOKEN': 'fetch'})
+
+                resp = self.ise.get('{0}/config/deploymentinfo/versioninfo'.format(self.url_base))
+                self.csrf = resp.headers["X-CSRF-Token"]
+                self.csrf_expires = datetime.utcfromtimestamp(0) + timedelta(seconds=60)
+
+            self.ise.headers.update({'ACCEPT': 'application/json', 'Content-Type': 'application/json',
+                                     'X-CSRF-TOKEN': self.csrf})
+
+            req = self.ise.request(method, url, data=data, timeout=self.timeout)
+        else:
+            req = self.ise.request(method, url, data=data, timeout=self.timeout)
+
+        return req
 
     def _get_groups(self, url, filter: str = None, size: int = 20, page: int = 1):
         """
@@ -237,6 +290,606 @@ class ERS(object):
 
         return self._get_objects('{0}/config/endpoint'.format(self.url_base), filter=filter, size=size, page=page)
 
+    def get_sgts(self, sgtNum=None, size=20, page=1):
+        """
+        Get all Secure Group Tags.
+
+        :param sgtNum: retrieve sgt configuration for given SGT Number
+        :return: result dictionary
+        """
+        if sgtNum:
+            filter = f"value.EQ.{sgtNum}"
+        else:
+            filter = None
+
+        return self._get_objects('{0}/config/sgt'.format(self.url_base), filter=filter, size=size, page=page)
+
+    def get_sgt(self, sgt):
+        """
+        Get Secure Group Tag details.
+
+        :param sgt: name or Object ID of the Secure Group Tag
+        :return: result dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        # If it's a valid OID, perform a more direct GET-call
+        if self._oid_test(sgt):
+            result = self.get_object(
+                '{0}/config/sgt'.format(self.url_base),
+                sgt,
+                'Sgt'
+            )
+            return result
+        # If not valid OID, perform regular search
+        else:
+            if isinstance(sgt, int):
+                resp = self.ise.get(
+                    '{0}/config/sgt?filter=value.EQ.{1}'.format(self.url_base, sgt))
+            else:
+                resp = self.ise.get(
+                    '{0}/config/sgt?filter=name.EQ.{1}'.format(self.url_base, sgt))
+            found_group = resp.json()
+
+        if found_group['SearchResult']['total'] == 1:
+            result = self.get_object('{0}/config/sgt'.format(self.url_base),
+                                     found_group['SearchResult']['resources'][0]['id'], "Sgt")
+
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
+    def add_sgt(self,
+                name,
+                description,
+                value,
+                propogate_to_apic=False,
+                return_object=False):
+        """
+        Add a SGT to TrustSec Components
+
+        :param name: Name
+        :param description: Description
+        :param value: SGT Number
+        :param propogate_to_apic: Specific to ACI
+        :param return_object: Look up object after creation and return in response
+        """
+        is_valid = ERS._sgt_name_test(name)
+        if not is_valid:
+            result = {
+                'success': False,
+                'response': '',
+                'error': '{0}. Invalid Security Group name, name may not be null and longer than 32 characters and '
+                'only contain the alphanumeric or underscore characters.'.format(name)
+            }
+            return result
+        else:
+            self.ise.headers.update(
+                {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+            result = {
+                'success': False,
+                'response': '',
+                'error': '',
+            }
+
+            data = {"Sgt": {'name': name, 'description': description, 'value': value,
+                            'propogateToApic': propogate_to_apic}}
+
+            resp = self._request('{0}/config/sgt'.format(self.url_base), method='post', data=json.dumps(data))
+            if resp.status_code == 201:
+                result['success'] = True
+                if return_object:
+                    result['response'] = self.get_sgt(name)["response"]
+                else:
+                    result['response'] = '{0} Added Successfully'.format(name)
+                return result
+            else:
+                return ERS._pass_ersresponse(result, resp)
+
+    def update_sgt(self,
+                   sgt,
+                   name,
+                   description,
+                   value,
+                   propogate_to_apic=False,
+                   return_object=False):
+        """
+        Update SGT in TrustSec Components
+
+        :param sgt: Object ID of sgt
+        :param name: Name
+        :param description: Description
+        :param value: SGT Number
+        :param propogate_to_apic: Specific to ACI
+        :param return_object: Look up object after update and return in response
+        """
+        is_valid = ERS._sgt_name_test(name)
+        if not is_valid:
+            result = {
+                'success': False,
+                'response': '',
+                'error': '{0}. Invalid Security Group name, name may not be null and longer than 32 characters and '
+                'only contain the alphanumeric or underscore characters.'.format(name)
+            }
+            return result
+        else:
+            self.ise.headers.update(
+                {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+            result = {
+                'success': False,
+                'response': '',
+                'error': '',
+            }
+
+            data = {"Sgt": {'name': name, 'description': description, 'value': value,
+                            'propogateToApic': propogate_to_apic}}
+
+            resp = self._request(('{0}/config/sgt/' + sgt).format(self.url_base), method='put', data=json.dumps(data))
+            if resp.status_code == 200:
+                result['success'] = True
+                if return_object:
+                    result['response'] = self.get_sgt(sgt)["response"]
+                else:
+                    result['response'] = resp.json()
+                return result
+            else:
+                return ERS._pass_ersresponse(result, resp)
+
+    def delete_sgt(self, sgt):
+        """
+        Delete SGT in TrustSec Components
+
+        :param sgt: Object ID of sgt
+        :return: Result dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        resp = self._request('{0}/config/sgt/{1}'.format(self.url_base, sgt), method='delete')
+
+        if resp.status_code == 204:
+            result['success'] = True
+            result['response'] = '{0} Deleted Successfully'.format(sgt)
+            return result
+        elif resp.status_code == 404:
+            result['response'] = '{0} not found'.format(sgt)
+            result['error'] = resp.status_code
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
+    def get_sgacls(self, size=20, page=1):
+        """
+        Get all Secure Group ACLs.
+
+        :param sgaclId: retrieve sgacl configuration for given SGACL Object ID
+        :return: result dictionary
+        """
+
+        filter = None
+
+        return self._get_objects('{0}/config/sgacl'.format(self.url_base), filter=filter, size=size, page=page)
+
+    def get_sgacl(self, sgacl):
+        """
+        Get Secure Group ACL details.
+
+        :param sgacl: name or Object ID of the Secure Group ACL
+        :return: result dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        # If it's a valid OID, perform a more direct GET-call
+        if self._oid_test(sgacl):
+            result = self.get_object(
+                '{0}/config/sgacl'.format(self.url_base),
+                sgacl,
+                'Sgacl'
+            )
+            return result
+        # If not valid OID, perform regular search
+        else:
+            resp = self.ise.get(
+                '{0}/config/sgacl?filter=name.EQ.{1}'.format(self.url_base, sgacl))
+            found_group = resp.json()
+
+        if found_group['SearchResult']['total'] == 1:
+            result = self.get_object('{0}/config/sgacl'.format(self.url_base),
+                                     found_group['SearchResult']['resources'][0]['id'], "Sgacl")
+
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
+    def add_sgacl(self,
+                  name,
+                  description,
+                  ip_version,
+                  acl_content,
+                  return_object=False):
+        """
+        Add a SG ACL to TrustSec Components
+
+        :param name: Name
+        :param description: Description
+        :param ip_version: IPV4, IPV6, or IP_AGNOSTIC
+        :param acl_content: List of ACLs
+        :param return_object: Look up object after creation and return in response
+        """
+        is_valid = ERS._sgacl_name_test(name)
+        if not is_valid:
+            result = {
+                'success': False,
+                'response': '',
+                'error': '{0}. Invalid SGACL name, name should start with a letter and can only contain the '
+                         'alphanumeric or underscore characters.'.format(name)
+            }
+            return result
+        else:
+            self.ise.headers.update(
+                {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+            result = {
+                'success': False,
+                'response': '',
+                'error': '',
+            }
+
+            data = {"Sgacl": {'name': name, 'description': description, 'ipVersion': ip_version,
+                              'aclcontent': "\n".join(acl_content)}}
+
+            resp = self._request('{0}/config/sgacl'.format(self.url_base), method='post', data=json.dumps(data))
+            if resp.status_code == 201:
+                result['success'] = True
+                if return_object:
+                    result['response'] = self.get_sgacl(name)["response"]
+                else:
+                    result['response'] = '{0} Added Successfully'.format(name)
+                return result
+            else:
+                return ERS._pass_ersresponse(result, resp)
+
+    def update_sgacl(self,
+                     sgacl,
+                     name,
+                     description,
+                     ip_version,
+                     acl_content,
+                     return_object=False):
+        """
+        Update a SG ACL from TrustSec Components
+
+        :param sgacl: Object ID of sgacl
+        :param name: Name
+        :param description: Description
+        :param ip_version: IPV4, IPV6, or IP_AGNOSTIC
+        :param acl_content: List of ACLs
+        :param return_object: Look up object after creation and return in response
+        """
+        is_valid = ERS._sgacl_name_test(name)
+        if not is_valid:
+            result = {
+                'success': False,
+                'response': '',
+                'error': '{0}. Invalid SGACL name, name should start with a letter and can only contain the '
+                         'alphanumeric or underscore characters.'.format(name)
+            }
+            return result
+        else:
+            self.ise.headers.update(
+                {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+            result = {
+                'success': False,
+                'response': '',
+                'error': '',
+            }
+
+            data = {"Sgacl": {'name': name, 'description': description, 'ipVersion': ip_version,
+                              'aclcontent': "\n".join(acl_content)}}
+
+            resp = self._request(('{0}/config/sgacl/' + sgacl).format(self.url_base), method='put',
+                                 data=json.dumps(data))
+            if resp.status_code == 200:
+                result['success'] = True
+                if return_object:
+                    result['response'] = self.get_sgacl(sgacl)["response"]
+                else:
+                    result['response'] = resp.json()
+                return result
+            else:
+                return ERS._pass_ersresponse(result, resp)
+
+    def delete_sgacl(self, sgacl):
+        """
+        Delete SGACL in TrustSec Components
+
+        :param sgacl: Object ID of sgacl
+        :return: Result dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        resp = self._request('{0}/config/sgacl/{1}'.format(self.url_base, sgacl), method='delete')
+
+        if resp.status_code == 204:
+            result['success'] = True
+            result['response'] = '{0} Deleted Successfully'.format(sgacl)
+            return result
+        elif resp.status_code == 404:
+            result['response'] = '{0} not found'.format(sgacl)
+            result['error'] = resp.status_code
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
+    def get_egressmatrixcells(self, size=20, page=1):
+        """
+        Get all TrustSec Egress Matrix Cells.
+
+        :param emcId: retrieve policy configuration for given egress matrix cell Object ID
+        :return: result dictionary
+        """
+
+        filter = None
+
+        return self._get_objects('{0}/config/egressmatrixcell'.format(self.url_base), filter=filter, size=size,
+                                 page=page)
+
+    def get_egressmatrixcell(self, emc, src_sgt=None, dst_sgt=None):
+        """
+        Get TrustSec Egress Matrix Cell Policy details.
+
+        :param emc: name or Object ID of the TrustSec Egress Matrix Cell Policy
+        :param src_sgt: name or Object ID of the Source SGT in the Policy
+        :param src_sgt: name or Object ID of the Dest SGT in the Policy
+        :return: result dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        # If it's a valid OID, perform a more direct GET-call
+        if self._oid_test(emc):
+            result = self.get_object(
+                '{0}/config/egressmatrixcell'.format(self.url_base),
+                emc,
+                'EgressMatrixCell'
+            )
+            return result
+        # If not valid OID, perform regular search
+        else:
+            if emc:
+                resp = self.ise.get(
+                    '{0}/config/egressmatrixcell?filter=description.EQ.{1}'.format(
+                        self.url_base, emc))
+                found_group = resp.json()
+            elif src_sgt and dst_sgt:
+                srcsgtval = self.get_sgt(src_sgt)["response"]["value"]
+                dstsgtval = self.get_sgt(dst_sgt)["response"]["value"]
+                resp = self.ise.get(
+                    '{0}/config/egressmatrixcell?filter=sgtSrcValue.EQ.{1}&filter=sgtDstValue.EQ.{2}'.format(
+                        self.url_base, srcsgtval, dstsgtval))
+                found_group = resp.json()
+            else:
+                return result
+
+        if found_group['SearchResult']['total'] == 1:
+            result = self.get_object('{0}/config/egressmatrixcell'.format(self.url_base),
+                                     found_group['SearchResult']['resources'][0]['id'], "EgressMatrixCell")
+
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
+    def add_egressmatrixcell(self,
+                             source_sgt,
+                             destination_sgt,
+                             default_rule,
+                             acls=None,
+                             description=None,
+                             return_object=False):
+        """
+        Add TrustSec Egress Matrix Cell Policy.
+
+        :param description: Description
+        :param source_sgt: Source SGT name or Object ID
+        :param destination_sgt: Destination SGT name or Object ID
+        :param default_rule: "NONE", "PERMIT_IP", "DENY_IP"
+        :param acls: list of SGACL Object IDs. Can be None.
+        :param return_object: Look up object after creation and return in response
+        """
+
+        # ISE will actually allow you to post duplicate polices, so before we execute the post, double check to
+        # make sure a policy doesn't already exist
+        src_sgt = self.get_sgt(source_sgt)["response"].get("id", None)
+        dst_sgt = self.get_sgt(destination_sgt)["response"].get("id", None)
+        if src_sgt and dst_sgt:
+            celldata = self.get_egressmatrixcell(None, src_sgt=src_sgt, dst_sgt=dst_sgt)["response"]
+        else:
+            celldata = None
+
+        if celldata:
+            result = {
+                'success': False,
+                'response': '',
+                'error': 'There is already a policy present for this source and destination. Please use update to make '
+                         'policy changes.'
+            }
+            return result
+        elif default_rule == "NONE" and acls is None:
+            result = {
+                'success': False,
+                'response': '',
+                'error': 'You must specify one or more acls as a list, or a default_rule; both cannot be blank'
+            }
+            return result
+        else:
+            self.ise.headers.update(
+                {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+            result = {
+                'success': False,
+                'response': '',
+                'error': '',
+            }
+
+            newacls = []
+            if acls:
+                for a in acls:
+                    if self._oid_test(a):
+                        newacls.append(a)
+                    else:
+                        newacl = self.get_sgacl(a)["response"].get("id", None)
+                        if newacl:
+                            newacls.append(newacl)
+
+            data = {"EgressMatrixCell": {'description': description,
+                                         'sourceSgtId': src_sgt,
+                                         'destinationSgtId': dst_sgt,
+                                         'defaultRule': default_rule, "matrixCellStatus": "ENABLED",
+                                         'sgacls': newacls}}
+
+            resp = self._request('{0}/config/egressmatrixcell'.format(self.url_base), method='post',
+                                 data=json.dumps(data))
+            if resp.status_code == 201:
+                result['success'] = True
+                if return_object:
+                    result['response'] = self.get_egressmatrixcell(None, src_sgt=src_sgt, dst_sgt=dst_sgt)["response"]
+                else:
+                    result['response'] = '{0} Added Successfully'.format(description)
+                return result
+            else:
+                return ERS._pass_ersresponse(result, resp)
+
+    def update_egressmatrixcell(self,
+                                emc,
+                                source_sgt,
+                                destination_sgt,
+                                default_rule,
+                                acls=None,
+                                description=None,
+                                return_object=False):
+        """
+        Update TrustSec Egress Matrix Cell Policy.
+
+        :param emc: Object ID of egress matrix cell
+        :param description: Description
+        :param source_sgt: Source SGT name or Object ID
+        :param destination_sgt: Destination SGT name or Object ID
+        :param default_rule: "NONE", "PERMIT_IP", "DENY_IP"
+        :param acls: list of SGACL Object IDs. Can be None.
+        :param return_object: Look up object after creation and return in response
+        """
+        if not emc:
+            result = {
+                'success': False,
+                'response': '',
+                'error': 'You must provide the egress matrix cell object id in order to update it.'
+            }
+            return result
+        else:
+            self.ise.headers.update(
+                {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+            result = {
+                'success': False,
+                'response': '',
+                'error': '',
+            }
+
+            newacls = []
+            if acls:
+                for a in acls:
+                    if self._oid_test(a):
+                        newacls.append(a)
+                    else:
+                        newacl = self.get_sgacl(a)["response"].get("id", None)
+                        if newacl:
+                            newacls.append(newacl)
+
+            src_sgt = self.get_sgt(source_sgt)["response"]["id"]
+            dst_sgt = self.get_sgt(destination_sgt)["response"]["id"]
+            data = {"EgressMatrixCell": {'id': emc, 'description': description,
+                                         'sourceSgtId': src_sgt,
+                                         'destinationSgtId': dst_sgt,
+                                         'defaultRule': default_rule, "matrixCellStatus": "ENABLED",
+                                         'sgacls': newacls}}
+
+            resp = self._request(('{0}/config/egressmatrixcell/' + emc).format(self.url_base), method='put',
+                                 data=json.dumps(data))
+            if resp.status_code == 200:
+                result['success'] = True
+                if return_object:
+                    result['response'] = self.get_egressmatrixcell(emc)["response"]
+                else:
+                    result['response'] = resp.json()
+                return result
+            else:
+                return ERS._pass_ersresponse(result, resp)
+
+    def delete_egressmatrixcell(self, emc):
+        """
+        Delete TrustSec Egress Matrix Cell Policy.
+
+        :param emc: Object ID of egress matrix cell policy
+        :return: Result dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        resp = self._request('{0}/config/egressmatrixcell/{1}'.format(self.url_base, emc), method='delete')
+
+        if resp.status_code == 204:
+            result['success'] = True
+            result['response'] = '{0} Deleted Successfully'.format(emc)
+            return result
+        elif resp.status_code == 404:
+            result['response'] = '{0} not found'.format(emc)
+            result['error'] = resp.status_code
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
     def get_object(self, url: str, objectid: str, objecttype: str):
         """
         Get generic object lists.
@@ -350,8 +1003,8 @@ class ERS(object):
                                     }
                     }
 
-            resp = self.ise.post('{0}/config/endpoint'.format(self.url_base),
-                                 data=json.dumps(data), timeout=self.timeout)
+            resp = self._request('{0}/config/endpoint'.format(self.url_base), method='post',
+                                 data=json.dumps(data))
             if resp.status_code == 201:
                 result['success'] = True
                 result['response'] = '{0} Added Successfully'.format(name)
@@ -380,8 +1033,8 @@ class ERS(object):
         found_endpoint = resp.json()
         if found_endpoint['SearchResult']['total'] == 1:
             endpoint_oid = found_endpoint['SearchResult']['resources'][0]['id']
-            resp = self.ise.delete(
-                '{0}/config/endpoint/{1}'.format(self.url_base, endpoint_oid), timeout=self.timeout)
+            resp = self._request(
+                '{0}/config/endpoint/{1}'.format(self.url_base, endpoint_oid), method='delete')
 
             if resp.status_code == 204:
                 result['success'] = True
@@ -519,8 +1172,8 @@ class ERS(object):
                                  'firstName': first_name, 'lastName': last_name, 'email': email,
                                  'description': description, 'identityGroups': user_group_oid}}
 
-        resp = self.ise.post('{0}/config/internaluser'.format(self.url_base),
-                             data=json.dumps(data), timeout=self.timeout)
+        resp = self._request('{0}/config/internaluser'.format(self.url_base), method='post',
+                             data=json.dumps(data))
         if resp.status_code == 201:
             result['success'] = True
             result['response'] = '{0} Added Successfully'.format(user_id)
@@ -550,8 +1203,8 @@ class ERS(object):
 
         if found_user['SearchResult']['total'] == 1:
             user_oid = found_user['SearchResult']['resources'][0]['id']
-            resp = self.ise.delete(
-                '{0}/config/internaluser/{1}'.format(self.url_base, user_oid), timeout=self.timeout)
+            resp = self._request(
+                '{0}/config/internaluser/{1}'.format(self.url_base, user_oid), method='delete')
 
             if resp.status_code == 204:
                 result['success'] = True
@@ -699,8 +1352,8 @@ class ERS(object):
               'connectModeOptions': tacas_connect_mode_options
             }
 
-        resp = self.ise.post('{0}/config/networkdevice'.format(self.url_base),
-                             data=json.dumps(data), timeout=self.timeout)
+        resp = self._request('{0}/config/networkdevice'.format(self.url_base), method='post',
+                             data=json.dumps(data))
 
         if resp.status_code == 201:
             result['success'] = True
@@ -730,8 +1383,8 @@ class ERS(object):
         found_device = resp.json()
         if found_device['SearchResult']['total'] == 1:
             device_oid = found_device['SearchResult']['resources'][0]['id']
-            resp = self.ise.delete(
-                '{0}/config/networkdevice/{1}'.format(self.url_base, device_oid), timeout=self.timeout)
+            resp = self._request(
+                '{0}/config/networkdevice/{1}'.format(self.url_base, device_oid), method='delete')
 
             if resp.status_code == 204:
                 result['success'] = True

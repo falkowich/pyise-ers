@@ -1,7 +1,8 @@
 uri = {
     'ise_node': 'ip or fqdn',
     'ers_user': 'ers-user',
-    'ers_pass': 'super-secret-password'
+    'ers_pass': 'super-secret-password',
+    'use_csrf': False
 }
 
 endpoint = {
@@ -36,7 +37,6 @@ device_group = {
 device = {
     'name': 'test-device',
     'ip_address': '10.1.1.1',
-
     'radius_key': 'test-radius-key',
     'snmp_ro': 'snmp-ro-pass',
     'dev_group': 'Stage#Stage#Closed',
@@ -45,4 +45,11 @@ device = {
     'description': 'test-description',
     'snmp_v': 'TWO_C',
     'dev_profile': 'Cisco'
+}
+
+trustsec = {
+    'test_sgt_value': 56789,
+    'test_assign_acl': "92919850-8c01-11e6-996c-525400b48521",
+    'emc_source_sgt': "Unknown",
+    'emc_dest_sgt': "TrustSec_Devices"
 }

@@ -16,6 +16,7 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
 * Merged back from the work that [https://github.com/msom](https://github.com/msom) has done with some good device fixes.
   * *One big thing is that module is now renamed from ise.cream to just ise.*
 * First publish to PyPi with the help of [https://github.com/JonasKs](https://github.com/JonasKs).
+* Add support for ISE CSRF and some TrustSec objects (SGT, SGACL, Egress Policy Matrix) [https://github.com/joshand](https://github.com/joshand).
 
 ## Status
 
@@ -25,7 +26,11 @@ Is you have any suggestions or find a bug, create a issue and I'll try to fix it
 
 ## Testing
 
-Testing has been completed on ISE v2.4.0.357 and with python 3.7.3  
+Testing has been completed on the following ISE versions:
+* v2.4.0.357 and with python 3.7.3  
+* v2.4.0.357 (Patch 11), Python 3.7.7 (joshand)
+* v2.7.0.356 (Patch 1), Python 3.7.7 (joshand)
+
 Until a mock of ERS-API is done, a simple test is in test/test_ers.py  
 To run tests:
 
@@ -67,6 +72,13 @@ sys.path.append('/path/to/ise/')
 from ise import ERS
 ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True)
 ```
+
+If ISE is configured to require CSRF for ERS requests for Enhanced Security, you can add the "use_csrf" tag:
+```python
+from ise import ERS
+ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True, use_csrf=True)
+```
+
 
 #### Methods return a result dictionary
 
@@ -276,3 +288,136 @@ ise.delete_device(device='testdevice03')
 
 {'error': '', 'response': 'testdevice03 Deleted Successfully', 'success': True}
 ```
+
+#### Get all Security Groups (SGTs)
+
+```python
+ise.get_sgts()
+
+{'success': True, 'response': [('Contractors', '4f9c8050-8f9f-11ea-b8e4-ca18718347e2'), ('Employees', 'a34ae530-59a2-11ea-a6b9-26b516ce162b'), ('Guest', '440dd8b0-7da7-11ea-bb75-261e6ff61f42'), ('IoT_Devices', '55bd68f0-8f9f-11ea-b8e4-ca18718347e2'), ('IoT_Servers', '36369eb0-8fa0-11ea-b8e4-ca18718347e2'), ('Servers', '385cbd90-8fa1-11ea-b8e4-ca18718347e2'), ('TrustSec_Devices', '947832a0-8c01-11e6-996c-525400b48521'), ('Unknown', '92adf9f0-8c01-11e6-996c-525400b48521')], 'error': '', 'total': 8}
+```
+
+#### Get Specific SGT
+
+```python
+ise.get_sgt("Unknown")
+ise.get_sgt(0)
+ise.get_sgt("92adf9f0-8c01-11e6-996c-525400b48521")
+
+{'success': True, 'response': {'id': '92adf9f0-8c01-11e6-996c-525400b48521', 'name': 'Unknown', 'description': 'Unknown Security Group', 'value': 0, 'generationId': '1', 'propogateToApic': False, 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/sgt/92adf9f0-8c01-11e6-996c-525400b48521', 'type': 'application/json'}}, 'error': ''}
+```
+
+#### Add a SGT
+
+```python
+ise.add_sgt("Python_Users", "Group used for all Python Users", 56789, return_object=True)
+
+{'success': True, 'response': {'id': 'd4696690-97ba-11ea-9614-caf56bcd6712', 'name': 'Python_Users', 'description': 'Group used for all Python Users', 'value': 56789, 'generationId': '0', 'propogateToApic': False, 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/sgt/d4696690-97ba-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
+```
+
+
+#### Update a SGT
+
+```python
+ise.update_sgt("d4696690-97ba-11ea-9614-caf56bcd6712", "Python_Tests", "Testing for Python Users", 45678, return_object=True)
+
+{'success': True, 'response': {'id': 'd4696690-97ba-11ea-9614-caf56bcd6712', 'name': 'Python_Tests', 'description': 'Testing for Python Users', 'value': 45678, 'generationId': '0', 'propogateToApic': False, 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/sgt/d4696690-97ba-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
+```
+
+
+#### Delete a SGT
+
+```python
+ise.delete_sgt("d4696690-97ba-11ea-9614-caf56bcd6712")
+
+{'success': True, 'response': 'd4696690-97ba-11ea-9614-caf56bcd6712 Deleted Successfully', 'error': ''}
+```
+
+
+#### Get all Security Groups ACLs (SGACLs)
+
+```python
+ise.get_sgacls()
+
+{'success': True, 'response': [('Block_All', '7c9b4a80-8fa1-11ea-b8e4-ca18718347e2'), ('Deny IP', '92919850-8c01-11e6-996c-525400b48521'), ('Deny_ICMP', 'c21dfa60-59a2-11ea-a6b9-26b516ce162b'), ('Deny_IP_Log', '0e6d3830-0684-11ea-ace5-42a6b55c5ca6'), ('Permit IP', '92951ac0-8c01-11e6-996c-525400b48521'), ('Permit_FTP', '761b9e50-7e01-11ea-bb75-261e6ff61f42'), ('Permit_IP_Log', '0e6aee40-0684-11ea-ace5-42a6b55c5ca6'), ('Permit_MQTT', '1470fa00-5a85-11ea-a6b9-26b516ce162b')], 'error': '', 'total': 8}
+```
+
+#### Get Specific SGACL
+
+```python
+ise.get_sgacl("Permit IP")
+ise.get_sgacl("92951ac0-8c01-11e6-996c-525400b48521")
+
+{'success': True, 'response': {'id': '92951ac0-8c01-11e6-996c-525400b48521', 'name': 'Permit IP', 'description': 'Permit IP SGACL', 'generationId': '0', 'aclcontent': 'permit ip', 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/sgacl/92951ac0-8c01-11e6-996c-525400b48521', 'type': 'application/json'}}, 'error': ''}
+```
+
+#### Add a SGACL
+
+```python
+ise.add_sgacl("Python_ACL", "Access List for Python Access", "IP_AGNOSTIC", ["permit tcp dst eq 80"], return_object=True)
+
+{'success': True, 'response': {'id': '7a820000-97bb-11ea-9614-caf56bcd6712', 'name': 'Python_ACL', 'description': 'Access List for Python Access', 'generationId': '0', 'aclcontent': 'permit tcp dst eq 80', 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/sgacl/7a820000-97bb-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
+```
+
+
+#### Update a SGACL
+
+```python
+ise.update_sgacl("7a820000-97bb-11ea-9614-caf56bcd6712", "Python_Access_List", "Python Access List", "IPV4", ["permit tcp src eq 80"], return_object=True)
+
+{'success': True, 'response': {'id': '7a820000-97bb-11ea-9614-caf56bcd6712', 'name': 'Python_Access_List', 'description': 'Python Access List', 'generationId': '1', 'ipVersion': 'IPV4', 'aclcontent': 'permit tcp src eq 80', 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/sgacl/7a820000-97bb-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
+```
+
+
+#### Delete a SGT
+
+```python
+ise.delete_sgacl("7a820000-97bb-11ea-9614-caf56bcd6712")
+
+{'success': True, 'response': '7a820000-97bb-11ea-9614-caf56bcd6712 Deleted Successfully', 'error': ''}
+```
+
+
+#### Get all TrustSec Egress Matrix Cells (Policies)
+
+```python
+ise.get_egressmatrixcells()
+
+{'success': True, 'response': [('ANY-ANY', '92c1a900-8c01-11e6-996c-525400b48521'), ('Contractors-Servers', '5251ca60-8fa1-11ea-b8e4-ca18718347e2'), ('Contractors-IoT_Devices', 'de7859b0-8fa0-11ea-b8e4-ca18718347e2'), ('Employees-Servers', '5fb81e71-8fa1-11ea-b8e4-ca18718347e2'), ('Employees-Employees', 'd2d88280-59a2-11ea-a6b9-26b516ce162b'), ('Employees-IoT_Devices', 'e18ac9d1-8fa0-11ea-b8e4-ca18718347e2'), ('Employees-TrustSec_Devices', 'ee035030-59a2-11ea-a6b9-26b516ce162b'), ('Guest-IoT_Devices', 'e4d49da1-8fa0-11ea-b8e4-ca18718347e2'), ('IoT_Devices-IoT_Devices', 'b0eccdf0-8fa0-11ea-b8e4-ca18718347e2'), ('IoT_Devices-IoT_Servers', 'b7e6d880-8fa0-11ea-b8e4-ca18718347e2'), ('IoT_Devices-Contractors', 'c82308e0-8fa0-11ea-b8e4-ca18718347e2'), ('IoT_Devices-Employees', 'cb276f40-8fa0-11ea-b8e4-ca18718347e2'), ('IoT_Devices-Guest', 'ce1e4110-8fa0-11ea-b8e4-ca18718347e2'), ('IoT_Devices-TrustSec_Devices', 'd1e33851-8fa0-11ea-b8e4-ca18718347e2'), ('IoT_Devices-Unknown', 'd68d3860-8fa0-11ea-b8e4-ca18718347e2'), ('IoT_Servers-IoT_Devices', 'bc784780-8fa0-11ea-b8e4-ca18718347e2'), ('IoT_Servers-IoT_Servers', 'c069f410-8fa0-11ea-b8e4-ca18718347e2'), ('TrustSec_Devices-IoT_Devices', 'e94bcde1-8fa0-11ea-b8e4-ca18718347e2'), ('Unknown-IoT_Devices', 'f3e9da31-8fa0-11ea-b8e4-ca18718347e2')], 'error': '', 'total': 19}
+```
+
+#### Get Specific Egress Matrix Cell
+
+```python
+ise.get_egressmatrixcell("Default egress rule")
+ise.get_egressmatrixcell(None, src_sgt="92bb1950-8c01-11e6-996c-525400b48521", dst_sgt="92bb1950-8c01-11e6-996c-525400b48521")
+
+{'success': True, 'response': {'id': '92c1a900-8c01-11e6-996c-525400b48521', 'name': 'ANY-ANY', 'description': 'Default egress rule', 'sourceSgtId': '92bb1950-8c01-11e6-996c-525400b48521', 'destinationSgtId': '92bb1950-8c01-11e6-996c-525400b48521', 'matrixCellStatus': 'ENABLED', 'defaultRule': 'PERMIT_IP', 'sgacls': ['92951ac0-8c01-11e6-996c-525400b48521'], 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/egressmatrixcell/92c1a900-8c01-11e6-996c-525400b48521', 'type': 'application/json'}}, 'error': ''}
+```
+
+#### Add a Egress Matrix Cell
+
+```python
+ise.add_egressmatrixcell(source_sgt="Unknown", destination_sgt="TrustSec_Devices", default_rule="PERMIT_IP", return_object=True)
+
+{'success': True, 'response': {'id': '6f76b621-97bf-11ea-9614-caf56bcd6712', 'name': 'Unknown-TrustSec_Devices', 'sourceSgtId': '92adf9f0-8c01-11e6-996c-525400b48521', 'destinationSgtId': '947832a0-8c01-11e6-996c-525400b48521', 'matrixCellStatus': 'ENABLED', 'defaultRule': 'PERMIT_IP', 'sgacls': ['92951ac0-8c01-11e6-996c-525400b48521'], 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/egressmatrixcell/6f76b621-97bf-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
+```
+
+
+#### Update a Egress Matrix Cell
+
+```python
+ise.update_egressmatrixcell("6f76b621-97bf-11ea-9614-caf56bcd6712", source_sgt="Unknown", destination_sgt="TrustSec_Devices", default_rule="NONE", acls=["Deny IP"], description="Description", return_object=True)
+
+{'success': True, 'response': {'id': '6f76b621-97bf-11ea-9614-caf56bcd6712', 'name': 'Unknown-TrustSec_Devices', 'description': 'Description', 'sourceSgtId': '92adf9f0-8c01-11e6-996c-525400b48521', 'destinationSgtId': '947832a0-8c01-11e6-996c-525400b48521', 'matrixCellStatus': 'ENABLED', 'defaultRule': 'DENY_IP', 'sgacls': ['92919850-8c01-11e6-996c-525400b48521'], 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/egressmatrixcell/6f76b621-97bf-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
+```
+
+
+#### Delete a Egress Matrix Cell
+
+```python
+ise.delete_egressmatrixcell("6f76b621-97bf-11ea-9614-caf56bcd6712")
+
+{'success': True, 'response': '6f76b621-97bf-11ea-9614-caf56bcd6712 Deleted Successfully', 'error': ''}
+```
+

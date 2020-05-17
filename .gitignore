@@ -2,6 +2,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+venv
+.DS_Store
 
 # C extensions
 *.so
@@ -65,3 +67,4 @@ settings.json
 
 # test config stuff
 config.py
+test.py

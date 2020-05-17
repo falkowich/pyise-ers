@@ -6,14 +6,13 @@ sys.path.append('./')
 
 from ise import ERS  # noqa E402
 from pprint import pprint  # noqa E402
-from config import uri, endpoint, endpoint_group, user, identity_group, device, device_group  # noqa E402
+from config import uri, endpoint, endpoint_group, user, identity_group, device, device_group, trustsec  # noqa E402
 
-ise = ERS(ise_node=uri['ise_node'], ers_user=uri['ers_user'], ers_pass=uri['ers_pass'], verify=False, disable_warnings=True, timeout=15)  # noqa: E501
-
+ise = ERS(ise_node=uri['ise_node'], ers_user=uri['ers_user'], ers_pass=uri['ers_pass'], verify=False,
+          disable_warnings=True, timeout=15, use_csrf=uri['use_csrf'])
 
 
 def test_groups():
-
     groups = ise.get_endpoint_groups()['response']
     pprint(groups)
 
@@ -191,6 +190,136 @@ def delete_device(device):
         print('delete_device » OK')
 
 
+def get_sgts():
+    test_get = ise.get_sgts(size=100, page=1)
+    if test_get['error']:
+        print(test_get['response'])
+    else:
+        print('get_sgts » OK')
+
+
+def get_sgt(name):
+    test = ise.get_sgt(name)
+    if test['error']:
+        print(test['response'])
+    else:
+        print('get_sgt » OK')
+
+
+def add_sgt(trustsec):
+    test = ise.add_sgt(name="Python_Unit_Test", description="Unit Tests", value=trustsec["test_sgt_value"],
+                       return_object=True)
+    if test['error']:
+        print(test['response'])
+    else:
+        print('add_sgt » OK')
+    return test['response']['id']
+
+
+def update_sgt(id, trustsec):
+    test = ise.update_sgt(id, name="Test_Unit_Python", description="Python Unit Tests",
+                          value=trustsec["test_sgt_value"])
+    if test['error']:
+        print(test['response'])
+    else:
+        print('update_sgt » OK')
+
+
+def delete_sgt(id):
+    test = ise.delete_sgt(id)
+    if test['error']:
+        print(test['response'])
+    else:
+        print('delete_sgt » OK')
+
+
+def get_sgacls():
+    test_get = ise.get_sgacls(size=100, page=1)
+    if test_get['error']:
+        print(test_get['response'])
+    else:
+        print('get_sgacls » OK')
+
+
+def get_sgacl(name):
+    test = ise.get_sgacl(name)
+    if test['error']:
+        print(test['response'])
+    else:
+        print('get_sgacl » OK')
+
+
+def add_sgacl(trustsec):
+    test = ise.add_sgacl(name="Python_Unit_Test", description="Unit Tests", ip_version="IPV4",
+                         acl_content=["permit ip"], return_object=True)
+    if test['error']:
+        print(test['response'])
+    else:
+        print('add_sgacl » OK')
+    return test['response']['id']
+
+
+def update_sgacl(id, trustsec):
+    test = ise.update_sgacl(id, name="Test_Unit_Python", description="Python Unit Tests", ip_version="IPV4",
+                            acl_content=["permit ip"])
+    if test['error']:
+        print(test['response'])
+    else:
+        print('update_sgacl » OK')
+
+
+def delete_sgacl(id):
+    test = ise.delete_sgacl(id)
+    if test['error']:
+        print(test['response'])
+    else:
+        print('delete_sgacl » OK')
+
+
+def get_emcs():
+    test_get = ise.get_egressmatrixcells(size=100, page=1)
+    if test_get['error']:
+        print(test_get['response'])
+    else:
+        print('get_egressmatrixcells » OK')
+
+
+def get_emc(name):
+    test = ise.get_egressmatrixcell(name)
+    if test['error']:
+        print(test['response'])
+    else:
+        print('get_egressmatrixcell » OK')
+
+
+def add_emc(trustsec):
+    test = ise.add_egressmatrixcell(trustsec["emc_source_sgt"], trustsec["emc_dest_sgt"], "PERMIT_IP",
+                                    return_object=True)
+    if test['error']:
+        print(test['response'])
+    else:
+        print('add_egressmatrixcell » OK')
+    return test['response']['id']
+
+
+def update_emc(id, trustsec):
+    test = ise.update_egressmatrixcell(id, trustsec["emc_source_sgt"], trustsec["emc_dest_sgt"], "NONE",
+                                       description="Python Unit Tests",
+                                       acls=[trustsec["test_assign_acl"]])
+    if test['error']:
+        print(test['response'])
+    else:
+        print('update_egressmatrixcell » OK')
+
+
+def delete_emc(id):
+    test = ise.delete_egressmatrixcell(id)
+    if test['error']:
+        print(test['response'])
+    else:
+        print('delete_egressmatrixcell » OK')
+
+
 if __name__ == "__main__":
 
     # Endpoint tests
@@ -219,3 +348,24 @@ if __name__ == "__main__":
     get_device(device)
     delete_device(device)
     #  get_object()  # TODO
+
+    # TrustSec SGT tests
+    get_sgts()
+    get_sgt("Unknown")
+    sgtid = add_sgt(trustsec)
+    update_sgt(sgtid, trustsec)
+    delete_sgt(sgtid)
+
+    # TrustSec SGACL tests
+    get_sgacls()
+    get_sgacl("Permit IP")
+    sgaclid = add_sgacl(trustsec)
+    update_sgacl(sgaclid, trustsec)
+    delete_sgacl(sgaclid)
+
+    # TrustSec Egress Matrix Cell (Policy) tests
+    get_emcs()
+    get_emc("Default egress rule")
+    emcid = add_emc(trustsec)
+    update_emc(emcid, trustsec)
+    delete_emc(emcid)
