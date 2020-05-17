@@ -1,7 +1,8 @@
 uri = {
     'ise_node': 'ip or fqdn',
     'ers_user': 'ers-user',
-    'ers_pass': 'super-secret-password'
+    'ers_pass': 'super-secret-password',
+    'use_csrf': False
 }
 
 endpoint = {
