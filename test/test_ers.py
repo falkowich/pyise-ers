@@ -9,7 +9,7 @@ from pprint import pprint  # noqa E402
 from config import uri, endpoint, endpoint_group, user, identity_group, device, device_group, trustsec  # noqa E402
 
 ise = ERS(ise_node=uri['ise_node'], ers_user=uri['ers_user'], ers_pass=uri['ers_pass'], verify=False,
-          disable_warnings=True, timeout=15)
+          disable_warnings=True, timeout=15, use_csrf=uri['use_csrf'])
 
 
 def test_groups():
@@ -304,7 +304,7 @@ def add_emc(trustsec):
 
 def update_emc(id, trustsec):
     test = ise.update_egressmatrixcell(id, trustsec["emc_source_sgt"], trustsec["emc_dest_sgt"], "NONE",
-                                       name="Test_Unit_Python", description="Python Unit Tests",
+                                       description="Python Unit Tests",
                                        acls=[trustsec["test_assign_acl"]])
     if test['error']:
         print(test['response'])
@@ -365,7 +365,7 @@ if __name__ == "__main__":
 
     # TrustSec Egress Matrix Cell (Policy) tests
     get_emcs()
-    get_emc("ANY-ANY")
+    get_emc("Default egress rule")
     emcid = add_emc(trustsec)
     update_emc(emcid, trustsec)
     delete_emc(emcid)
