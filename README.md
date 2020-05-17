@@ -16,6 +16,7 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
 * Merged back from the work that [https://github.com/msom](https://github.com/msom) has done with some good device fixes.
   * *One big thing is that module is now renamed from ise.cream to just ise.*
 * First publish to PyPi with the help of [https://github.com/JonasKs](https://github.com/JonasKs).
+* Add support for ISE CSRF and some TrustSec objects (SGT, SGACL, Egress Policy Matrix) [https://github.com/joshand](https://github.com/joshand).
 
 ## Status
 
@@ -25,7 +26,11 @@ Is you have any suggestions or find a bug, create a issue and I'll try to fix it
 
 ## Testing
 
-Testing has been completed on ISE v2.4.0.357 and with python 3.7.3  
+Testing has been completed on the following ISE versions:
+* v2.4.0.357 and with python 3.7.3  
+* v2.4.0.357 (Patch 11), Python 3.7.7 (joshand)
+* v2.7.0.356 (Patch 1), Python 3.7.7 (joshand)
+
 Until a mock of ERS-API is done, a simple test is in test/test_ers.py  
 To run tests:
 
@@ -67,6 +72,13 @@ sys.path.append('/path/to/ise/')
 from ise import ERS
 ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True)
 ```
+
+If ISE is configured to require CSRF for ERS requests for Enhanced Security, you can add the "use_csrf" tag:
+```python
+from ise import ERS
+ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True, use_csrf=True)
+```
+
 
 #### Methods return a result dictionary
 
