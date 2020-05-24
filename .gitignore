@@ -68,3 +68,4 @@ settings.json
 # test config stuff
 config.py
 test.py
+fixtures/vcr_cassettes/

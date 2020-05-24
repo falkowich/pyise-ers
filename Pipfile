@@ -11,6 +11,7 @@ pipenv-to-requirements = "*"
 setuptools = "*"
 wheel = "*"
 twine = "*"
+pytest-vcr = "*"
 
 [packages]
 requests = "*"
