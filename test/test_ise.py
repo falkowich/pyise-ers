@@ -239,18 +239,6 @@ def test_add_sgacl():
     assert r1['success'] is True
 
 
-@vcr.use_cassette('fixtures/vcr_cassettes/add_sgacl.yaml')
-def test_add_sgacl():
-    r1 = ise.add_sgacl(
-        name="Python_Unit_Test",
-        description="Unit Tests",
-        ip_version="IPV4",
-        acl_content=["permit ip"],
-        return_object=True
-    )
-    assert r1['success'] is True
-
-
 @vcr.use_cassette('fixtures/vcr_cassettes/update_sgacl.yaml')
 def test_update_sgacl():
     res = ise.get_sgacl("Python_Unit_Test")
