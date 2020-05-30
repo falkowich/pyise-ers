@@ -300,7 +300,7 @@ def test_update_egressmatrixcell():
     assert r1['success'] is True
 
 
-@vcr.use_cassette('fixtures/vcr_cassettes/delete_egressmatrixcell(id).yaml')
+@vcr.use_cassette('fixtures/vcr_cassettes/delete_egressmatrixcell.yaml')
 def test_delete_egressmatrixcell():
     res = ise.get_egressmatrixcell("Test_Unit_Python")
     id = res['response']['id']

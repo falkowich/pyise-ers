@@ -22,21 +22,37 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
 
 Tested and used in our environment at work. But as usual it's up to you to test this out in a test environment so everything works as intended.
 
-Is you have any suggestions or find a bug, create a issue and I'll try to fix it :)
+Is you have any suggestions or find a bug, create a issue and we will try to fix it :)
 
 ## Testing
 
 Testing has been completed on the following ISE versions:
-* v2.4.0.357 and with python 3.7.3  
+
+* v2.4.0.357 and with python 3.7.3
 * v2.4.0.357 (Patch 11), Python 3.7.7 (joshand)
 * v2.7.0.356 (Patch 1), Python 3.7.7 (joshand)
 
-Until a mock of ERS-API is done, a simple test is in test/test_ers.py  
-To run tests:
+There are two tests available in tests/ directory.
+
+### Manual test
+
+To run the "manual" tests:
 
 * make a copy of config-DEFAULT.py to config.py
 * edit uri with settings to your test ise
-* run python test-ers.py
+* run python manual_test_ers.py
+
+### Pytest
+
+To run the testfiles with pytest-vcr.  
+The first time this is runned the directory fixtures/vcr_cassettes are created with saved .yaml files from the test.
+That is so that the tests can be repeated without contacting ISE everytime.
+
+* make a copy of config-DEFAULT.py to config.py
+* edit uri with settings to your test ise
+* run python -m pytest
+
+The plan is to extend the testing with pytest, and hopefully get good testcoverage on this library.
 
 ### Enable REST API
 
