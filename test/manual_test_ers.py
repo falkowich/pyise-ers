@@ -322,50 +322,50 @@ def delete_emc(id):
 
 if __name__ == "__main__":
 
-#    # Endpoint tests
-#    add_endpoint(endpoint)
-#    get_endpoints()
-#    get_endpoint(endpoint)
-#    delete_endpoint(endpoint)
-#
-#    # EndpointGroup tests
-#    get_endpoint_groups(21)
-#    get_endpoint_group(endpoint_group)
-#
-#    # User tests
-#    get_identity_groups()
-#    identity_group_id = get_identity_group(identity_group)
-#    add_user(user, identity_group_id)
-#    get_users()
-#    get_user(user)
-#    delete_user(user)
-#
-#    # Device tests
-#    get_device_groups()
-#    get_device_group(device_group)
-#    add_device(device)
-#    get_devices()
-#    get_device(device)
-#    delete_device(device)
-#    #  get_object()  # TODO
-#
-#    # TrustSec SGT tests
-#    get_sgts()
-#    get_sgt("Unknown")
-#    sgtid = add_sgt(trustsec)
-#    update_sgt(sgtid, trustsec)
-#    delete_sgt(sgtid)
-#
-#    # TrustSec SGACL tests
-#    get_sgacls()
-#    get_sgacl("Permit IP")
-#    sgaclid = add_sgacl(trustsec)
-#    update_sgacl(sgaclid, trustsec)
-#    delete_sgacl(sgaclid)
-#
-#    # TrustSec Egress Matrix Cell (Policy) tests
-#    get_emcs()
-#    get_emc("Default egress rule")
-#    emcid = add_emc(trustsec)
+    # Endpoint tests
+    add_endpoint(endpoint)
+    get_endpoints()
+    get_endpoint(endpoint)
+    delete_endpoint(endpoint)
+
+    # EndpointGroup tests
+    get_endpoint_groups(21)
+    get_endpoint_group(endpoint_group)
+
+    # User tests
+    get_identity_groups()
+    identity_group_id = get_identity_group(identity_group)
+    add_user(user, identity_group_id)
+    get_users()
+    get_user(user)
+    delete_user(user)
+
+    # Device tests
+    get_device_groups()
+    get_device_group(device_group)
+    add_device(device)
+    get_devices()
+    get_device(device)
+    delete_device(device)
+    #  get_object()  # TODO
+
+    # TrustSec SGT tests
+    get_sgts()
+    get_sgt("Unknown")
+    sgtid = add_sgt(trustsec)
+    update_sgt(sgtid, trustsec)
+    delete_sgt(sgtid)
+
+    # TrustSec SGACL tests
+    get_sgacls()
+    get_sgacl("Permit IP")
+    sgaclid = add_sgacl(trustsec)
+    update_sgacl(sgaclid, trustsec)
+    delete_sgacl(sgaclid)
+
+    # TrustSec Egress Matrix Cell (Policy) tests
+    get_emcs()
+    get_emc("Default egress rule")
+    emcid = add_emc(trustsec)
     update_emc(emcid, trustsec)
     delete_emc(emcid)
