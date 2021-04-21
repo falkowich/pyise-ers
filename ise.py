@@ -1243,6 +1243,9 @@ class ERS(object):
 
         return self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
 
+    # TODO: Add an add_device_group method 
+    # TODO: Add a delete_device_group method 
+
     def get_devices(self, filter=None, size=20, page=1):
         """
         Get a list of devices.
@@ -1281,6 +1284,8 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
+    # TODO: Make radius and snmp optional 
+    # TODO: Make groups a list
     def add_device(self,
                    name,
                    ip_address,
