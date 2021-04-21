@@ -4,6 +4,7 @@ import os
 import re
 from furl import furl
 from datetime import datetime, timedelta
+from urllib.parse import quote
 
 import requests
 
@@ -1231,6 +1232,7 @@ class ERS(object):
         """
         return self._get_groups('{0}/config/networkdevicegroup'.format(self.url_base), size=size, page=page)
 
+    # TODO: Add support to get group by name in addition to ID
     def get_device_group(self, device_group_oid):
         """
         Get a device group details.
@@ -1243,7 +1245,6 @@ class ERS(object):
 
         return self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
 
-    # TODO: Add an add_device_group method 
     def add_device_group(self, name, description=""): 
         """
         Add a Network Device Group 
@@ -1280,7 +1281,49 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    # TODO: Add a delete_device_group method 
+    def delete_device_group(self, name): 
+        """
+        Delete a Network Device Group
+
+        :param name: Full name of the group to delete. (Example: "Device Type#All Device Types#ASA Firewall)
+
+        :return: Result dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        # Using quote() function from urllib.parse to urlencode the name of the group
+        resp = self.ise.get(
+            '{0}/config/networkdevicegroup?filter=name.contains.{1}'.format(self.url_base, quote(name)))
+        found_group = resp.json()
+        if found_group['SearchResult']['total'] == 1:
+            group_oid = found_group['SearchResult']['resources'][0]['id']
+            resp = self._request(
+                '{0}/config/networkdevicegroup/{1}'.format(self.url_base, group_oid), method='delete')
+
+            if resp.status_code == 204:
+                result['success'] = True
+                result['response'] = '{0} Deleted Successfully'.format(name)
+                return result
+            elif resp.status_code == 404:
+                result['response'] = '{0} not found'.format(name)
+                result['error'] = resp.status_code
+                return result
+            else:
+                return ERS._pass_ersresponse(result, resp)
+        elif found_group['SearchResult']['total'] == 0: 
+            result['response'] = '{0} not found'.format(name)
+            result['error'] = 404
+            return result
+        else: 
+            return ERS._pass_ersresponse(result, resp)
+
 
     def get_devices(self, filter=None, size=20, page=1):
         """
