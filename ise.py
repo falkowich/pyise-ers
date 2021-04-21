@@ -1289,12 +1289,14 @@ class ERS(object):
     def add_device(self,
                    name,
                    ip_address,
-                   radius_key,
-                   snmp_ro,
-                   dev_group,
-                   dev_location,
-                   dev_type,
+                   mask = 32, 
                    description='',
+                   dev_group=None,
+                   dev_location="Location#All Locations",
+                   dev_type="Device Type#All Device Types",
+                   dev_ipsec="IPSEC#Is IPSEC Device#No",
+                   radius_key=None,
+                   snmp_ro=None,
                    snmp_v='TWO_C',
                    dev_profile='Cisco',
                    tacacs_shared_secret=None,
@@ -1325,27 +1327,14 @@ class ERS(object):
 
         data = {'NetworkDevice': {'name': name,
                                   'description': description,
-                                  'authenticationSettings': {
-                                      'networkProtocol': 'RADIUS',
-                                      'radiusSharedSecret': radius_key,
-                                      'enableKeyWrap': 'false',
-                                  },
-                                  'snmpsettings': {
-                                      'version': 'TWO_C',
-                                      'roCommunity': snmp_ro,
-                                      'pollingInterval': 3600,
-                                      'linkTrapQuery': 'true',
-                                      'macTrapQuery': 'true',
-                                      'originatingPolicyServicesNode': 'Auto'
-                                  },
                                   'profileName': dev_profile,
                                   'coaPort': 1700,
                                   'NetworkDeviceIPList': [{
                                       'ipaddress': ip_address,
-                                      'mask': 32
+                                      'mask': mask,
                                   }],
                                   'NetworkDeviceGroupList': [
-                                      dev_group, dev_type, dev_location,
+                                      dev_type, dev_location,
                                       'IPSEC#Is IPSEC Device#No'
                                     ]
                                   }
@@ -1356,6 +1345,29 @@ class ERS(object):
               'sharedSecret': tacacs_shared_secret,
               'connectModeOptions': tacas_connect_mode_options
             }
+        
+        if radius_key is not None: 
+            data['NetworkDevice']["authenticationSettings"] = {
+                                      'networkProtocol': 'RADIUS',
+                                      'radiusSharedSecret': radius_key,
+                                      'enableKeyWrap': 'false',
+                                  }
+        
+        if snmp_ro is not None: 
+            data["NetworkDevice"]["snmpsettings"] = {
+                                      'version': 'TWO_C',
+                                      'roCommunity': snmp_ro,
+                                      'pollingInterval': 3600,
+                                      'linkTrapQuery': 'true',
+                                      'macTrapQuery': 'true',
+                                      'originatingPolicyServicesNode': 'Auto'
+                                  }
+
+        if dev_group is not None: 
+            if isinstance(dev_group, str): 
+                data["NetworkDevice"]["NetworkDeviceGroupList"].append(dev_group)
+            elif isinstance(dev_group, list): 
+                data["NetworkDevice"]["NetworkDeviceGroupList"] += dev_group
 
         resp = self._request('{0}/config/networkdevice'.format(self.url_base), method='post',
                              data=json.dumps(data))
@@ -1407,3 +1419,5 @@ class ERS(object):
             return result
         else:
             return ERS._pass_ersresponse(result, resp)
+
+# TODO: Create update_device function 
