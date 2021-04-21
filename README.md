@@ -266,6 +266,26 @@ ise.get_device_groups()['response']
 
 ```
 
+#### Add a new device group 
+
+```python
+ise.add_device_group(name="Device Type#All Device Types#Python Device Type", description="From Python")
+
+{'success': True,
+ 'response': 'Device Type#All Device Types#Python Device Type Added Successfully',
+ 'error': ''}
+```
+
+#### Remove a device group 
+
+```python
+ise.delete_device_group(name="Device Type#All Device Types#Python Device Type")
+
+{'success': True,
+ 'response': 'Device Type#All Device Types#Python Device Type Deleted Successfully',
+ 'error': ''}
+```
+
 #### Add a device
 
 ```python
@@ -278,7 +298,6 @@ ise.add_device(name='testdevice03',
                dev_type='Device Type#All Device Types#Switch')
 
 {'error': '', 'response': 'testdevice03 Added Successfully', 'success': True}
-
 ```
 
 #### Delete a device
