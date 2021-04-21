@@ -1281,6 +1281,8 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
+    # TODO: Add update_device_group function 
+
     def delete_device_group(self, name): 
         """
         Delete a Network Device Group
