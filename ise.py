@@ -1244,6 +1244,42 @@ class ERS(object):
         return self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
 
     # TODO: Add an add_device_group method 
+    def add_device_group(self, name, description=""): 
+        """
+        Add a Network Device Group 
+
+        :param name: Full name of the group to add. (Example: "Device Type#All Device Types#ASA Firewall)
+        :param description: Optional description for group
+
+        :return: Result dictionary
+        """
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        data = {
+            "NetworkDeviceGroup": {
+                "name": name,
+                "description": description, 
+                "othername": name.split("#")[0]
+            }
+        }
+
+        resp = self._request('{0}/config/networkdevicegroup'.format(self.url_base), method='post',
+                             data=json.dumps(data))
+
+        if resp.status_code == 201:
+            result['success'] = True
+            result['response'] = '{0} Added Successfully'.format(name)
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
     # TODO: Add a delete_device_group method 
 
     def get_devices(self, filter=None, size=20, page=1):
