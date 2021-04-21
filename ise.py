@@ -1284,8 +1284,6 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    # TODO: Make radius and snmp optional 
-    # TODO: Make groups a list
     def add_device(self,
                    name,
                    ip_address,
@@ -1300,20 +1298,36 @@ class ERS(object):
                    snmp_v='TWO_C',
                    dev_profile='Cisco',
                    tacacs_shared_secret=None,
-                   tacas_connect_mode_options='ON_LEGACY'
+                   tacas_connect_mode_options='ON_LEGACY', 
+                   coa_port=1700, 
+                   snmp_version = "TWO_C", 
+                   snmp_polling_interval = 3600, 
+                   snmp_link_trap_query = "true", 
+                   snmp_mac_trap_query = "true", 
+                   snmp_originating_policy_services_node="Auto",
                    ):
         """
         Add a device.
 
         :param name: name of device
         :param ip_address: IP address of device
-        :param radius_key: Radius shared secret
-        :param snmp_ro: SNMP read only community string
-        :param dev_group: Device group name
-        :param dev_location: Device location
-        :param dev_type: Device type
-        :param description: Device description
-        :param dev_profile: Device profile
+        :param description: Device description (default "")
+        :param dev_group: Custom device group name, string or list (default None)
+        :param dev_location: Device location (default "Location#All Locations")
+        :param dev_type: Device type (default "Device Type#All Device Types")
+        :param dev_ipsec: IPSEC Status for device (default "IPSEC#Is IPSEC Device#No")
+        :param radius_key: Radius shared secret (default None)
+        :param snmp_ro: SNMP read only community string (default None)
+        :param dev_profile: Device profile (default "Cisco")
+        :param tacacs_shared_secret: Tacacs shared secret  (default None)
+        :param tacas_connect_mode_options: Tacacs connect mode  (default 'ON_LEGACY',)
+        :param coa_port: Change of Auth port  (default 1700)
+        :param snmp_version: SNMP Version  (default "TWO_C")
+        :param snmp_polling_interval: SNMP Polling Interval  (default 3600)
+        :param snmp_link_trap_query: SNMP Link Trap  (default "true")
+        :param snmp_mac_trap_query: SNMP MAC Trap  (default "true")
+        :param snmp_originating_policy_services_node: SNMP Policy Node  (default "Auto")
+
         :return: Result dictionary
         """
         result = {
@@ -1328,14 +1342,14 @@ class ERS(object):
         data = {'NetworkDevice': {'name': name,
                                   'description': description,
                                   'profileName': dev_profile,
-                                  'coaPort': 1700,
+                                  'coaPort': coa_port,
                                   'NetworkDeviceIPList': [{
                                       'ipaddress': ip_address,
                                       'mask': mask,
                                   }],
                                   'NetworkDeviceGroupList': [
                                       dev_type, dev_location,
-                                      'IPSEC#Is IPSEC Device#No'
+                                      dev_ipsec
                                     ]
                                   }
                 }
@@ -1355,12 +1369,12 @@ class ERS(object):
         
         if snmp_ro is not None: 
             data["NetworkDevice"]["snmpsettings"] = {
-                                      'version': 'TWO_C',
+                                      'version': snmp_version,
                                       'roCommunity': snmp_ro,
-                                      'pollingInterval': 3600,
-                                      'linkTrapQuery': 'true',
-                                      'macTrapQuery': 'true',
-                                      'originatingPolicyServicesNode': 'Auto'
+                                      'pollingInterval': snmp_polling_interval,
+                                      'linkTrapQuery': snmp_link_trap_query,
+                                      'macTrapQuery': snmp_mac_trap_query,
+                                      'originatingPolicyServicesNode': snmp_originating_policy_services_node
                                   }
 
         if dev_group is not None: 
