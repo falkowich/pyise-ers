@@ -1232,18 +1232,36 @@ class ERS(object):
         """
         return self._get_groups('{0}/config/networkdevicegroup'.format(self.url_base), size=size, page=page)
 
-    # TODO: Add support to get group by name in addition to ID
-    def get_device_group(self, device_group_oid):
+    def get_device_group(self, device_group_oid=None, name=None):
         """
-        Get a device group details.
+        Get a device group(s) details by group id or name. 
+        
+        device_group_oid takes priority for searching over name
 
-        :param device_group_oid: oid of the device group
-        :return: result dictionary
+        :param device_group_oid: oid of the device group (default None)
+        :param name: name of group (default None)
+        :return: result dictionary or list of dictionaries
         """
         self.ise.headers.update(
             {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
-        return self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
+        if device_group_oid is not None: 
+            device_group = self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
+        elif name is not None: 
+            # Using quote() function from urllib.parse to urlencode the name of the group
+            resp = self.ise.get(
+                '{0}/config/networkdevicegroup?filter=name.contains.{1}'.format(self.url_base, quote(name)))
+            found_group = resp.json()
+
+            if found_group['SearchResult']['total'] == 1:
+                group_oid = found_group['SearchResult']['resources'][0]['id']
+                device_group = self.get_device_group(device_group_oid=group_oid)
+            elif found_group['SearchResult']['total'] == 0: 
+                return None
+            else: 
+                device_group = [self.get_device_group(device_group_oid=group["id"]) for group in found_group['SearchResult']['resources']]
+
+        return device_group
 
     def add_device_group(self, name, description=""): 
         """
