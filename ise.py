@@ -1257,7 +1257,7 @@ class ERS(object):
                 group_oid = found_group['SearchResult']['resources'][0]['id']
                 device_group = self.get_device_group(device_group_oid=group_oid)
             elif found_group['SearchResult']['total'] == 0: 
-                return None
+                return {'success': False, 'response': '', 'error': 404}
             else: 
                 device_group = [self.get_device_group(device_group_oid=group["id"]) for group in found_group['SearchResult']['resources']]
 
@@ -1299,7 +1299,58 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    # TODO: Add update_device_group function 
+    def update_device_group(self, device_group_oid, name=None, description=None):
+        """
+        Update a Network Device Group with provided settings.
+
+        :param device_group_oid: Unique ID for group 
+        :param name: New name for group (default None)
+        :param description: New description for group (default None)
+
+        :return: results dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        resp = self.get_device_group(device_group_oid=device_group_oid)
+
+        if not resp["success"]: 
+            # Pass through the 404 error from the lookup 
+            return resp
+
+        device_group = resp["response"]
+
+        # Set initial values to current values
+        data = {
+            "NetworkDeviceGroup": {
+                "name": device_group["name"],
+                "description": device_group["description"], 
+                "othername": device_group["othername"]
+            }
+        }
+
+        if name: 
+            data["NetworkDeviceGroup"]["name"] = name
+        if description: 
+            data["NetworkDeviceGroup"]["description"] = description
+
+        resp = self._request('{0}/config/networkdevicegroup/{1}'.format(self.url_base, device_group_oid), method='put',
+                             data=json.dumps(data))
+
+        if resp.status_code == 200:
+            result['success'] = True
+            result['response'] = '{0} Updated Successfully'.format(device_group_oid)
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+        
+
 
     def delete_device_group(self, name): 
         """

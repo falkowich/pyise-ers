@@ -340,6 +340,16 @@ ise.add_device_group(name="Device Type#All Device Types#Python Device Type", des
  'error': ''}
 ```
 
+#### Update a device group 
+
+```python
+ise.update_device_group(device_group_oid=group_id, name="Device Type#All Device Types#Updated Device Type", description="Update Description")
+
+{'success': True,
+ 'response': 'e7db3e00-a36d-11eb-ac01-36750594a888 Updated Successfully',
+ 'error': ''}
+```
+
 #### Remove a device group 
 
 ```python
