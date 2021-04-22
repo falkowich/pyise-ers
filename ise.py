@@ -1445,10 +1445,9 @@ class ERS(object):
                    dev_ipsec="IPSEC#Is IPSEC Device#No",
                    radius_key=None,
                    snmp_ro=None,
-                   snmp_v='TWO_C',
                    dev_profile='Cisco',
                    tacacs_shared_secret=None,
-                   tacas_connect_mode_options='ON_LEGACY', 
+                   tacacs_connect_mode_options='ON_LEGACY', 
                    coa_port=1700, 
                    snmp_version = "TWO_C", 
                    snmp_polling_interval = 3600, 
@@ -1470,7 +1469,7 @@ class ERS(object):
         :param snmp_ro: SNMP read only community string (default None)
         :param dev_profile: Device profile (default "Cisco")
         :param tacacs_shared_secret: Tacacs shared secret  (default None)
-        :param tacas_connect_mode_options: Tacacs connect mode  (default 'ON_LEGACY',)
+        :param tacacs_connect_mode_options: Tacacs connect mode  (default 'ON_LEGACY',)
         :param coa_port: Change of Auth port  (default 1700)
         :param snmp_version: SNMP Version  (default "TWO_C")
         :param snmp_polling_interval: SNMP Polling Interval  (default 3600)
@@ -1584,4 +1583,250 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-# TODO: Create update_device function 
+    def update_device(self, 
+                        name,
+                        new_name=None,
+                        ip_address=None,
+                        mask=None, 
+                        description=None,
+                        dev_group=None,
+                        dev_location=None,
+                        dev_type=None,
+                        dev_ipsec=None,
+                        radius_key=None,
+                        snmp_ro=None,
+                        dev_profile=None,
+                        tacacs_shared_secret=None,
+                        tacacs_connect_mode_options=None, 
+                        coa_port=None, 
+                        snmp_version=None, 
+                        snmp_polling_interval=None, 
+                        snmp_link_trap_query=None, 
+                        snmp_mac_trap_query=None, 
+                        snmp_originating_policy_services_node=None,
+                        disable_tacacs=False,
+                        disable_radius=False, 
+                        disable_snmp=False,
+                   ):
+
+        """
+        Update a Network Device with provided settings.
+
+        New settings not provided will remain at current setting
+
+        :param name: Current name of the device
+        :param new_name: New name for device (default None)
+        :param ip_address: New ip address for device (default None)
+        :param mask: New network mask for device (default None)
+        :param description: New description for device (default None)
+        :param dev_group: New custom group(s) for device - string or list (default None)
+        :param dev_location: New location for device (default None)
+        :param dev_type: New device type for device (default None)
+        :param dev_ipsec: New IPSEC status for device (default None)
+        :param radius_key: New radius key for device (default None)
+        :param snmp_ro: New snmp_ro string for device (default None)
+        :param dev_profile: New Device profile for device (default None)
+        :param tacacs_shared_secret: New tacacs shared secret for device (default None)
+        :param tacas_connect_mode_options: New tacacs mode for device (default None)
+        :param coa_port: New COA port for device (default None)
+        :param snmp_version: New SNMP Version for device (default None)
+        :param snmp_polling_interval: New SNMP polling interval for device (default None)
+        :param snmp_link_trap_query: New SNMP link trap query for device (default None)
+        :param snmp_mac_trap_query: New SNMP mac trap query for device (default None)
+        :param snmp_originating_policy_services_node: New SNMP policy service node for device (default None)
+        :param disable_tacacs: Disable TACACS if configured (default False)
+        :param disable_radius: Disable Radius if configured (default False) *NOTE: Flag placed for completeness, but ERS API currently doesn't support disabling RADIUS*
+        :param disable_snmp: Disable SNMP if configured (default False)
+
+        :return: results dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        resp = self.get_device(device=name)
+
+        if not resp["success"]: 
+            # Pass through the 404 error from the lookup 
+            return resp
+
+        device = resp["response"]
+
+        # Remove response values from GET that aren't used in PUT 
+        device_oid = device.pop("id")
+        del device["link"]
+
+        # Update basic device properties 
+        if new_name: 
+            device["name"] = new_name
+        if description: 
+            device["description"] = description
+        if dev_profile: 
+            device["profileName"] = dev_profile 
+        if coa_port: 
+            device["coaPort"] = coa_port 
+        
+        # Update device ip address
+        # TODO: Currently only supports a device with a single IP address
+        if ip_address: 
+            device["NetworkDeviceIPList"][0]["ipaddress"] = ip_address
+        if mask: 
+            device["NetworkDeviceIPList"][0]["mask"] = mask
+
+        # Update radius settings 
+        if disable_radius: 
+            # device.pop("authenticationSettings", None)
+            # BUG in ERS API: Doesn't seem to be a way to successfully disable RADIUS from the API
+            # Some details in this post 
+            # https://community.cisco.com/t5/network-access-control/ise-ers-network-device-api-put-update-operation-how-to-remove/td-p/4028001
+            result["error"] = "Error: ERS API doesn't support disabling RADIUS. You'll need to delete/add the device"
+            result["success"] = False 
+            return result
+        elif radius_key: 
+            device["authenticationSettings"] = {
+                                        'networkProtocol': 'RADIUS',
+                                        'radiusSharedSecret': radius_key,
+                                        'enableKeyWrap': 'false',
+                                    }
+
+        # Update tacacs settings 
+        if disable_tacacs: 
+            device.pop("tacacsSettings", None)
+        elif tacacs_shared_secret or tacacs_connect_mode_options: 
+            # Get current tacacs currently configured on device. If not configured build data model
+            tacacs_settings = device.pop(
+                    "tacacsSettings", 
+                    {
+                        'sharedSecret': None,
+                        'connectModeOptions': None
+                    }
+                )
+
+            # Update new values provided by functions
+            if tacacs_shared_secret: 
+                tacacs_settings["sharedSecret"] = tacacs_shared_secret 
+            if tacacs_connect_mode_options: 
+                tacacs_settings["connectModeOptions"] = tacacs_connect_mode_options
+
+            # Set a default for connect mode setting if one isn't provided or already configured 
+            if tacacs_settings["connectModeOptions"] is None: 
+                tacacs_settings["connectModeOptions"] = 'ON_LEGACY'
+
+            # Update the device with new tacacs settings as long as all factors confgured 
+            #   This could happen in an odd case where a connect mode change provided without a 
+            #   TACACS secret and TACACS wasn't already configured. Behavior is to then IGNORE
+            #   tacacs completely 
+            if None not in tacacs_settings.values(): 
+                device["tacacsSettings"] = tacacs_settings     
+
+        # Update snmp settings 
+        if disable_snmp: 
+            device.pop("snmpsettings", None)
+        elif snmp_ro or snmp_version or snmp_polling_interval or snmp_link_trap_query or snmp_mac_trap_query or snmp_originating_policy_services_node: 
+            # Get current SNMP settings from device, or build data model 
+            snmp_settings = device.pop(
+                "snmpsettings", 
+                {
+                    'version': None,
+                    'roCommunity': None,
+                    'pollingInterval': None,
+                    'linkTrapQuery': None,
+                    'macTrapQuery': None,
+                    'originatingPolicyServicesNode': None
+                }
+                )
+
+            # Update new values provided
+            if snmp_ro: 
+                snmp_settings["roCommunity"] = snmp_ro
+                
+            if snmp_version:
+                snmp_settings["version"] = snmp_version
+
+            if snmp_polling_interval: 
+                snmp_settings["pollingInterval"] = snmp_polling_interval
+            
+            if snmp_link_trap_query: 
+                snmp_settings["linkTrapQuery"] = snmp_link_trap_query
+            
+            if snmp_mac_trap_query: 
+                snmp_settings["macTrapQuery"] = snmp_mac_trap_query
+                
+            if snmp_originating_policy_services_node: 
+                snmp_settings["originatingPolicyServicesNode"] = snmp_originating_policy_services_node
+            
+            # Update defaults for common setting should SNMP be newly configured and all settings not provided
+            if snmp_settings["version"] is None:
+                snmp_settings["version"] = "TWO_C"
+
+            if snmp_settings["pollingInterval"] is None: 
+                snmp_settings["pollingInterval"] = 3600
+            
+            if snmp_settings["linkTrapQuery"] is None: 
+                snmp_settings["linkTrapQuery"] = "true"
+            
+            if snmp_settings["macTrapQuery"] is None: 
+                snmp_settings["macTrapQuery"] = "true"
+                
+            if snmp_settings["originatingPolicyServicesNode"] is None: 
+                snmp_settings["originatingPolicyServicesNode"] = "Auto"
+
+            # Update the device with new snmp settings as long as all factors confgured 
+            #   This could happen in an odd case where an snmp attribute change provided without a 
+            #   SNMP RO and SNMP wasn't already configured. Behavior is to then IGNORE
+            #   snmp completely 
+            if None not in snmp_settings.values(): 
+                device["snmpsettings"] = snmp_settings     
+
+        # Update groups 
+        if dev_group or dev_location or dev_type or dev_ipsec: 
+            # Groups are a mandatory attribute, let's see what the current configuration is 
+            groups = device.pop("NetworkDeviceGroupList", None)
+
+            # Determine the current values of the mandatory ISE Groups
+            group_location = [group for group in groups if group.startswith("Location#All Locations")][0]
+            group_type = [group for group in groups if group.startswith("Device Type#All Device Types")][0]
+            group_ipsec = [group for group in groups if group.startswith("IPSEC#Is IPSEC Device")][0]
+
+            # Create a list of any custom groups by removing the mandatory groups from the list
+            custom_groups = groups 
+            custom_groups.pop(groups.index(group_location))
+            custom_groups.pop(groups.index(group_type))
+            custom_groups.pop(groups.index(group_ipsec))
+
+            # Update the groups to new values if provided 
+            if dev_location: 
+                group_location = dev_location 
+            if dev_type: 
+                group_type = dev_type 
+            if dev_ipsec: 
+                group_ipsec = dev_ipsec 
+            if dev_group: 
+                if isinstance(dev_group, str): 
+                    custom_groups = [dev_group]
+                elif isinstance(dev_group, list): 
+                    custom_groups = dev_group
+            
+            device["NetworkDeviceGroupList"] = [group_location, group_type, group_ipsec]
+            device["NetworkDeviceGroupList"] += custom_groups
+
+
+        # data for request 
+        data = {"NetworkDevice": device}
+
+        resp = self._request('{0}/config/networkdevice/{1}'.format(self.url_base, device_oid), method='put',
+                             data=json.dumps(data))
+
+        if resp.status_code == 200:
+            result['success'] = True
+            # result['response'] = '{0} Updated Successfully'.format(device_group_oid)
+            result['response'] = resp.json()["UpdatedFieldsList"]
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+        

@@ -374,6 +374,19 @@ ise.add_device(name='testdevice03',
 {'error': '', 'response': 'testdevice03 Added Successfully', 'success': True}
 ```
 
+#### Update a device 
+
+```python
+ise.update_device("PYTHON-DEVICE", tacacs_shared_secret="NEWTACACS")
+
+{'success': True,
+ 'response': {'updatedField': [{'field': 'TacacsSettings.ConnectModeOptions',
+    'oldValue': '',
+    'newValue': 'ON_LEGACY'},
+   {'field': 'TacacsSettings.SharedSecret', 'newValue': 'NEWTACACS'}]},
+ 'error': ''}
+```
+
 #### Delete a device
 
 ```python
