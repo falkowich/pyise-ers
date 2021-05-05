@@ -1435,8 +1435,8 @@ class ERS(object):
             return ERS._pass_ersresponse(result, resp)
 
     def add_device(self,
-                   name,
-                   ip_address,
+                   name = None,
+                   ip_address = None,
                    mask = 32, 
                    description='',
                    dev_group=None,
@@ -1454,6 +1454,7 @@ class ERS(object):
                    snmp_link_trap_query = "true", 
                    snmp_mac_trap_query = "true", 
                    snmp_originating_policy_services_node="Auto",
+                   device_payload = None,
                    ):
         """
         Add a device.
@@ -1476,6 +1477,7 @@ class ERS(object):
         :param snmp_link_trap_query: SNMP Link Trap  (default "true")
         :param snmp_mac_trap_query: SNMP MAC Trap  (default "true")
         :param snmp_originating_policy_services_node: SNMP Policy Node  (default "Auto")
+        :param device_payload: A single dictionary representing desired device configuration. If provided it overrides individual settings (default None)
 
         :return: Result dictionary
         """
@@ -1488,49 +1490,64 @@ class ERS(object):
         self.ise.headers.update(
             {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
-        data = {'NetworkDevice': {'name': name,
-                                  'description': description,
-                                  'profileName': dev_profile,
-                                  'coaPort': coa_port,
-                                  'NetworkDeviceIPList': [{
-                                      'ipaddress': ip_address,
-                                      'mask': mask,
-                                  }],
-                                  'NetworkDeviceGroupList': [
-                                      dev_type, dev_location,
-                                      dev_ipsec
-                                    ]
-                                  }
+        # If a payload was provided, use it as is
+        if device_payload: 
+            data = {'NetworkDevice': device_payload}
+
+            # Pull name out of payload to use in response 
+            name = device_payload["name"]
+        
+        # If no payload provided, build from provided details
+        elif name and ip_address: 
+            data = {'NetworkDevice': {'name': name,
+                                    'description': description,
+                                    'profileName': dev_profile,
+                                    'coaPort': coa_port,
+                                    'NetworkDeviceIPList': [{
+                                        'ipaddress': ip_address,
+                                        'mask': mask,
+                                    }],
+                                    'NetworkDeviceGroupList': [
+                                        dev_type, dev_location,
+                                        dev_ipsec
+                                        ]
+                                    }
+                    }
+
+            if tacacs_shared_secret is not None:
+                data['NetworkDevice']['tacacsSettings'] = {
+                'sharedSecret': tacacs_shared_secret,
+                'connectModeOptions': tacacs_connect_mode_options
                 }
+            
+            if radius_key is not None: 
+                data['NetworkDevice']["authenticationSettings"] = {
+                                        'networkProtocol': 'RADIUS',
+                                        'radiusSharedSecret': radius_key,
+                                        'enableKeyWrap': 'false',
+                                    }
+            
+            if snmp_ro is not None: 
+                data["NetworkDevice"]["snmpsettings"] = {
+                                        'version': snmp_version,
+                                        'roCommunity': snmp_ro,
+                                        'pollingInterval': snmp_polling_interval,
+                                        'linkTrapQuery': snmp_link_trap_query,
+                                        'macTrapQuery': snmp_mac_trap_query,
+                                        'originatingPolicyServicesNode': snmp_originating_policy_services_node
+                                    }
 
-        if tacacs_shared_secret is not None:
-            data['NetworkDevice']['tacacsSettings'] = {
-              'sharedSecret': tacacs_shared_secret,
-              'connectModeOptions': tacacs_connect_mode_options
-            }
-        
-        if radius_key is not None: 
-            data['NetworkDevice']["authenticationSettings"] = {
-                                      'networkProtocol': 'RADIUS',
-                                      'radiusSharedSecret': radius_key,
-                                      'enableKeyWrap': 'false',
-                                  }
-        
-        if snmp_ro is not None: 
-            data["NetworkDevice"]["snmpsettings"] = {
-                                      'version': snmp_version,
-                                      'roCommunity': snmp_ro,
-                                      'pollingInterval': snmp_polling_interval,
-                                      'linkTrapQuery': snmp_link_trap_query,
-                                      'macTrapQuery': snmp_mac_trap_query,
-                                      'originatingPolicyServicesNode': snmp_originating_policy_services_node
-                                  }
+            if dev_group is not None: 
+                if isinstance(dev_group, str): 
+                    data["NetworkDevice"]["NetworkDeviceGroupList"].append(dev_group)
+                elif isinstance(dev_group, list): 
+                    data["NetworkDevice"]["NetworkDeviceGroupList"] += dev_group
 
-        if dev_group is not None: 
-            if isinstance(dev_group, str): 
-                data["NetworkDevice"]["NetworkDeviceGroupList"].append(dev_group)
-            elif isinstance(dev_group, list): 
-                data["NetworkDevice"]["NetworkDeviceGroupList"] += dev_group
+        # If neither a payload or name/ip_address provided exit with error 
+        else: 
+            result["success"] = False
+            result["error"] = "You must provide either (name, ip_address) or (device_payload) values to create a device"
+            return result
 
         resp = self._request('{0}/config/networkdevice'.format(self.url_base), method='post',
                              data=json.dumps(data))
