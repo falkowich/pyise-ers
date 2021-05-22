@@ -14,5 +14,3 @@ beautifulsoup4
 furl
 lxml
 requests
-beautifulsoup4
-lxml
