@@ -282,6 +282,100 @@ ise.get_device_groups()['response']
 
 ```
 
+#### Get device group(s) details
+
+```python
+# Provide a device_group_id 
+ise.get_device_group(device_group_id="4b26b5b0-71a6-11eb-b5e0-52cf9299494c")
+
+{'success': True,
+ 'response': {'id': '4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
+  'name': 'Device Type#All Device Types#NXOS',
+  'description': '',
+  'link': {'rel': 'self',
+   'href': 'https://tst01-z0-vm-ise-01:9060/ers/config/networkdevicegroup/4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
+   'type': 'application/json'},
+  'othername': 'Device Type'},
+ 'error': ''}
+
+
+# Provide a partial group name to look for 
+ise.get_device_group(name="NXOS")
+
+{'success': True,
+ 'response': {'id': '4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
+  'name': 'Device Type#All Device Types#NXOS',
+  'description': '',
+  'link': {'rel': 'self',
+   'href': 'https://tst01-z0-vm-ise-01:9060/ers/config/networkdevicegroup/4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
+   'type': 'application/json'},
+  'othername': 'Device Type'},
+ 'error': ''}
+
+# If more than one group found with for a name a list is returned
+ise.get_device_group(name="Device Types")
+
+[
+  {'success': True,
+  'response': {'id': '70c79c30-8bff-11e6-996c-525400b48521',
+   'name': 'Device Type#All Device Types',
+   'description': 'All Device Types',
+   'link': {'rel': 'self',
+    'href': 'https://tst01-z0-vm-ise-01:9060/ers/config/networkdevicegroup/70c79c30-8bff-11e6-996c-525400b48521',
+    'type': 'application/json'},
+   'othername': 'Device Type'},
+  'error': ''},
+ {'success': True,
+  'response': {'id': 'ee45c0a0-7fbc-11eb-ac01-36750594a888',
+   'name': 'Device Type#All Device Types#IOS-XE',
+   'description': '',
+   'link': {'rel': 'self',
+    'href': 'https://tst01-z0-vm-ise-01:9060/ers/config/networkdevicegroup/ee45c0a0-7fbc-11eb-ac01-36750594a888',
+    'type': 'application/json'},
+   'othername': 'Device Type'},
+  'error': ''},
+ {'success': True,
+  'response': {'id': '4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
+   'name': 'Device Type#All Device Types#NXOS',
+   'description': '',
+   'link': {'rel': 'self',
+    'href': 'https://tst01-z0-vm-ise-01:9060/ers/config/networkdevicegroup/4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
+    'type': 'application/json'},
+   'othername': 'Device Type'},
+  'error': ''},
+]
+```
+
+#### Add a new device group 
+
+```python
+ise.add_device_group(name="Device Type#All Device Types#Python Device Type", description="From Python")
+
+{'success': True,
+ 'response': 'Device Type#All Device Types#Python Device Type Added Successfully',
+ 'error': ''}
+```
+
+#### Update a device group 
+
+```python
+ise.update_device_group(device_group_oid=group_id, name="Device Type#All Device Types#Updated Device Type", description="Update Description")
+
+{'success': True,
+ 'response': 'e7db3e00-a36d-11eb-ac01-36750594a888 Updated Successfully',
+ 'error': ''}
+```
+
+#### Remove a device group 
+
+```python
+ise.delete_device_group(name="Device Type#All Device Types#Python Device Type")
+
+{'success': True,
+ 'response': 'Device Type#All Device Types#Python Device Type Deleted Successfully',
+ 'error': ''}
+```
+
 #### Add a device
 
 ```python
@@ -294,7 +388,19 @@ ise.add_device(name='testdevice03',
                dev_type='Device Type#All Device Types#Switch')
 
 {'error': '', 'response': 'testdevice03 Added Successfully', 'success': True}
+```
 
+#### Update a device 
+
+```python
+ise.update_device("PYTHON-DEVICE", tacacs_shared_secret="NEWTACACS")
+
+{'success': True,
+ 'response': {'updatedField': [{'field': 'TacacsSettings.ConnectModeOptions',
+    'oldValue': '',
+    'newValue': 'ON_LEGACY'},
+   {'field': 'TacacsSettings.SharedSecret', 'newValue': 'NEWTACACS'}]},
+ 'error': ''}
 ```
 
 #### Delete a device

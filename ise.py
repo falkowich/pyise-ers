@@ -4,6 +4,7 @@ import os
 import re
 from furl import furl
 from datetime import datetime, timedelta
+from urllib.parse import quote
 
 import requests
 
@@ -1231,17 +1232,169 @@ class ERS(object):
         """
         return self._get_groups('{0}/config/networkdevicegroup'.format(self.url_base), size=size, page=page)
 
-    def get_device_group(self, device_group_oid):
+    def get_device_group(self, device_group_oid=None, name=None):
         """
-        Get a device group details.
+        Get a device group(s) details by group id or name. 
+        
+        device_group_oid takes priority for searching over name
 
-        :param device_group_oid: oid of the device group
-        :return: result dictionary
+        :param device_group_oid: oid of the device group (default None)
+        :param name: name of group (default None)
+        :return: result dictionary or list of dictionaries
         """
         self.ise.headers.update(
             {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
-        return self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
+        if device_group_oid is not None: 
+            device_group = self.get_object('{0}/config/networkdevicegroup/'.format(self.url_base), device_group_oid, 'NetworkDeviceGroup')  # noqa E501
+        elif name is not None: 
+            # Using quote() function from urllib.parse to urlencode the name of the group
+            resp = self.ise.get(
+                '{0}/config/networkdevicegroup?filter=name.contains.{1}'.format(self.url_base, quote(name)))
+            found_group = resp.json()
+
+            if found_group['SearchResult']['total'] == 1:
+                group_oid = found_group['SearchResult']['resources'][0]['id']
+                device_group = self.get_device_group(device_group_oid=group_oid)
+            elif found_group['SearchResult']['total'] == 0: 
+                return {'success': False, 'response': '', 'error': 404}
+            else: 
+                device_group = [self.get_device_group(device_group_oid=group["id"]) for group in found_group['SearchResult']['resources']]
+
+        return device_group
+
+    def add_device_group(self, name, description=""): 
+        """
+        Add a Network Device Group 
+
+        :param name: Full name of the group to add. (Example: "Device Type#All Device Types#ASA Firewall)
+        :param description: Optional description for group
+
+        :return: Result dictionary
+        """
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        data = {
+            "NetworkDeviceGroup": {
+                "name": name,
+                "description": description, 
+                "othername": name.split("#")[0]
+            }
+        }
+
+        resp = self._request('{0}/config/networkdevicegroup'.format(self.url_base), method='post',
+                             data=json.dumps(data))
+
+        if resp.status_code == 201:
+            result['success'] = True
+            result['response'] = '{0} Added Successfully'.format(name)
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
+    def update_device_group(self, device_group_oid, name=None, description=None):
+        """
+        Update a Network Device Group with provided settings.
+
+        :param device_group_oid: Unique ID for group 
+        :param name: New name for group (default None)
+        :param description: New description for group (default None)
+
+        :return: results dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        resp = self.get_device_group(device_group_oid=device_group_oid)
+
+        if not resp["success"]: 
+            # Pass through the 404 error from the lookup 
+            return resp
+
+        device_group = resp["response"]
+
+        # Set initial values to current values
+        data = {
+            "NetworkDeviceGroup": {
+                "name": device_group["name"],
+                "description": device_group["description"], 
+                "othername": device_group["othername"]
+            }
+        }
+
+        if name: 
+            data["NetworkDeviceGroup"]["name"] = name
+        if description: 
+            data["NetworkDeviceGroup"]["description"] = description
+
+        resp = self._request('{0}/config/networkdevicegroup/{1}'.format(self.url_base, device_group_oid), method='put',
+                             data=json.dumps(data))
+
+        if resp.status_code == 200:
+            result['success'] = True
+            result['response'] = '{0} Updated Successfully'.format(device_group_oid)
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+        
+
+
+    def delete_device_group(self, name): 
+        """
+        Delete a Network Device Group
+
+        :param name: Full name of the group to delete. (Example: "Device Type#All Device Types#ASA Firewall)
+
+        :return: Result dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        # Using quote() function from urllib.parse to urlencode the name of the group
+        resp = self.ise.get(
+            '{0}/config/networkdevicegroup?filter=name.contains.{1}'.format(self.url_base, quote(name)))
+        found_group = resp.json()
+        if found_group['SearchResult']['total'] == 1:
+            group_oid = found_group['SearchResult']['resources'][0]['id']
+            resp = self._request(
+                '{0}/config/networkdevicegroup/{1}'.format(self.url_base, group_oid), method='delete')
+
+            if resp.status_code == 204:
+                result['success'] = True
+                result['response'] = '{0} Deleted Successfully'.format(name)
+                return result
+            elif resp.status_code == 404:
+                result['response'] = '{0} not found'.format(name)
+                result['error'] = resp.status_code
+                return result
+            else:
+                return ERS._pass_ersresponse(result, resp)
+        elif found_group['SearchResult']['total'] == 0: 
+            result['response'] = '{0} not found'.format(name)
+            result['error'] = 404
+            return result
+        else: 
+            return ERS._pass_ersresponse(result, resp)
+
 
     def get_devices(self, filter=None, size=20, page=1):
         """
@@ -1282,31 +1435,50 @@ class ERS(object):
             return ERS._pass_ersresponse(result, resp)
 
     def add_device(self,
-                   name,
-                   ip_address,
-                   radius_key,
-                   snmp_ro,
-                   dev_group,
-                   dev_location,
-                   dev_type,
+                   name = None,
+                   ip_address = None,
+                   mask = 32, 
                    description='',
-                   snmp_v='TWO_C',
+                   dev_group=None,
+                   dev_location="Location#All Locations",
+                   dev_type="Device Type#All Device Types",
+                   dev_ipsec="IPSEC#Is IPSEC Device#No",
+                   radius_key=None,
+                   snmp_ro=None,
                    dev_profile='Cisco',
                    tacacs_shared_secret=None,
-                   tacas_connect_mode_options='ON_LEGACY'
+                   tacacs_connect_mode_options='ON_LEGACY', 
+                   coa_port=1700, 
+                   snmp_version = "TWO_C", 
+                   snmp_polling_interval = 3600, 
+                   snmp_link_trap_query = "true", 
+                   snmp_mac_trap_query = "true", 
+                   snmp_originating_policy_services_node="Auto",
+                   device_payload = None,
                    ):
         """
         Add a device.
 
         :param name: name of device
         :param ip_address: IP address of device
-        :param radius_key: Radius shared secret
-        :param snmp_ro: SNMP read only community string
-        :param dev_group: Device group name
-        :param dev_location: Device location
-        :param dev_type: Device type
-        :param description: Device description
-        :param dev_profile: Device profile
+        :param description: Device description (default "")
+        :param dev_group: Custom device group name, string or list (default None)
+        :param dev_location: Device location (default "Location#All Locations")
+        :param dev_type: Device type (default "Device Type#All Device Types")
+        :param dev_ipsec: IPSEC Status for device (default "IPSEC#Is IPSEC Device#No")
+        :param radius_key: Radius shared secret (default None)
+        :param snmp_ro: SNMP read only community string (default None)
+        :param dev_profile: Device profile (default "Cisco")
+        :param tacacs_shared_secret: Tacacs shared secret  (default None)
+        :param tacacs_connect_mode_options: Tacacs connect mode  (default 'ON_LEGACY',)
+        :param coa_port: Change of Auth port  (default 1700)
+        :param snmp_version: SNMP Version  (default "TWO_C")
+        :param snmp_polling_interval: SNMP Polling Interval  (default 3600)
+        :param snmp_link_trap_query: SNMP Link Trap  (default "true")
+        :param snmp_mac_trap_query: SNMP MAC Trap  (default "true")
+        :param snmp_originating_policy_services_node: SNMP Policy Node  (default "Auto")
+        :param device_payload: A single dictionary representing desired device configuration. If provided it overrides individual settings (default None)
+
         :return: Result dictionary
         """
         result = {
@@ -1318,39 +1490,64 @@ class ERS(object):
         self.ise.headers.update(
             {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
 
-        data = {'NetworkDevice': {'name': name,
-                                  'description': description,
-                                  'authenticationSettings': {
-                                      'networkProtocol': 'RADIUS',
-                                      'radiusSharedSecret': radius_key,
-                                      'enableKeyWrap': 'false',
-                                  },
-                                  'snmpsettings': {
-                                      'version': 'TWO_C',
-                                      'roCommunity': snmp_ro,
-                                      'pollingInterval': 3600,
-                                      'linkTrapQuery': 'true',
-                                      'macTrapQuery': 'true',
-                                      'originatingPolicyServicesNode': 'Auto'
-                                  },
-                                  'profileName': dev_profile,
-                                  'coaPort': 1700,
-                                  'NetworkDeviceIPList': [{
-                                      'ipaddress': ip_address,
-                                      'mask': 32
-                                  }],
-                                  'NetworkDeviceGroupList': [
-                                      dev_group, dev_type, dev_location,
-                                      'IPSEC#Is IPSEC Device#No'
-                                    ]
-                                  }
-                }
+        # If a payload was provided, use it as is
+        if device_payload: 
+            data = {'NetworkDevice': device_payload}
 
-        if tacacs_shared_secret is not None:
-            data['NetworkDevice']['tacacsSettings'] = {
-              'sharedSecret': tacacs_shared_secret,
-              'connectModeOptions': tacas_connect_mode_options
-            }
+            # Pull name out of payload to use in response 
+            name = device_payload["name"]
+        
+        # If no payload provided, build from provided details
+        elif name and ip_address: 
+            data = {'NetworkDevice': {'name': name,
+                                    'description': description,
+                                    'profileName': dev_profile,
+                                    'coaPort': coa_port,
+                                    'NetworkDeviceIPList': [{
+                                        'ipaddress': ip_address,
+                                        'mask': mask,
+                                    }],
+                                    'NetworkDeviceGroupList': [
+                                        dev_type, dev_location,
+                                        dev_ipsec
+                                        ]
+                                    }
+                    }
+
+            if tacacs_shared_secret is not None:
+                data['NetworkDevice']['tacacsSettings'] = {
+                'sharedSecret': tacacs_shared_secret,
+                'connectModeOptions': tacacs_connect_mode_options
+                }
+            
+            if radius_key is not None: 
+                data['NetworkDevice']["authenticationSettings"] = {
+                                        'networkProtocol': 'RADIUS',
+                                        'radiusSharedSecret': radius_key,
+                                        'enableKeyWrap': 'false',
+                                    }
+            
+            if snmp_ro is not None: 
+                data["NetworkDevice"]["snmpsettings"] = {
+                                        'version': snmp_version,
+                                        'roCommunity': snmp_ro,
+                                        'pollingInterval': snmp_polling_interval,
+                                        'linkTrapQuery': snmp_link_trap_query,
+                                        'macTrapQuery': snmp_mac_trap_query,
+                                        'originatingPolicyServicesNode': snmp_originating_policy_services_node
+                                    }
+
+            if dev_group is not None: 
+                if isinstance(dev_group, str): 
+                    data["NetworkDevice"]["NetworkDeviceGroupList"].append(dev_group)
+                elif isinstance(dev_group, list): 
+                    data["NetworkDevice"]["NetworkDeviceGroupList"] += dev_group
+
+        # If neither a payload or name/ip_address provided exit with error 
+        else: 
+            result["success"] = False
+            result["error"] = "You must provide either (name, ip_address) or (device_payload) values to create a device"
+            return result
 
         resp = self._request('{0}/config/networkdevice'.format(self.url_base), method='post',
                              data=json.dumps(data))
@@ -1402,3 +1599,261 @@ class ERS(object):
             return result
         else:
             return ERS._pass_ersresponse(result, resp)
+
+    def update_device(self, 
+                        name,
+                        new_name=None,
+                        ip_address=None,
+                        mask=None, 
+                        description=None,
+                        dev_group=None,
+                        dev_location=None,
+                        dev_type=None,
+                        dev_ipsec=None,
+                        radius_key=None,
+                        snmp_ro=None,
+                        dev_profile=None,
+                        tacacs_shared_secret=None,
+                        tacacs_connect_mode_options=None, 
+                        coa_port=None, 
+                        snmp_version=None, 
+                        snmp_polling_interval=None, 
+                        snmp_link_trap_query=None, 
+                        snmp_mac_trap_query=None, 
+                        snmp_originating_policy_services_node=None,
+                        disable_tacacs=False,
+                        disable_radius=False, 
+                        disable_snmp=False,
+                        device_payload=None,
+                   ):
+
+        """
+        Update a Network Device with provided settings.
+
+        New settings not provided will remain at current setting
+
+        :param name: Current name of the device
+        :param new_name: New name for device (default None)
+        :param ip_address: New ip address for device (default None)
+        :param mask: New network mask for device (default None)
+        :param description: New description for device (default None)
+        :param dev_group: New custom group(s) for device - string or list (default None)
+        :param dev_location: New location for device (default None)
+        :param dev_type: New device type for device (default None)
+        :param dev_ipsec: New IPSEC status for device (default None)
+        :param radius_key: New radius key for device (default None)
+        :param snmp_ro: New snmp_ro string for device (default None)
+        :param dev_profile: New Device profile for device (default None)
+        :param tacacs_shared_secret: New tacacs shared secret for device (default None)
+        :param tacas_connect_mode_options: New tacacs mode for device (default None)
+        :param coa_port: New COA port for device (default None)
+        :param snmp_version: New SNMP Version for device (default None)
+        :param snmp_polling_interval: New SNMP polling interval for device (default None)
+        :param snmp_link_trap_query: New SNMP link trap query for device (default None)
+        :param snmp_mac_trap_query: New SNMP mac trap query for device (default None)
+        :param snmp_originating_policy_services_node: New SNMP policy service node for device (default None)
+        :param disable_tacacs: Disable TACACS if configured (default False)
+        :param disable_radius: Disable Radius if configured (default False) *NOTE: Flag placed for completeness, but ERS API currently doesn't support disabling RADIUS*
+        :param disable_snmp: Disable SNMP if configured (default False)
+        :param device_payload: A single dictionary representing desired device configuration. If provided it overrides individual settings (default None)
+
+        :return: results dictionary
+        """
+        self.ise.headers.update(
+            {'ACCEPT': 'application/json', 'Content-Type': 'application/json'})
+
+        result = {
+            'success': False,
+            'response': '',
+            'error': '',
+        }
+
+        resp = self.get_device(device=name)
+
+        if not resp["success"]: 
+            # Pass through the 404 error from the lookup 
+            return resp
+
+        device = resp["response"]
+
+        # Find Device ID for use in update request 
+        device_oid = device.pop("id")
+
+        # If a full device payload provided, use it for the update request 
+        if device_payload: 
+            device = device_payload
+        
+        # If no specific payload provided, update individual values provided 
+        else: 
+            # Update basic device properties 
+            if new_name: 
+                device["name"] = new_name
+            if description: 
+                device["description"] = description
+            if dev_profile: 
+                device["profileName"] = dev_profile 
+            if coa_port: 
+                device["coaPort"] = coa_port 
+            
+            # Update device ip address
+            # TODO: Currently only supports a device with a single IP address
+            if ip_address: 
+                device["NetworkDeviceIPList"][0]["ipaddress"] = ip_address
+            if mask: 
+                device["NetworkDeviceIPList"][0]["mask"] = mask
+
+            # Update radius settings 
+            if disable_radius: 
+                # device.pop("authenticationSettings", None)
+                # BUG in ERS API: Doesn't seem to be a way to successfully disable RADIUS from the API
+                # Some details in this post 
+                # https://community.cisco.com/t5/network-access-control/ise-ers-network-device-api-put-update-operation-how-to-remove/td-p/4028001
+                result["error"] = "Error: ERS API doesn't support disabling RADIUS. You'll need to delete/add the device"
+                result["success"] = False 
+                return result
+            elif radius_key: 
+                device["authenticationSettings"] = {
+                                            'networkProtocol': 'RADIUS',
+                                            'radiusSharedSecret': radius_key,
+                                            'enableKeyWrap': 'false',
+                                        }
+
+            # Update tacacs settings 
+            if disable_tacacs: 
+                device.pop("tacacsSettings", None)
+            elif tacacs_shared_secret or tacacs_connect_mode_options: 
+                # Get current tacacs currently configured on device. If not configured build data model
+                tacacs_settings = device.pop(
+                        "tacacsSettings", 
+                        {
+                            'sharedSecret': None,
+                            'connectModeOptions': None
+                        }
+                    )
+
+                # Update new values provided by functions
+                if tacacs_shared_secret: 
+                    tacacs_settings["sharedSecret"] = tacacs_shared_secret 
+                if tacacs_connect_mode_options: 
+                    tacacs_settings["connectModeOptions"] = tacacs_connect_mode_options
+
+                # Set a default for connect mode setting if one isn't provided or already configured 
+                if tacacs_settings["connectModeOptions"] is None: 
+                    tacacs_settings["connectModeOptions"] = 'ON_LEGACY'
+
+                # Update the device with new tacacs settings as long as all factors confgured 
+                #   This could happen in an odd case where a connect mode change provided without a 
+                #   TACACS secret and TACACS wasn't already configured. Behavior is to then IGNORE
+                #   tacacs completely 
+                if None not in tacacs_settings.values(): 
+                    device["tacacsSettings"] = tacacs_settings     
+
+            # Update snmp settings 
+            if disable_snmp: 
+                device.pop("snmpsettings", None)
+            elif snmp_ro or snmp_version or snmp_polling_interval or snmp_link_trap_query or snmp_mac_trap_query or snmp_originating_policy_services_node: 
+                # Get current SNMP settings from device, or build data model 
+                snmp_settings = device.pop(
+                    "snmpsettings", 
+                    {
+                        'version': None,
+                        'roCommunity': None,
+                        'pollingInterval': None,
+                        'linkTrapQuery': None,
+                        'macTrapQuery': None,
+                        'originatingPolicyServicesNode': None
+                    }
+                    )
+
+                # Update new values provided
+                if snmp_ro: 
+                    snmp_settings["roCommunity"] = snmp_ro
+                    
+                if snmp_version:
+                    snmp_settings["version"] = snmp_version
+
+                if snmp_polling_interval: 
+                    snmp_settings["pollingInterval"] = snmp_polling_interval
+                
+                if snmp_link_trap_query: 
+                    snmp_settings["linkTrapQuery"] = snmp_link_trap_query
+                
+                if snmp_mac_trap_query: 
+                    snmp_settings["macTrapQuery"] = snmp_mac_trap_query
+                    
+                if snmp_originating_policy_services_node: 
+                    snmp_settings["originatingPolicyServicesNode"] = snmp_originating_policy_services_node
+                
+                # Update defaults for common setting should SNMP be newly configured and all settings not provided
+                if snmp_settings["version"] is None:
+                    snmp_settings["version"] = "TWO_C"
+
+                if snmp_settings["pollingInterval"] is None: 
+                    snmp_settings["pollingInterval"] = 3600
+                
+                if snmp_settings["linkTrapQuery"] is None: 
+                    snmp_settings["linkTrapQuery"] = "true"
+                
+                if snmp_settings["macTrapQuery"] is None: 
+                    snmp_settings["macTrapQuery"] = "true"
+                    
+                if snmp_settings["originatingPolicyServicesNode"] is None: 
+                    snmp_settings["originatingPolicyServicesNode"] = "Auto"
+
+                # Update the device with new snmp settings as long as all factors confgured 
+                #   This could happen in an odd case where an snmp attribute change provided without a 
+                #   SNMP RO and SNMP wasn't already configured. Behavior is to then IGNORE
+                #   snmp completely 
+                if None not in snmp_settings.values(): 
+                    device["snmpsettings"] = snmp_settings     
+
+            # Update groups 
+            if dev_group or dev_location or dev_type or dev_ipsec: 
+                # Groups are a mandatory attribute, let's see what the current configuration is 
+                groups = device.pop("NetworkDeviceGroupList", None)
+
+                # Determine the current values of the mandatory ISE Groups
+                group_location = [group for group in groups if group.startswith("Location#All Locations")][0]
+                group_type = [group for group in groups if group.startswith("Device Type#All Device Types")][0]
+                group_ipsec = [group for group in groups if group.startswith("IPSEC#Is IPSEC Device")][0]
+
+                # Create a list of any custom groups by removing the mandatory groups from the list
+                custom_groups = groups 
+                custom_groups.pop(groups.index(group_location))
+                custom_groups.pop(groups.index(group_type))
+                custom_groups.pop(groups.index(group_ipsec))
+
+                # Update the groups to new values if provided 
+                if dev_location: 
+                    group_location = dev_location 
+                if dev_type: 
+                    group_type = dev_type 
+                if dev_ipsec: 
+                    group_ipsec = dev_ipsec 
+                if dev_group: 
+                    if isinstance(dev_group, str): 
+                        custom_groups = [dev_group]
+                    elif isinstance(dev_group, list): 
+                        custom_groups = dev_group
+                
+                device["NetworkDeviceGroupList"] = [group_location, group_type, group_ipsec]
+                device["NetworkDeviceGroupList"] += custom_groups
+
+        # Remove possible payload values that aren't used in PUT updates 
+        device.pop("id", None)
+        device.pop("link", None)
+
+        # data for request 
+        data = {"NetworkDevice": device}
+
+        resp = self._request('{0}/config/networkdevice/{1}'.format(self.url_base, device_oid), method='put',
+                             data=json.dumps(data))
+
+        if resp.status_code == 200:
+            result['success'] = True
+            # result['response'] = '{0} Updated Successfully'.format(device_group_oid)
+            result['response'] = resp.json()["UpdatedFieldsList"]
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+        
