@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 flake8 = "*"
 pytest = "*"
-ptpython = "*"
 pipenv-to-requirements = "*"
 setuptools = "*"
 wheel = "*"
@@ -16,6 +15,8 @@ pytest-vcr = "*"
 [packages]
 requests = "*"
 furl = "*"
+lxml = "*"
+beautifulsoup4 = "*"
 
 [requires]
 python_version = "3.7"
