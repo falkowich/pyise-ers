@@ -1,20 +1,9 @@
-################################################################################
-# This requirements file has been automatically generated from `Pipfile` with
-# `pipenv-to-requirements`
-#
-#
-# This has been done to maintain backward compatibility with tools and services
-# that do not support `Pipfile` yet.
-#
-# Do NOT edit it directly, use `pipenv install [-d]` to modify `Pipfile` and
-# `Pipfile.lock` and then regenerate `requirements*.txt`.
-################################################################################
-
-certifi==2020.4.5.1
+-i https://pypi.org/simple/
+certifi==2020.12.5
 chardet==3.0.4
 furl==2.1.0
-idna==2.9
+idna==2.10
 orderedmultidict==1.0.1
 requests==2.23.0
-six==1.15.0
-urllib3==1.25.9
+six==1.16.0
+urllib3==1.25.11
