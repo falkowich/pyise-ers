@@ -17,6 +17,12 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
   * *One big thing is that module is now renamed from ise.cream to just ise.*
 * First publish to PyPi with the help of [https://github.com/JonasKs](https://github.com/JonasKs).
 * Add support for ISE CSRF and some TrustSec objects (SGT, SGACL, Egress Policy Matrix) [https://github.com/joshand](https://github.com/joshand).
+* Merged [Enhancement to Device Group and Device Functions](https://github.com/falkowich/ise/pull/152) with a big thanks to [https://github.com/hpreston](https://github.com/hpreston)
+  * New functions for devicegroups where added » add_device_group, update_device_group, delete_device_group. 
+  * New function to update devices where added » update_device
+  * Updated get_device_group for looking up names
+  * Updated add_device with new parameters and device_payload
+* Updated dependensies for dev and prod, created new manual testcases, cleaned up the code with black. 
 
 ## Status
 
@@ -39,7 +45,7 @@ There are two tests available in tests/ directory.
 To run the "manual" tests:
 
 * make a copy of config-DEFAULT.py to config.py
-* edit uri with settings to your test ise
+* edit uri_list with settings to your test ise server
 * run python manual_test_ers.py
 
 ### Pytest
