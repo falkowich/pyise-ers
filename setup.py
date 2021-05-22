@@ -2,34 +2,29 @@ from setuptools import find_packages, setup
 
 # read the contents of your README file
 from os import path
+
 this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-    name='ISE',
-    version='0.1.2.e1',
-    py_modules=['ise'],
-    url='https://github.com/falkowich/ise',
-    download_url='https://pypi.python.org/pypi/ise',
-    license='LICENSE.md',
-    maintainer='Andreas Falk',
-    maintainer_email='falk@sadsloth.net',
-    description='Python wrapper for Cisco ISE ERS API',
+    name="ISE",
+    version="0.1.2.e1",
+    py_modules=["ise"],
+    url="https://github.com/falkowich/ise",
+    download_url="https://pypi.python.org/pypi/ise",
+    license="LICENSE.md",
+    maintainer="Andreas Falk",
+    maintainer_email="falk@sadsloth.net",
+    description="Python wrapper for Cisco ISE ERS API",
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     packages=find_packages(),
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     include_package_data=True,
     zip_safe=False,
-    install_requires=[
-        'furl>=2.1.0',
-        'requests>=2.23.0'
-    ],
+    install_requires=["furl>=2.1.2", "requests>=2.25.1"],
     extras_require={
-        'test': [
-            'pytest',
-            'coverage'
-        ],
+        "test": ["pytest", "coverage"],
     },
 )

@@ -7,7 +7,7 @@ sys.path.append("./")
 
 from ise import ERS  # noqa E402
 from pprint import pprint  # noqa E402
-from config import ( # noqa E402
+from config import (  # noqa E402
     uri_list,
     endpoint,
     endpoint_group,
@@ -16,7 +16,7 @@ from config import ( # noqa E402
     device,
     device_group,
     trustsec,
-    device_payload
+    device_payload,
 )
 
 
@@ -230,10 +230,7 @@ def add_device(device):
 
 
 def update_device(device):
-    test = ise.update_device(
-        name=device['name'],
-        new_name=device['new_name']
-    )
+    test = ise.update_device(name=device["name"], new_name=device["new_name"])
     if test["error"]:
         print(test["response"])
     else:
