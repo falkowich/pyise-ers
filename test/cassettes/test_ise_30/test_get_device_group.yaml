@@ -1,0 +1,186 @@
+interactions:
+- request:
+    body: null
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/networkdevicegroup?filter=name.contains.Python
+  response:
+    body:
+      string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
+        [ {\n      \"id\" : \"0fec62e0-bbef-11eb-a40b-96027a66c43b\",\n      \"name\"
+        : \"Device Type#All Device Types#Python Device Type\",\n      \"description\"
+        : \"From Python\",\n      \"link\" : {\n        \"rel\" : \"self\",\n        \"href\"
+        : \"https://192.168.1.30:9060/ers/config/networkdevicegroup/0fec62e0-bbef-11eb-a40b-96027a66c43b\",\n
+        \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sun, 23 May 2021 17:48:21 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/networkdevicegroup/0fec62e0-bbef-11eb-a40b-96027a66c43b
+  response:
+    body:
+      string: "{\n  \"NetworkDeviceGroup\" : {\n    \"id\" : \"0fec62e0-bbef-11eb-a40b-96027a66c43b\",\n
+        \   \"name\" : \"Device Type#All Device Types#Python Device Type\",\n    \"description\"
+        : \"From Python\",\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\"
+        : \"https://192.168.1.30:9060/ers/config/networkdevicegroup/0fec62e0-bbef-11eb-a40b-96027a66c43b\",\n
+        \     \"type\" : \"application/json\"\n    },\n    \"othername\" : \"Device
+        Type\"\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sun, 23 May 2021 17:48:21 GMT
+      ETag:
+      - '"8A3FFA44E0B38D941354748F96501456"'
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/networkdevicegroup/0fec62e0-bbef-11eb-a40b-96027a66c43b
+  response:
+    body:
+      string: "{\n  \"NetworkDeviceGroup\" : {\n    \"id\" : \"0fec62e0-bbef-11eb-a40b-96027a66c43b\",\n
+        \   \"name\" : \"Device Type#All Device Types#Python Device Type\",\n    \"description\"
+        : \"From Python\",\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\"
+        : \"https://192.168.1.30:9060/ers/config/networkdevicegroup/0fec62e0-bbef-11eb-a40b-96027a66c43b\",\n
+        \     \"type\" : \"application/json\"\n    },\n    \"othername\" : \"Device
+        Type\"\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sun, 23 May 2021 17:48:21 GMT
+      ETag:
+      - '"8A3FFA44E0B38D941354748F96501456"'
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+version: 1

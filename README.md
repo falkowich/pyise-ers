@@ -50,13 +50,16 @@ To run the "manual" tests:
 
 ### Pytest
 
-To run the testfiles with pytest-vcr.  
-The first time this is runned the directory fixtures/vcr_cassettes are created with saved .yaml files from the test.
+To run the testfiles with pytest-recording.  
+The first time this is runned the directory cassettes/ are created with saved .yaml files from the test.
 That is so that the tests can be repeated without contacting ISE everytime.
 
 * make a copy of config-DEFAULT.py to config.py
-* edit uri with settings to your test ise
-* run python -m pytest
+  * edit uri with settings to your test ise instance.
+  * in the config.py there are a list where you can set multiple versions if ise instances.
+* to run the tests
+  * pytest --record-mode=rewrite (To rewrite cassettes with live data)
+  * pytest (to reuse the recorded cassetes)
 
 The plan is to extend the testing with pytest, and hopefully get good testcoverage on this library.
 

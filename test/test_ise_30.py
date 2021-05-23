@@ -1,27 +1,37 @@
-import vcr
+import pytest
 import sys
+import urllib3
 
 sys.path.append("./")
 
 from ise import ERS  # noqa E402
 from pprint import pprint  # noqa E402
 from config import (  # noqa E402
-    uri,
+    uri_list,
     endpoint,
     endpoint_group,
     user,
     identity_group,
     device,
+    device_payload,
     device_group,
     trustsec,
 )
 
-my_vcr = vcr.VCR(
-    serializer="json",
-    cassette_library_dir="fixtures/vcr_cassettes",
-    record_mode="once",
-    match_on=["url", "method", "headers"],
-)
+urllib3.disable_warnings()
+
+
+@pytest.fixture(scope="module")
+def vcr_config():
+    return {
+        "filter_headers": ["authorization"],
+        "ignore_localhost": True,
+    }
+
+
+for uri in uri_list:
+    if uri["ise_version"] == "3.0":
+        uri = uri
 
 
 ise = ERS(
@@ -35,18 +45,7 @@ ise = ERS(
 )
 
 
-# Endpoint tests
-@vcr.use_cassette("fixtures/vcr_cassettes/get_endpoints.yaml")
-def test_get_endpoints():  # noqa D103
-
-    r1 = ise.get_endpoints(size=1, page=1)
-    assert r1["success"] is True
-    assert r1["response"] <= [
-        ("00:00:00:00:00:02", "6bae9b50-35fb-11ea-a049-9e6928bbd7a4")
-    ]
-
-
-@vcr.use_cassette("fixtures/vcr_cassettes/add_endpoint.yaml")
+@pytest.mark.vcr
 def test_add_endpoint():  # noqa D103
 
     r1 = ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
@@ -54,57 +53,72 @@ def test_add_endpoint():  # noqa D103
     assert r1["response"] == "test-endpoint Added Successfully"
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_endpoint.yaml")
+# Endpoint tests
+@pytest.mark.vcr
+def test_get_endpoints():  # noqa D103
+
+    r1 = ise.get_endpoints(size=1, page=1)
+    assert r1["success"] is True
+    assert "AA:BB:CC:00:11:22" in str(r1["response"])
+
+
+@pytest.mark.vcr
 def test_get_endpoint():  # noqa D103
 
     r1 = ise.get_endpoint(endpoint["mac"])
     assert r1["success"] is True
-    # TODO assert r1['response'] == 'test-endpoint Added Successfully'
+    assert "'name': 'AA:BB:CC:00:11:22'" in str(r1["response"])
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/delete_endpoint.yaml")
+@pytest.mark.vcr
 def test_delete_endpoint():  # noqa D103
-
     r1 = ise.delete_endpoint(endpoint["mac"])
     assert r1["success"] is True
     assert r1["response"] == "AA:BB:CC:00:11:22 Deleted Successfully"
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_endpoint_groups.yaml")
+@pytest.mark.vcr
 def test_get_endpoint_groups():  # noqa D103
 
     r1 = ise.get_endpoint_groups(size=1, page=1)
     assert r1["success"] is True
-    assert r1["response"] == [
-        ("ADM", "b7ef3920-ca30-11e9-92d6-96c5f2507fd6", "Admin network - [MAB]")
-    ]
+    assert (
+        "('Android', 'ffa36b00-8bff-11e6-996c-525400b48521', 'Identity Group for Profile: Android')"
+        in str(r1["response"])
+    )
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_endpoint_group.yaml")
+@pytest.mark.vcr
 def test_get_endpoint_group():  # noqa D103
 
     r1 = ise.get_endpoint_group(endpoint_group["name"])
     assert r1["success"] is True
-    # TODO assert r1['response'] == [('ADM', 'b7ef3920-ca30-11e9-92d6-96c5f2507fd6', 'Admin network - [MAB]')]
+    assert "'description': 'Unknown Identity Group'" in str(r1["response"])
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_identity_groups.yaml")
+@pytest.mark.vcr
 def test_get_identity_groups():  # noqa D103
 
     r1 = ise.get_identity_groups(size=1, page=1)
     assert r1["success"] is True
-    # TODO assert r1['response'] == [('ADM', 'b7ef3920-ca30-11e9-92d6-96c5f2507fd6', 'Admin network - [MAB]')]
+    assert r1["response"] == [
+        (
+            "ALL_ACCOUNTS (default)",
+            "a176c430-8c01-11e6-996c-525400b48521",
+            "Default ALL_ACCOUNTS (default) User Group",
+        )
+    ]
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_identity_group.yaml")
+@pytest.mark.vcr
 def test_get_identity_group():  # noqa D103
 
     r1 = ise.get_identity_group(identity_group["name"])
     assert r1["success"] is True
-    # TODO assert r1['response'] == [('ADM', 'b7ef3920-ca30-11e9-92d6-96c5f2507fd6', 'Admin network - [MAB]')]
+    assert "Default Employee User Group" in str(r1["response"])
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/add_user.yaml")
+@pytest.mark.vcr
 def test_add_user():  # noqa D103
 
     r1 = ise.get_identity_group(identity_group["name"])
@@ -118,93 +132,177 @@ def test_add_user():  # noqa D103
         last_name=user["last_name"],
     )
     assert r2["success"] is True
-    # TODO assert r1['response'] == [('ADM', 'b7ef3920-ca30-11e9-92d6-96c5f2507fd6', 'Admin network - [MAB]')]
+    assert r2["response"] == "test-user Added Successfully"
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_users.yaml")
+@pytest.mark.vcr
 def test_get_users():  # noqa D103
 
     r1 = ise.get_users(size=1, page=1)
     assert r1["success"] is True
-    # TODO assert r1['response'] == [('ADM', 'b7ef3920-ca30-11e9-92d6-96c5f2507fd6', 'Admin network - [MAB]')]
+    assert "test-user" in str(r1["response"])
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_user.yaml")
+@pytest.mark.vcr
 def test_get_user():  # noqa D103
 
     r1 = ise.get_user(user["user_id"])
     assert r1["success"] is True
-    # TODO assert r1['response'] == [('ADM', 'b7ef3920-ca30-11e9-92d6-96c5f2507fd6', 'Admin network - [MAB]')]
+    assert ("Firstname" and "Lastname") in str(r1["response"])
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/delete_user.yaml")
+@pytest.mark.vcr
 def test_delete_user():  # noqa D103
 
     r1 = ise.delete_user(user["user_id"])
     assert r1["success"] is True
-    # TODO assert r1['response'] == [('ADM', 'b7ef3920-ca30-11e9-92d6-96c5f2507fd6', 'Admin network - [MAB]')]
+    assert r1["response"] == "test-user Deleted Successfully"
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_device_groups.yaml")
+@pytest.mark.vcr
+def test_add_device_group():
+    r1 = ise.add_device_group(
+        name=device_group["name"], description=device_group["description"]
+    )
+    assert r1["success"] is True
+    assert "Device Type#All Device Types#Python Device Type Added" in str(
+        r1["response"]
+    )
+
+
+@pytest.mark.vcr
 def test_get_device_groups():
     r1 = ise.get_device_groups(size=1, page=1)
     assert r1["success"] is True
+    assert r1["response"] == [
+        (
+            "Device Type#All Device Types",
+            "70c79c30-8bff-11e6-996c-525400b48521",
+            "All Device Types",
+        )
+    ]
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_device_group.yaml")
-def test_get_device_group():
-    r1 = ise.get_device_group(device_group["oid"])
+@pytest.mark.vcr
+def test_get_device_group_from_name():
+    r1 = ise.get_device_group(name="Python")
     assert r1["success"] is True
+    assert "Device Type#All Device Types#Python Device Type" in str(r1["response"])
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/add_device.yaml")
+@pytest.mark.vcr
+def test_get_device_group():
+    r1 = ise.get_device_group(name="Python")
+    device_group_id = r1["response"]["id"]
+    r2 = ise.get_device_group(device_group_id)
+    assert r2["success"] is True
+    assert "Device Type#All Device Types#Python Device Type" in str(r2["response"])
+
+
+@pytest.mark.vcr
+def test_update_device_group():
+    r1 = ise.get_device_group(name="Python")
+    device_group_id = r1["response"]["id"]
+    r2 = ise.update_device_group(
+        device_group_oid=device_group_id,
+        name="Device Type#All Device Types#Updated Device Type",
+        description="Update Description",
+    )
+    assert r2["success"] is True
+    assert "Updated Successfully" in str(r2["response"])
+
+
+@pytest.mark.vcr
+def test_delete_device_group():
+    r1 = ise.delete_device_group(
+        name="Device Type#All Device Types#Updated Device Type"
+    )
+    assert r1["success"] is True
+    assert "Device Type#All Device Types#Updated Device Type Deleted" in str(
+        r1["response"]
+    )
+
+
+@pytest.mark.vcr
 def test_add_device():
     r1 = ise.add_device(
         name=device["name"],
         ip_address=device["ip_address"],
-        radius_key=device["radius_key"],
-        snmp_ro=device["snmp_ro"],
+        mask=device["mask"],
+        description=device["description"],
         dev_group=device["dev_group"],
         dev_location=device["dev_location"],
         dev_type=device["dev_type"],
-        description=device["description"],
-        snmp_v=device["snmp_v"],
+        dev_ipsec=device["dev_ipsec"],
+        radius_key=device["radius_key"],
+        snmp_ro=device["snmp_ro"],
         dev_profile=device["dev_profile"],
+        tacacs_shared_secret=device["tacacs_shared_secret"],
+        tacacs_connect_mode_options=device["tacacs_connect_mode_options"],
+        coa_port=device["coa_port"],
+        snmp_version=device["snmp_version"],
+        snmp_polling_interval=device["snmp_polling_interval"],
+        snmp_link_trap_query=device["snmp_link_trap_query"],
+        snmp_mac_trap_query=device["snmp_mac_trap_query"],
+        snmp_originating_policy_services_node=device[
+            "snmp_originating_policy_services_node"
+        ],
     )
     assert r1["success"] is True
+    assert r1["response"] == "test-name Added Successfully"
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_devices.yaml")
+@pytest.mark.vcr
 def test_get_devices():
-    r1 = ise.get_devices(size=1, page=1)
+    r1 = ise.get_devices(size=100, page=1)
     assert r1["success"] is True
+    assert "test-name" in str(r1["response"])
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_device.yaml")
+@pytest.mark.vcr
 def test_get_device():
     r1 = ise.get_device(device["name"])
     assert r1["success"] is True
+    assert "test-name" in str(r1["response"])
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/delete_device.yaml")
+@pytest.mark.vcr
 def test_delete_device():
     r1 = ise.delete_device(device["name"])
     assert r1["success"] is True
+    assert r1["response"] == "test-name Deleted Successfully"
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_sgts.yaml")
+@pytest.mark.vcr
+def test_add_device_payload():
+    r1 = ise.add_device(device_payload=device_payload)
+    assert r1["success"] is True
+    assert r1["response"] == "test-name Added Successfully"
+
+
+@pytest.mark.vcr
+def test_update_device():
+    r1 = ise.update_device(name=device["name"], new_name=device["new_name"])
+    assert r1["success"] is True
+    # TODO assert r1["response"]["updatedField"][0]["newValue"] == "new-test-name"
+
+    # cleanup
+    ise.delete_device(device["new_name"])
+
+
+@pytest.mark.vcr
 def test_get_sgts():
     r1 = ise.get_sgts(size=1, page=1)
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_sgt.yaml")
+@pytest.mark.vcr
 def test_get_sgt():
     r1 = ise.get_sgt("Unknown")
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/add_sgt.yaml")
+@pytest.mark.vcr
 def test_add_sgt():
     r1 = ise.add_sgt(
         name="Python_Unit_Test",
@@ -215,7 +313,7 @@ def test_add_sgt():
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/update_sgt.yaml")
+@pytest.mark.vcr
 def test_update_sgt():
     res = ise.get_sgt("Python_Unit_Test")
     id = res["response"]["id"]
@@ -228,7 +326,7 @@ def test_update_sgt():
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/delete_sgt.yaml")
+@pytest.mark.vcr
 def test_delete_sgt():
     res = ise.get_sgt("Test_Unit_Python")
     id = res["response"]["id"]
@@ -236,19 +334,19 @@ def test_delete_sgt():
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_sgacls.yaml")
+@pytest.mark.vcr
 def test_get_sgacls():
     r1 = ise.get_sgacls(size=1, page=1)
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_sgacl.yaml")
+@pytest.mark.vcr
 def test_get_sgacl():
     r1 = ise.get_sgacl("Permit IP")
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/add_sgacl.yaml")
+@pytest.mark.vcr
 def test_add_sgacl():
     r1 = ise.add_sgacl(
         name="Python_Unit_Test",
@@ -260,7 +358,7 @@ def test_add_sgacl():
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/update_sgacl.yaml")
+@pytest.mark.vcr
 def test_update_sgacl():
     res = ise.get_sgacl("Python_Unit_Test")
     id = res["response"]["id"]
@@ -274,7 +372,7 @@ def test_update_sgacl():
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/delete_sgacl.yaml")
+@pytest.mark.vcr
 def test_delete_sgacl():
     res = ise.get_sgacl("Test_Unit_Python")
     id = res["response"]["id"]
@@ -282,19 +380,19 @@ def test_delete_sgacl():
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_egressmatrixcells.yaml")
+@pytest.mark.vcr
 def test_get_egressmatrixcells():
     r1 = ise.get_egressmatrixcells(size=1, page=1)
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/get_egressmatrixcell.yaml")
+@pytest.mark.vcr
 def test_get_egressmatrixcell():
     r1 = ise.get_egressmatrixcell("Default egress rule")
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/add_egressmatrixcell.yaml")
+@pytest.mark.vcr
 def test_add_egressmatrixcell():
     r1 = ise.add_egressmatrixcell(
         trustsec["emc_source_sgt"],
@@ -306,7 +404,7 @@ def test_add_egressmatrixcell():
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/update_egressmatrixcell.yaml")
+@pytest.mark.vcr
 def test_update_egressmatrixcell():
     res = ise.get_egressmatrixcell("Python Unit Tests")
     id = res["response"]["id"]
@@ -321,7 +419,7 @@ def test_update_egressmatrixcell():
     assert r1["success"] is True
 
 
-@vcr.use_cassette("fixtures/vcr_cassettes/delete_egressmatrixcell.yaml")
+@pytest.mark.vcr
 def test_delete_egressmatrixcell():
     res = ise.get_egressmatrixcell("Test_Unit_Python")
     id = res["response"]["id"]
