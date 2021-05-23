@@ -1,0 +1,430 @@
+interactions:
+- request:
+    body: null
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/egressmatrixcell?filter=description.EQ.Python%20Unit%20Tests
+  response:
+    body:
+      string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
+        [ {\n      \"id\" : \"147ee350-bbef-11eb-a40b-96027a66c43b\",\n      \"name\"
+        : \"Unknown-TrustSec_Devices\",\n      \"description\" : \"Python Unit Tests\",\n
+        \     \"link\" : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/egressmatrixcell/147ee350-bbef-11eb-a40b-96027a66c43b\",\n
+        \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sun, 23 May 2021 17:48:28 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/egressmatrixcell/147ee350-bbef-11eb-a40b-96027a66c43b
+  response:
+    body:
+      string: "{\n  \"EgressMatrixCell\" : {\n    \"id\" : \"147ee350-bbef-11eb-a40b-96027a66c43b\",\n
+        \   \"name\" : \"Unknown-TrustSec_Devices\",\n    \"description\" : \"Python
+        Unit Tests\",\n    \"sourceSgtId\" : \"92adf9f0-8c01-11e6-996c-525400b48521\",\n
+        \   \"destinationSgtId\" : \"947832a0-8c01-11e6-996c-525400b48521\",\n    \"matrixCellStatus\"
+        : \"ENABLED\",\n    \"defaultRule\" : \"PERMIT_IP\",\n    \"sgacls\" : [ \"92951ac0-8c01-11e6-996c-525400b48521\"
+        ],\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.30:9060/ers/config/egressmatrixcell/147ee350-bbef-11eb-a40b-96027a66c43b\",\n
+        \     \"type\" : \"application/json\"\n    }\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sun, 23 May 2021 17:48:28 GMT
+      ETag:
+      - '"121751C6271638C87274E35EA9EDAC93"'
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/sgt?filter=name.EQ.Unknown
+  response:
+    body:
+      string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
+        [ {\n      \"id\" : \"92adf9f0-8c01-11e6-996c-525400b48521\",\n      \"name\"
+        : \"Unknown\",\n      \"description\" : \"Unknown Security Group\",\n      \"link\"
+        : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/sgt/92adf9f0-8c01-11e6-996c-525400b48521\",\n
+        \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sun, 23 May 2021 17:48:28 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/sgt/92adf9f0-8c01-11e6-996c-525400b48521
+  response:
+    body:
+      string: "{\n  \"Sgt\" : {\n    \"id\" : \"92adf9f0-8c01-11e6-996c-525400b48521\",\n
+        \   \"name\" : \"Unknown\",\n    \"description\" : \"Unknown Security Group\",\n
+        \   \"value\" : 0,\n    \"generationId\" : \"0\",\n    \"propogateToApic\"
+        : false,\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.30:9060/ers/config/sgt/92adf9f0-8c01-11e6-996c-525400b48521\",\n
+        \     \"type\" : \"application/json\"\n    }\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sun, 23 May 2021 17:48:28 GMT
+      ETag:
+      - '"253FBA75A6AAAB195FE25911507DA098"'
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/sgt?filter=name.EQ.TrustSec_Devices
+  response:
+    body:
+      string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
+        [ {\n      \"id\" : \"947832a0-8c01-11e6-996c-525400b48521\",\n      \"name\"
+        : \"TrustSec_Devices\",\n      \"description\" : \"TrustSec Devices Security
+        Group\",\n      \"link\" : {\n        \"rel\" : \"self\",\n        \"href\"
+        : \"https://192.168.1.30:9060/ers/config/sgt/947832a0-8c01-11e6-996c-525400b48521\",\n
+        \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sun, 23 May 2021 17:48:28 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/sgt/947832a0-8c01-11e6-996c-525400b48521
+  response:
+    body:
+      string: "{\n  \"Sgt\" : {\n    \"id\" : \"947832a0-8c01-11e6-996c-525400b48521\",\n
+        \   \"name\" : \"TrustSec_Devices\",\n    \"description\" : \"TrustSec Devices
+        Security Group\",\n    \"value\" : 2,\n    \"generationId\" : \"271\",\n    \"propogateToApic\"
+        : true,\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.30:9060/ers/config/sgt/947832a0-8c01-11e6-996c-525400b48521\",\n
+        \     \"type\" : \"application/json\"\n    }\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sun, 23 May 2021 17:48:28 GMT
+      ETag:
+      - '"70961CE5333EB002A497BBF4347F0AFC"'
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: '{"EgressMatrixCell": {"id": "147ee350-bbef-11eb-a40b-96027a66c43b", "description":
+      "Test_Unit_Python", "sourceSgtId": "92adf9f0-8c01-11e6-996c-525400b48521", "destinationSgtId":
+      "947832a0-8c01-11e6-996c-525400b48521", "defaultRule": "NONE", "matrixCellStatus":
+      "ENABLED", "sgacls": ["92919850-8c01-11e6-996c-525400b48521"]}}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Length:
+      - '324'
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      User-Agent:
+      - python-requests/2.25.1
+    method: PUT
+    uri: https://192.168.1.30:9060/ers/config/egressmatrixcell/147ee350-bbef-11eb-a40b-96027a66c43b
+  response:
+    body:
+      string: "{\n  \"UpdatedFieldsList\" : {\n    \"updatedField\" : [ {\n      \"field\"
+        : \"Description\",\n      \"oldValue\" : \"Python Unit Tests\",\n      \"newValue\"
+        : \"Test_Unit_Python\"\n    }, {\n      \"field\" : \"matrixSGACLs\",\n      \"oldValue\"
+        : \"MatrixSGACL [name=Permit IP, refId=92951ac0-8c01-11e6-996c-525400b48521]\",\n
+        \     \"newValue\" : \"MatrixSGACL [name=Deny IP, refId=92919850-8c01-11e6-996c-525400b48521]\"\n
+        \   } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sun, 23 May 2021 17:48:29 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+version: 1

@@ -1,18 +1,19 @@
 uri_list = [
     {
+        "ise_version": "2.7",
         "ise_node": "ip_to_ise_version_x",
         "ers_user": "ers-user",
         "ers_pass": "Password27",
         "use_csrf": False,
     },
     {
+        "ise_version": "3.0",
         "ise_node": "ip_to_ise_version_y",
         "ers_user": "ers-user",
         "ers_pass": "Password30",
         "use_csrf": False,
     },
 ]
-
 
 endpoint = {
     "name": "test-endpoint",

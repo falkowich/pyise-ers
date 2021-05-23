@@ -10,8 +10,8 @@ pipenv-to-requirements = "*"
 setuptools = "*"
 wheel = "*"
 twine = "*"
-pytest-vcr = "*"
 black = "*"
+pytest-recording = "*"
 
 [packages]
 requests = "*"
