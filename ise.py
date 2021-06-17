@@ -29,6 +29,7 @@ class ERS(object):
         verify=False,
         disable_warnings=False,
         use_csrf=False,
+        preflight_checks=True,
         timeout=2,
         protocol="https",
     ):
@@ -41,6 +42,7 @@ class ERS(object):
         :param verify: Verify SSL cert
         :param disable_warnings: Disable requests warnings
         :param timeout: Query timeout
+        :param preflight_checks: Queries ISE MnT API for version (more to come)
         """
         self.ise_node = ise_node
         self.user_name = ers_user
@@ -58,10 +60,12 @@ class ERS(object):
         self.csrf_expires = None
         self.timeout = timeout
         self.ise.headers.update({"Connection": "keep_alive"})
+        self.preflight_checks = preflight_checks
         
         if self.disable_warnings:
             requests.packages.urllib3.disable_warnings()
-        self.version = self.get_version()
+        if self.preflight_checks:
+            self.version = self.get_version()
 
     @staticmethod
     def _mac_test(mac):
