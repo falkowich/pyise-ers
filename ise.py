@@ -5,6 +5,7 @@ import re
 from furl import furl
 from datetime import datetime, timedelta
 from urllib.parse import quote
+from bs4 import BeautifulSoup
 
 import requests
 
@@ -56,10 +57,11 @@ class ERS(object):
         self.csrf = None
         self.csrf_expires = None
         self.timeout = timeout
-        self.ise.headers.update({"Connection": "keep_alive"})
-
+        self.ise.headers.update({'Connection': 'keep_alive'})
+    
         if self.disable_warnings:
             requests.packages.urllib3.disable_warnings()
+        self.version = self.get_version()
 
     @staticmethod
     def _mac_test(mac):
@@ -168,6 +170,22 @@ class ERS(object):
             req = self.ise.request(method, url, data=data, timeout=self.timeout)
 
         return req
+
+    def get_version(self):
+        try:
+            # Build MnT API URL
+            url =  "https://" + self.ise_node + "/admin/API/mnt/Version"
+            # Access MnT API
+            req = self.ise.request('get', url, data=None, timeout=self.timeout)
+            # Extract version of first node
+            soup = BeautifulSoup(req.content,'xml')
+            full_version = soup.find_all('version')[0].get_text()
+            # Get simple version ie: 2.7
+            short_version = float(full_version[0:3])
+            # print("ISE Initializing - Version Check " + full_version)
+            return short_version
+        except:
+            return ""
 
     def _get_groups(self, url, filter: str = None, size: int = 20, page: int = 1):
         """
