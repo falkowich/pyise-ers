@@ -57,8 +57,7 @@ class ERS(object):
         self.csrf = None
         self.csrf_expires = None
         self.timeout = timeout
-        self.ise.headers.update({'Connection': 'keep_alive'})
-    
+self.ise.headers.update({"Connection": "keep_alive"})    
         if self.disable_warnings:
             requests.packages.urllib3.disable_warnings()
         self.version = self.get_version()
