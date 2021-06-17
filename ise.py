@@ -58,6 +58,7 @@ class ERS(object):
         self.csrf_expires = None
         self.timeout = timeout
         self.ise.headers.update({"Connection": "keep_alive"})    
+        
         if self.disable_warnings:
             requests.packages.urllib3.disable_warnings()
         self.version = self.get_version()
@@ -226,7 +227,6 @@ class ERS(object):
             return result
         else:
             return ERS._pass_ersresponse(result, resp)
-
     def _get_objects(self, url, filter: str = None, size: int = 20, page: int = 1):
         """
         Generic method for requesting objects lists.
