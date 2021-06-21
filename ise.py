@@ -29,7 +29,8 @@ class ERS(object):
         verify=False,
         disable_warnings=False,
         use_csrf=False,
-        preflight_checks=True,
+        version='',
+        enable_failover=False,
         timeout=2,
         protocol="https",
     ):
@@ -42,7 +43,8 @@ class ERS(object):
         :param verify: Verify SSL cert
         :param disable_warnings: Disable requests warnings
         :param timeout: Query timeout
-        :param preflight_checks: Queries ISE MnT API for version (more to come)
+        :param version: Discovers Version via ISE MnT API
+        :param enable_failover: Discovers the primary ERS server
         """
         self.ise_node = ise_node
         self.user_name = ers_user
@@ -60,12 +62,49 @@ class ERS(object):
         self.csrf_expires = None
         self.timeout = timeout
         self.ise.headers.update({"Connection": "keep_alive"})
-        self.preflight_checks = preflight_checks
-        
+        self.version = version  
+        self.enable_failover = enable_failover
+
         if self.disable_warnings:
             requests.packages.urllib3.disable_warnings()
-        if self.preflight_checks:
+        if self.version == '':
             self.version = self.get_version()
+        if self.enable_failover:
+            self.ise_node = self.discover_primary_ers_node(self)
+
+    @staticmethod
+    def discover_primary_ers_node(self):
+        """
+        Loops through the seed node's knowledge of the ERS nodes.
+        Queries each node if it has the Primary Active Role for ERS
+        Returns the Primary Node ip address.
+        """
+        
+        # Choosing JSON instead of XML
+        self.ise.headers.update(
+            {"ACCEPT": "application/json", "Content-Type": "application/json"}
+        )
+
+        resp = self._request(
+            "{0}/config/node".format(self.url_base), method="get"
+        )
+
+        if resp.status_code == 200:
+            nodes = [
+                (i["id"],i["link"]["href"])
+                for i in resp.json()["SearchResult"]["resources"]
+            ]
+            for node in nodes:
+                node_response = self._request(
+                "{0}/config/node/{1}".format(self.url_base, node[0]), method="get"
+                )
+                if(node_response.json()["Node"]["primaryPapNode"]):
+                    print("Found Primary ERS Node")
+                    break
+            return node_response.json()["Node"]["ipAddress"]
+        else:
+            # We didn't find the primary node, something is wrong with the cluster, and we should not proceed.
+            raise "No Primary ERS Node found - Check your ISE Cluster Status!"
 
     @staticmethod
     def _mac_test(mac):
@@ -2159,3 +2198,5 @@ class ERS(object):
             return result
         else:
             return ERS._pass_ersresponse(result, resp)
+
+ise = ERS(ise_node='172.27.0.139', ers_user='admin', ers_pass='C1sN3t4hBc', verify=False, disable_warnings=True, enable_failover=True)
