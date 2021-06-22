@@ -31,6 +31,7 @@ class ERS(object):
         use_csrf=False,
         version='',
         enable_failover=False,
+        ise_node_2='',
         timeout=2,
         protocol="https",
     ):
@@ -38,6 +39,7 @@ class ERS(object):
         Class to interact with Cisco ISE via the ERS API.
 
         :param ise_node: IP Address of the primary admin ISE node
+        :param ise_node_2: IP Address of the secondary admin ISE node
         :param ers_user: ERS username
         :param ers_pass: ERS password
         :param verify: Verify SSL cert
@@ -47,6 +49,7 @@ class ERS(object):
         :param enable_failover: Discovers the primary ERS server
         """
         self.ise_node = ise_node
+        self.ise_node_2 = ise_node_2
         self.user_name = ers_user
         self.user_pass = ers_pass
         self.protocol = protocol
@@ -84,27 +87,56 @@ class ERS(object):
         self.ise.headers.update(
             {"ACCEPT": "application/json", "Content-Type": "application/json"}
         )
+        try:
+            resp = self._request(
+                "{0}/config/node".format(self.url_base), method="get"
+            )
 
-        resp = self._request(
-            "{0}/config/node".format(self.url_base), method="get"
-        )
+            if resp.status_code == 200:
+                nodes = [
+                    (i["id"],i["link"]["href"])
+                    for i in resp.json()["SearchResult"]["resources"]
+                ]
+                for node in nodes:
+                    try:
+                        node_response = self._request(
+                        "{0}/config/node/{1}".format(self.url_base, node[0]), method="get"
+                        )
+                        if(node_response.json()["Node"]["primaryPapNode"]):
+                            print("Found Primary ERS Node")
+                            return node_response.json()["Node"]["ipAddress"]
+                    except requests.exceptions.RequestException as e:
+                        print("Error: Connection Error to Primary ISE Node, continuing...")
+        except requests.exceptions.RequestException as e:
+            print("Error: The primary node is not responding, trying secondary node.")
+            # If we get here, the first node failed to respond, we try the second node.
 
-        if resp.status_code == 200:
-            nodes = [
-                (i["id"],i["link"]["href"])
-                for i in resp.json()["SearchResult"]["resources"]
-            ]
-            for node in nodes:
-                node_response = self._request(
-                "{0}/config/node/{1}".format(self.url_base, node[0]), method="get"
+            try:
+                secondary_url_base = "{0}://{1}:9060/ers".format(self.protocol, self.ise_node_2)
+                resp = self._request(
+                "{0}/config/node".format(secondary_url_base), method="get"
                 )
-                if(node_response.json()["Node"]["primaryPapNode"]):
-                    print("Found Primary ERS Node")
-                    break
-            return node_response.json()["Node"]["ipAddress"]
-        else:
-            # We didn't find the primary node, something is wrong with the cluster, and we should not proceed.
-            raise "No Primary ERS Node found - Check your ISE Cluster Status!"
+
+                if resp.status_code == 200:
+                    nodes = [
+                    (i["id"],i["link"]["href"])
+                    for i in resp.json()["SearchResult"]["resources"]
+                ]
+                for node in nodes:
+                    # Because all the nodes are known, they may timeout here also.
+                    try:
+                        node_response = self._request(
+                        "{0}/config/node/{1}".format(secondary_url_base, node[0]), method="get"
+                        )
+                        if(node_response.json()["Node"]["primaryPapNode"]):
+                            print("Found Primary ERS Node")
+                            return node_response.json()["Node"]["ipAddress"]
+                    except requests.exceptions.RequestException as e:
+                        print("Error: Connection Error to Secondary ISE Node.")
+                        raise
+            except requests.exceptions.RequestException as e:
+                print("Error: Connection Error to Secondary ISE Node.")
+                # raise
 
     @staticmethod
     def _mac_test(mac):
@@ -193,7 +225,7 @@ class ERS(object):
                         "X-CSRF-TOKEN": "fetch",
                     }
                 )
-
+                
                 resp = self.ise.get(
                     "{0}/config/deploymentinfo/versioninfo".format(self.url_base)
                 )
@@ -2198,5 +2230,3 @@ class ERS(object):
             return result
         else:
             return ERS._pass_ersresponse(result, resp)
-
-ise = ERS(ise_node='172.27.0.139', ers_user='admin', ers_pass='C1sN3t4hBc', verify=False, disable_warnings=True, enable_failover=True)
