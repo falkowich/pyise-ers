@@ -3,7 +3,9 @@
 
 # ISE
 
-Python module to manage Cisco ISE via the REST API.
+Python module to manage Cisco ISE via the REST API.  
+
+[Join Discord Server](https://discord.gg/CA6FphRgF4)
 
 ## History
 
