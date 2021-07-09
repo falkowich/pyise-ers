@@ -18,6 +18,12 @@ class InvalidMacAddress(Exception):
     def __str__(self):
         return repr(self.value)
 
+class InvalidID(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
 
 class ERS(object):
     def __init__(
@@ -107,7 +113,7 @@ class ERS(object):
     def _oid_test(id):
         """
         Test for a valid OID
-        :param id: OID in the form of abcd1234-ef56-7890-abcd1234ef56
+        :param id: OID in the form of abcd1234-ef56-7890-1234-abcd1234ef56
         :return: True/False
         """
         if id and re.match(r"^([a-f0-9]{8}-([a-f0-9]{4}-){3}[a-z0-9]{12})$", id):
@@ -452,6 +458,78 @@ class ERS(object):
                 return result
             else:
                 return ERS._pass_ersresponse(result, resp)
+
+    def update_endpoint(
+        self,
+        id,
+        name="",
+        mac="",
+        group_id="",
+        static_profile_assigment="",
+        static_group_assignment="",
+        profile_id="",
+        description="",
+        portalUser="",
+        customAttributes={},
+    ):
+        """
+        Update an endpoint.
+
+        :param id: ID
+        :param mac: Macaddress
+        :param group_id: OID of group to add endpoint in
+        :param static_profile_assigment: Set static profile
+        :param static_group_assignment: Set static group
+        :param profile_id: OID of profile
+        :param description: User description
+        :param portaluser: Portal username
+        :param customAttributes: key value pairs of custom attributes
+        :return: result dictionary
+        """
+        self.ise.headers.update(
+            {"ACCEPT": "application/json", "Content-Type": "application/json"}
+        )
+
+        result = {
+            "success": False,
+            "response": "",
+            "error": "",
+        }
+
+        is_valid = self._oid_test(id)
+
+        if not is_valid:
+            raise InvalidID(
+                "{0}. Must be in the form of abcd1234-ef56-7890-abcd1234ef56".format(id)
+            )
+
+        data = {
+            "ERSEndPoint": {
+                "id": id,
+                "mac": mac,
+                "description": description,
+                "mac": mac,
+                "profileId": profile_id,
+                "staticProfileAssignment": static_profile_assigment,
+                "groupId": group_id,
+                "staticGroupAssignment": static_group_assignment,
+                "portalUser": portalUser,
+                "customAttributes": {"customAttributes": customAttributes},
+            }
+        }
+
+        resp = self._request(
+            "{0}/config/endpoint/{1}".format(self.url_base, id),
+            method="put",
+            data=json.dumps(data),
+        )
+        print(resp.status_code)
+        if resp.status_code == 200:
+            result["success"] = True
+            result["response"] = "{0} Updated Successfully".format(id)
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
 
     def update_sgt(
         self,
@@ -1070,6 +1148,7 @@ class ERS(object):
         :param mac_address: MAC address of the endpoint
         :return: result dictionary
         """
+
         is_valid = ERS._mac_test(mac_address)
 
         if not is_valid:
@@ -1124,7 +1203,7 @@ class ERS(object):
         customAttributes={},
     ):
         """
-        Add a user to the local user store.
+        Add an endpoint.
 
         :param name: Name
         :param mac: Macaddress
