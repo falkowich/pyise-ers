@@ -37,6 +37,16 @@ def add_endpoint(endpoint):
     else:
         print("add_endpoint » OK")
 
+def update_endpoint(endpoint):
+    result = ise.get_endpoint(endpoint["mac"])
+    id = result['response']['id']
+    test = ise.update_endpoint(
+        id=id, mac=endpoint["mac"], group_id=endpoint["group-id"],static_profile_assigment=True
+        )
+    if test["error"]:
+        print(test["response"])
+    else:
+        print("update_endpoint » OK")
 
 def get_endpoints():
     test = ise.get_endpoints(size=100, page=1)
@@ -458,6 +468,7 @@ if __name__ == "__main__":
 
         # Endpoint tests
         add_endpoint(endpoint)
+        update_endpoint(endpoint)
         get_endpoints()
         get_endpoint(endpoint)
         delete_endpoint(endpoint)
