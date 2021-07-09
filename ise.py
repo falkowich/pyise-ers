@@ -1148,7 +1148,6 @@ class ERS(object):
         :param mac_address: MAC address of the endpoint
         :return: result dictionary
         """
-
         is_valid = ERS._mac_test(mac_address)
 
         if not is_valid:
