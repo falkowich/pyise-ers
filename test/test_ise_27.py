@@ -52,6 +52,13 @@ def test_add_endpoint():  # noqa D103
     assert r1["success"] is True
     assert r1["response"] == "test-endpoint Added Successfully"
 
+@pytest.mark.vcr
+def test_update_endpoint():  # noqa D103
+    result = ise.get_endpoint(endpoint["mac"])
+    id = result['response']['id']
+    r1 = ise.update_endpoint(id=id, mac=endpoint["mac"], group_id=endpoint["group-id"],static_profile_assigment=True)
+    assert r1["success"] is True
+    assert r1["response"] == f"{id} Updated Successfully"
 
 # Endpoint tests
 @pytest.mark.vcr
