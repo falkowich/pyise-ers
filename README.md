@@ -184,6 +184,13 @@ ise.add_endpoint(name='test02', mac='AA:BB:CC:00:11:24', group_id='bf6bdcf0-14ed
 {'response': 'test02 Added Successfully', 'success': True, 'error': ''}
 ```
 
+#### Update endpoint
+
+```python
+ise.update_endpoint(id='abcd1234-ef56-7890-abcd1234ef56', mac='AA:BB:CC:00:11:24', group_id='bf6bdcf0-14ed-11e5-a7a6-00505683258b', static_group_assignment=False)
+{'response': 'abcd1234-ef56-7890-abcd1234ef56 Updated Successfully', 'success': True, 'error': ''}
+```
+
 #### Delete endpoint
 
 ```python
