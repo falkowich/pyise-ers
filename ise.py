@@ -1247,6 +1247,12 @@ class ERS(object):
                     method="put",
                     data=json.dumps(data),
                 )
+                if resp.status_code == 201:
+                    result["success"] = True
+                    result["response"] = "{0} Updated Successfully".format(name)
+                    return result
+                else:
+                    return ERS._pass_ersresponse(result, resp)
             elif found_endpoint["SearchResult"]["total"] == 0:
                 result["response"] = "{0} not found".format(mac)
                 result["error"] = 404
