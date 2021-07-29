@@ -1247,7 +1247,7 @@ class ERS(object):
                     method="put",
                     data=json.dumps(data),
                 )
-                if resp.status_code == 201:
+                if resp.status_code == 200:
                     result["success"] = True
                     result["response"] = "{0} Updated Successfully".format(name)
                     return result
