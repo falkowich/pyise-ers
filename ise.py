@@ -1178,6 +1178,85 @@ class ERS(object):
                 return result
             else:
                 return ERS._pass_ersresponse(result, resp)
+            
+    def update_endpoint(
+        self,
+        name,
+        mac,
+        group_id,
+        static_profile_assigment="false",
+        static_group_assignment="true",
+        profile_id="",
+        description="",
+        portalUser="",
+        customAttributes={},
+    ):
+        """
+        Update a user to the local user store.
+
+        :param name: Name
+        :param mac: Macaddress
+        :param group_id: OID of group to add endpoint in
+        :param static_profile_assigment: Set static profile
+        :param static_group_assignment: Set static group
+        :param profile_id: OID of profile
+        :param description: User description
+        :param portaluser: Portal username
+        :param customAttributes: key value pairs of custom attributes
+        :return: result dictionary
+        """
+        is_valid = ERS._mac_test(mac)
+        if not is_valid:
+            raise InvalidMacAddress(
+                "{0}. Must be in the form of AA:BB:CC:00:11:22".format(mac)
+            )
+        else:
+            self.ise.headers.update(
+                {"ACCEPT": "application/json", "Content-Type": "application/json"}
+            )
+
+            result = {
+                "success": False,
+                "response": "",
+                "error": "",
+            }
+
+            resp = self.ise.get(
+                "{0}/config/endpoint?filter=mac.EQ.{1}".format(self.url_base, mac)
+            )
+            found_endpoint = resp.json()
+
+            if found_endpoint["SearchResult"]["total"] == 1:
+                endpoint_oid = found_endpoint["SearchResult"]["resources"][0]["id"]
+                data = {
+                    "ERSEndPoint": {
+                        "name": name,
+                        "description": description,
+                        "mac": mac,
+                        "profileId": profile_id,
+                        "staticProfileAssignment": static_profile_assigment,
+                        "groupId": group_id,
+                        "staticGroupAssignment": static_group_assignment,
+                        "portalUser": portalUser,
+                        "customAttributes": {"customAttributes": customAttributes},
+                    }
+                }
+
+                resp = self._request(
+                    "{0}/config/endpoint/{1}".format(self.url_base, endpoint_oid),
+                    method="put",
+                    data=json.dumps(data),
+                )
+            elif found_endpoint["SearchResult"]["total"] == 0:
+                result["response"] = "{0} not found".format(mac)
+                result["error"] = 404
+                return result
+
+            else:
+                result["response"] = "{0} not found".format(mac)
+                result["error"] = resp.status_code
+                return result
+
 
     def delete_endpoint(self, mac):
         """
