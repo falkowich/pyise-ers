@@ -71,6 +71,13 @@ def test_get_endpoint():  # noqa D103
 
 
 @pytest.mark.vcr
+def test_update_endpoint():  # noqa D103
+    r1 = ise.update_endpoint(endpoint["mac"])
+    assert r1["success"] is True
+    assert r1["response"] == "AA:BB:CC:00:11:22 Updated Successfully"
+    
+    
+@pytest.mark.vcr
 def test_delete_endpoint():  # noqa D103
     r1 = ise.delete_endpoint(endpoint["mac"])
     assert r1["success"] is True
