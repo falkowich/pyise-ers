@@ -11,7 +11,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      - APPSESSIONID=575B3474D386237E61B36C7FCD1FD041; JSESSIONIDSSO=0F20C99C8ACD9F2D1A6FCF69C5BEBB1B
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -19,9 +19,9 @@ interactions:
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
-        [ {\n      \"id\" : \"d02a5226-488b-442b-ab6c-c5f89fe4ec65\",\n      \"name\"
+        [ {\n      \"id\" : \"24b49080-a326-41df-9f55-15e331ff9bf4\",\n      \"name\"
         : \"test-user\",\n      \"link\" : {\n        \"rel\" : \"self\",\n        \"href\"
-        : \"https://192.168.1.30:9060/ers/config/internaluser/d02a5226-488b-442b-ab6c-c5f89fe4ec65\",\n
+        : \"https://192.168.1.30:9060/ers/config/internaluser/24b49080-a326-41df-9f55-15e331ff9bf4\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -32,7 +32,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:25 GMT
+      - Sat, 02 Oct 2021 18:18:07 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

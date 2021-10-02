@@ -14,7 +14,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      - APPSESSIONID=575B3474D386237E61B36C7FCD1FD041; JSESSIONIDSSO=0F20C99C8ACD9F2D1A6FCF69C5BEBB1B
       User-Agent:
       - python-requests/2.25.1
     method: POST
@@ -33,11 +33,11 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:28 GMT
+      - Sat, 02 Oct 2021 18:18:12 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Location:
-      - https://192.168.1.30:9060/ers/config/networkdevicegroup/3ae8e730-23a9-11ec-9954-d60cbf567311
+      - https://192.168.1.30:9060/ers/config/networkdevicegroup/1a402ad0-23ad-11ec-9954-d60cbf567311
       Pragma:
       - no-cache
       Server:
@@ -81,7 +81,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      - APPSESSIONID=575B3474D386237E61B36C7FCD1FD041; JSESSIONIDSSO=0F20C99C8ACD9F2D1A6FCF69C5BEBB1B
       User-Agent:
       - python-requests/2.25.1
     method: POST
@@ -100,11 +100,11 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:28 GMT
+      - Sat, 02 Oct 2021 18:18:12 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Location:
-      - https://192.168.1.30:9060/ers/config/networkdevice/3b1a3060-23a9-11ec-9954-d60cbf567311
+      - https://192.168.1.30:9060/ers/config/networkdevice/1a9b6a30-23ad-11ec-9954-d60cbf567311
       Pragma:
       - no-cache
       Server:
@@ -138,7 +138,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      - APPSESSIONID=575B3474D386237E61B36C7FCD1FD041; JSESSIONIDSSO=0F20C99C8ACD9F2D1A6FCF69C5BEBB1B
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -146,9 +146,9 @@ interactions:
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
-        [ {\n      \"id\" : \"3ae8e730-23a9-11ec-9954-d60cbf567311\",\n      \"name\"
+        [ {\n      \"id\" : \"1a402ad0-23ad-11ec-9954-d60cbf567311\",\n      \"name\"
         : \"testgroup#testgroup\",\n      \"description\" : \"temporary testgroup\",\n
-        \     \"link\" : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevicegroup/3ae8e730-23a9-11ec-9954-d60cbf567311\",\n
+        \     \"link\" : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevicegroup/1a402ad0-23ad-11ec-9954-d60cbf567311\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -159,7 +159,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:29 GMT
+      - Sat, 02 Oct 2021 18:18:12 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -199,11 +199,11 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      - APPSESSIONID=575B3474D386237E61B36C7FCD1FD041; JSESSIONIDSSO=0F20C99C8ACD9F2D1A6FCF69C5BEBB1B
       User-Agent:
       - python-requests/2.25.1
     method: DELETE
-    uri: https://192.168.1.30:9060/ers/config/networkdevicegroup/3ae8e730-23a9-11ec-9954-d60cbf567311
+    uri: https://192.168.1.30:9060/ers/config/networkdevicegroup/1a402ad0-23ad-11ec-9954-d60cbf567311
   response:
     body:
       string: ''
@@ -216,7 +216,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:30 GMT
+      - Sat, 02 Oct 2021 18:18:13 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

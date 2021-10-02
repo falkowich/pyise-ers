@@ -11,7 +11,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -19,9 +19,9 @@ interactions:
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
-        [ {\n      \"id\" : \"36f84c11-23a9-11ec-8ac2-f2c839b2fc61\",\n      \"name\"
+        [ {\n      \"id\" : \"13f91c90-23ad-11ec-8ac2-f2c839b2fc61\",\n      \"name\"
         : \"Unknown-TrustSec_Devices\",\n      \"description\" : \"Python Unit Tests\",\n
-        \     \"link\" : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/egressmatrixcell/36f84c11-23a9-11ec-8ac2-f2c839b2fc61\",\n
+        \     \"link\" : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/egressmatrixcell/13f91c90-23ad-11ec-8ac2-f2c839b2fc61\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -32,7 +32,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:22 GMT
+      - Sat, 02 Oct 2021 18:18:01 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -70,19 +70,19 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.27:9060/ers/config/egressmatrixcell/36f84c11-23a9-11ec-8ac2-f2c839b2fc61
+    uri: https://192.168.1.27:9060/ers/config/egressmatrixcell/13f91c90-23ad-11ec-8ac2-f2c839b2fc61
   response:
     body:
-      string: "{\n  \"EgressMatrixCell\" : {\n    \"id\" : \"36f84c11-23a9-11ec-8ac2-f2c839b2fc61\",\n
+      string: "{\n  \"EgressMatrixCell\" : {\n    \"id\" : \"13f91c90-23ad-11ec-8ac2-f2c839b2fc61\",\n
         \   \"name\" : \"Unknown-TrustSec_Devices\",\n    \"description\" : \"Python
         Unit Tests\",\n    \"sourceSgtId\" : \"92adf9f0-8c01-11e6-996c-525400b48521\",\n
         \   \"destinationSgtId\" : \"947832a0-8c01-11e6-996c-525400b48521\",\n    \"matrixCellStatus\"
         : \"ENABLED\",\n    \"defaultRule\" : \"PERMIT_IP\",\n    \"sgacls\" : [ \"92951ac0-8c01-11e6-996c-525400b48521\"
-        ],\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/egressmatrixcell/36f84c11-23a9-11ec-8ac2-f2c839b2fc61\",\n
+        ],\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/egressmatrixcell/13f91c90-23ad-11ec-8ac2-f2c839b2fc61\",\n
         \     \"type\" : \"application/json\"\n    }\n  }\n}"
     headers:
       Cache-Control:
@@ -93,9 +93,9 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:22 GMT
+      - Sat, 02 Oct 2021 18:18:01 GMT
       ETag:
-      - '"BF61121F2EBD2CF873E14D43269DF35D"'
+      - '"331E28677205CB84C32BA98ED31BB6CE"'
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -133,7 +133,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -154,7 +154,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:22 GMT
+      - Sat, 02 Oct 2021 18:18:01 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -192,7 +192,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -213,7 +213,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:22 GMT
+      - Sat, 02 Oct 2021 18:18:01 GMT
       ETag:
       - '"0EA821848C3207C42603A3711911DE9B"'
       Expires:
@@ -253,7 +253,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -275,7 +275,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:22 GMT
+      - Sat, 02 Oct 2021 18:18:01 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -313,7 +313,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -322,7 +322,7 @@ interactions:
     body:
       string: "{\n  \"Sgt\" : {\n    \"id\" : \"947832a0-8c01-11e6-996c-525400b48521\",\n
         \   \"name\" : \"TrustSec_Devices\",\n    \"description\" : \"TrustSec Devices
-        Security Group\",\n    \"value\" : 2,\n    \"generationId\" : \"31\",\n    \"propogateToApic\"
+        Security Group\",\n    \"value\" : 2,\n    \"generationId\" : \"34\",\n    \"propogateToApic\"
         : true,\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/sgt/947832a0-8c01-11e6-996c-525400b48521\",\n
         \     \"type\" : \"application/json\"\n    }\n  }\n}"
     headers:
@@ -334,9 +334,9 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:22 GMT
+      - Sat, 02 Oct 2021 18:18:01 GMT
       ETag:
-      - '"9951AC9FC0D8B8CEAF79193A1E35F1C7"'
+      - '"D2078304537354E2FBC9E8CA1E11E089"'
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -363,7 +363,7 @@ interactions:
       code: 200
       message: ''
 - request:
-    body: '{"EgressMatrixCell": {"id": "36f84c11-23a9-11ec-8ac2-f2c839b2fc61", "description":
+    body: '{"EgressMatrixCell": {"id": "13f91c90-23ad-11ec-8ac2-f2c839b2fc61", "description":
       "Test_Unit_Python", "sourceSgtId": "92adf9f0-8c01-11e6-996c-525400b48521", "destinationSgtId":
       "947832a0-8c01-11e6-996c-525400b48521", "defaultRule": "NONE", "matrixCellStatus":
       "ENABLED", "sgacls": ["92919850-8c01-11e6-996c-525400b48521"]}}'
@@ -379,11 +379,11 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: PUT
-    uri: https://192.168.1.27:9060/ers/config/egressmatrixcell/36f84c11-23a9-11ec-8ac2-f2c839b2fc61
+    uri: https://192.168.1.27:9060/ers/config/egressmatrixcell/13f91c90-23ad-11ec-8ac2-f2c839b2fc61
   response:
     body:
       string: "{\n  \"UpdatedFieldsList\" : {\n    \"updatedField\" : [ {\n      \"field\"
@@ -401,7 +401,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:22 GMT
+      - Sat, 02 Oct 2021 18:18:02 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

@@ -11,7 +11,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -19,9 +19,9 @@ interactions:
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
-        [ {\n      \"id\" : \"cb9b6473-a14a-4f2d-95d3-7874ba271580\",\n      \"name\"
+        [ {\n      \"id\" : \"4c250ec1-2e2d-49a4-97fb-456c779e0d3b\",\n      \"name\"
         : \"test-user\",\n      \"link\" : {\n        \"rel\" : \"self\",\n        \"href\"
-        : \"https://192.168.1.27:9060/ers/config/internaluser/cb9b6473-a14a-4f2d-95d3-7874ba271580\",\n
+        : \"https://192.168.1.27:9060/ers/config/internaluser/4c250ec1-2e2d-49a4-97fb-456c779e0d3b\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -32,7 +32,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:12 GMT
+      - Sat, 02 Oct 2021 18:17:49 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -70,20 +70,20 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.27:9060/ers/config/internaluser/cb9b6473-a14a-4f2d-95d3-7874ba271580
+    uri: https://192.168.1.27:9060/ers/config/internaluser/4c250ec1-2e2d-49a4-97fb-456c779e0d3b
   response:
     body:
-      string: "{\n  \"InternalUser\" : {\n    \"id\" : \"cb9b6473-a14a-4f2d-95d3-7874ba271580\",\n
+      string: "{\n  \"InternalUser\" : {\n    \"id\" : \"4c250ec1-2e2d-49a4-97fb-456c779e0d3b\",\n
         \   \"name\" : \"test-user\",\n    \"enabled\" : true,\n    \"password\" :
         \"*******\",\n    \"firstName\" : \"Firstname\",\n    \"lastName\" : \"Lastname\",\n
         \   \"changePassword\" : true,\n    \"identityGroups\" : \"a1740510-8c01-11e6-996c-525400b48521\",\n
         \   \"expiryDateEnabled\" : false,\n    \"enablePassword\" : \"*******\",\n
         \   \"customAttributes\" : { },\n    \"passwordIDStore\" : \"Internal Users\",\n
-        \   \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/internaluser/cb9b6473-a14a-4f2d-95d3-7874ba271580\",\n
+        \   \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/internaluser/4c250ec1-2e2d-49a4-97fb-456c779e0d3b\",\n
         \     \"type\" : \"application/json\"\n    }\n  }\n}"
     headers:
       Cache-Control:
@@ -94,9 +94,9 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:12 GMT
+      - Sat, 02 Oct 2021 18:17:49 GMT
       ETag:
-      - '"E9418CAC034F9C7E48D8F4210169B22C"'
+      - '"A765ADD8836D692A38CD0CD79A094C68"'
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

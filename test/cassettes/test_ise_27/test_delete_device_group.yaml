@@ -11,7 +11,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -19,10 +19,10 @@ interactions:
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
-        [ {\n      \"id\" : \"313254b0-23a9-11ec-8ac2-f2c839b2fc61\",\n      \"name\"
+        [ {\n      \"id\" : \"0d200780-23ad-11ec-8ac2-f2c839b2fc61\",\n      \"name\"
         : \"Device Type#All Device Types#Updated Device Type\",\n      \"description\"
         : \"From Python\",\n      \"link\" : {\n        \"rel\" : \"self\",\n        \"href\"
-        : \"https://192.168.1.27:9060/ers/config/networkdevicegroup/313254b0-23a9-11ec-8ac2-f2c839b2fc61\",\n
+        : \"https://192.168.1.27:9060/ers/config/networkdevicegroup/0d200780-23ad-11ec-8ac2-f2c839b2fc61\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -33,7 +33,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:14 GMT
+      - Sat, 02 Oct 2021 18:17:52 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -73,11 +73,11 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: DELETE
-    uri: https://192.168.1.27:9060/ers/config/networkdevicegroup/313254b0-23a9-11ec-8ac2-f2c839b2fc61
+    uri: https://192.168.1.27:9060/ers/config/networkdevicegroup/0d200780-23ad-11ec-8ac2-f2c839b2fc61
   response:
     body:
       string: ''
@@ -90,7 +90,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:15 GMT
+      - Sat, 02 Oct 2021 18:17:53 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

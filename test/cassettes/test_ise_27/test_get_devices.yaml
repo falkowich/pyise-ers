@@ -11,7 +11,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=3BCDD3DF257E65886015D24603D9F7D0; JSESSIONIDSSO=A499ECBD11BDF9188F880C4D4EC6B352
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -23,9 +23,9 @@ interactions:
         : \"ISE_EST_Local_Host\",\n      \"description\" : \"\",\n      \"link\" :
         {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/networkdevice/582af6c0-2396-11ec-af8e-5254006f7dfa\",\n
         \       \"type\" : \"application/json\"\n      }\n    }, {\n      \"id\" :
-        \"3315e1c0-23a9-11ec-8ac2-f2c839b2fc61\",\n      \"name\" : \"test-name\",\n
+        \"0f695b40-23ad-11ec-8ac2-f2c839b2fc61\",\n      \"name\" : \"test-name\",\n
         \     \"description\" : \"test-description\",\n      \"link\" : {\n        \"rel\"
-        : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/networkdevice/3315e1c0-23a9-11ec-8ac2-f2c839b2fc61\",\n
+        : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/networkdevice/0f695b40-23ad-11ec-8ac2-f2c839b2fc61\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -36,7 +36,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:16 GMT
+      - Sat, 02 Oct 2021 18:17:54 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

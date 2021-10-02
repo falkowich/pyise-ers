@@ -11,7 +11,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      - APPSESSIONID=575B3474D386237E61B36C7FCD1FD041; JSESSIONIDSSO=0F20C99C8ACD9F2D1A6FCF69C5BEBB1B
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -32,7 +32,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:25 GMT
+      - Sat, 02 Oct 2021 18:18:06 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -70,7 +70,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      - APPSESSIONID=575B3474D386237E61B36C7FCD1FD041; JSESSIONIDSSO=0F20C99C8ACD9F2D1A6FCF69C5BEBB1B
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -91,7 +91,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:25 GMT
+      - Sat, 02 Oct 2021 18:18:06 GMT
       ETag:
       - '"2DD10199B618332C02476D27253A85BB"'
       Expires:
