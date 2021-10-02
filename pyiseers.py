@@ -150,7 +150,8 @@ class ERS(object):
                 )
 
                 resp = self.ise.get(
-                    "{0}/config/deploymentinfo/versioninfo".format(self.url_base)
+                    "{0}/config/deploymentinfo/versioninfo".format(self.url_base),
+                    timeout=self.timeout,
                 )
                 self.csrf = resp.headers["X-CSRF-Token"]
                 self.csrf_expires = datetime.utcfromtimestamp(0) + timedelta(seconds=60)
@@ -197,7 +198,7 @@ class ERS(object):
         self.ise.headers.update(
             {"ACCEPT": "application/json", "Content-Type": "application/json"}
         )
-        resp = self.ise.get(f.url)
+        resp = self.ise.get(f.url, timeout=self.timeout)
 
         if resp.status_code == 200:
             result["success"] = True
@@ -239,7 +240,7 @@ class ERS(object):
         if filter:
             f.args["filter"] = filter
 
-        resp = self.ise.get(f.url)
+        resp = self.ise.get(f.url, timeout=self.timeout)
 
         # TODO add dynamic paging?
         if resp.status_code == 200:
@@ -303,7 +304,8 @@ class ERS(object):
             resp = self.ise.get(
                 "{0}/config/endpointgroup?filter=name.EQ.{1}".format(
                     self.url_base, group
-                )
+                ),
+                timeout=self.timeout,
             )
             found_group = resp.json()
 
@@ -378,11 +380,13 @@ class ERS(object):
         else:
             if isinstance(sgt, int):
                 resp = self.ise.get(
-                    "{0}/config/sgt?filter=value.EQ.{1}".format(self.url_base, sgt)
+                    "{0}/config/sgt?filter=value.EQ.{1}".format(self.url_base, sgt),
+                    timeout=self.timeout,
                 )
             else:
                 resp = self.ise.get(
-                    "{0}/config/sgt?filter=name.EQ.{1}".format(self.url_base, sgt)
+                    "{0}/config/sgt?filter=name.EQ.{1}".format(self.url_base, sgt),
+                    timeout=self.timeout,
                 )
             found_group = resp.json()
 
@@ -591,7 +595,8 @@ class ERS(object):
         # If not valid OID, perform regular search
         else:
             resp = self.ise.get(
-                "{0}/config/sgacl?filter=name.EQ.{1}".format(self.url_base, sgacl)
+                "{0}/config/sgacl?filter=name.EQ.{1}".format(self.url_base, sgacl),
+                timeout=self.timeout,
             )
             found_group = resp.json()
 
@@ -801,7 +806,8 @@ class ERS(object):
                 resp = self.ise.get(
                     "{0}/config/egressmatrixcell?filter=description.EQ.{1}".format(
                         self.url_base, emc
-                    )
+                    ),
+                    timeout=self.timeout,
                 )
                 found_group = resp.json()
             elif src_sgt and dst_sgt:
@@ -810,7 +816,8 @@ class ERS(object):
                 resp = self.ise.get(
                     "{0}/config/egressmatrixcell?filter=sgtSrcValue.EQ.{1}&filter=sgtDstValue.EQ.{2}".format(
                         self.url_base, srcsgtval, dstsgtval
-                    )
+                    ),
+                    timeout=self.timeout,
                 )
                 found_group = resp.json()
             else:
@@ -1054,7 +1061,7 @@ class ERS(object):
 
         f = furl(url)
         f.path /= objectid
-        resp = self.ise.get(f.url)
+        resp = self.ise.get(f.url, timeout=self.timeout)
 
         if resp.status_code == 200:
             result["success"] = True
@@ -1090,7 +1097,8 @@ class ERS(object):
             resp = self.ise.get(
                 "{0}/config/endpoint?filter=mac.EQ.{1}".format(
                     self.url_base, mac_address
-                )
+                ),
+                timeout=self.timeout,
             )
             found_endpoint = resp.json()
 
@@ -1197,7 +1205,8 @@ class ERS(object):
         }
 
         resp = self.ise.get(
-            "{0}/config/endpoint?filter=mac.EQ.{1}".format(self.url_base, mac)
+            "{0}/config/endpoint?filter=mac.EQ.{1}".format(self.url_base, mac),
+            timeout=self.timeout,
         )
         found_endpoint = resp.json()
         if found_endpoint["SearchResult"]["total"] == 1:
@@ -1256,7 +1265,8 @@ class ERS(object):
         }
 
         resp = self.ise.get(
-            "{0}/config/identitygroup?filter=name.EQ.{1}".format(self.url_base, group)
+            "{0}/config/identitygroup?filter=name.EQ.{1}".format(self.url_base, group),
+            timeout=self.timeout,
         )
         found_group = resp.json()
 
@@ -1305,7 +1315,8 @@ class ERS(object):
         }
 
         resp = self.ise.get(
-            "{0}/config/internaluser?filter=name.EQ.{1}".format(self.url_base, user_id)
+            "{0}/config/internaluser?filter=name.EQ.{1}".format(self.url_base, user_id),
+            timeout=self.timeout,
         )
         found_user = resp.json()
 
@@ -1402,7 +1413,8 @@ class ERS(object):
         }
 
         resp = self.ise.get(
-            "{0}/config/internaluser?filter=name.EQ.{1}".format(self.url_base, user_id)
+            "{0}/config/internaluser?filter=name.EQ.{1}".format(self.url_base, user_id),
+            timeout=self.timeout,
         )
         found_user = resp.json()
 
@@ -1465,7 +1477,8 @@ class ERS(object):
             resp = self.ise.get(
                 "{0}/config/networkdevicegroup?filter=name.contains.{1}".format(
                     self.url_base, quote(name)
-                )
+                ),
+                timeout=self.timeout,
             )
             found_group = resp.json()
 
@@ -1599,7 +1612,8 @@ class ERS(object):
         resp = self.ise.get(
             "{0}/config/networkdevicegroup?filter=name.contains.{1}".format(
                 self.url_base, quote(name)
-            )
+            ),
+            timeout=self.timeout,
         )
         found_group = resp.json()
         if found_group["SearchResult"]["total"] == 1:
@@ -1657,7 +1671,8 @@ class ERS(object):
         }
 
         resp = self.ise.get(
-            "{0}/config/networkdevice?filter=name.EQ.{1}".format(self.url_base, device)
+            "{0}/config/networkdevice?filter=name.EQ.{1}".format(self.url_base, device),
+            timeout=self.timeout,
         )
         found_device = resp.json()
 
@@ -1826,7 +1841,8 @@ class ERS(object):
         }
 
         resp = self.ise.get(
-            "{0}/config/networkdevice?filter=name.EQ.{1}".format(self.url_base, device)
+            "{0}/config/networkdevice?filter=name.EQ.{1}".format(self.url_base, device),
+            timeout=self.timeout,
         )
         found_device = resp.json()
         if found_device["SearchResult"]["total"] == 1:

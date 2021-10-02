@@ -233,9 +233,7 @@ def add_device(device):
     else:
         print("add_device » OK")
 
-    cleanup = ise.delete_device_group(
-        name=device["dev_group"]
-    )
+    cleanup = ise.delete_device_group(name=device["dev_group"])
 
 
 def update_device(device):
@@ -453,15 +451,14 @@ def delete_emc(id):
 
 if __name__ == "__main__":
     ise = ERS(
-    ise_node=uri_27["ise_node"],
-    ers_user=uri_27["ers_user"],
-    ers_pass=uri_27["ers_pass"],
-    verify=False,
-    disable_warnings=True,
-    timeout=15,
-    use_csrf=uri_27["use_csrf"]
+        ise_node=uri_27["ise_node"],
+        ers_user=uri_27["ers_user"],
+        ers_pass=uri_27["ers_pass"],
+        verify=False,
+        disable_warnings=True,
+        timeout=15,
+        use_csrf=uri_27["use_csrf"],
     )
-    
 
     print(f"Testing {ise.ise_node}")
 

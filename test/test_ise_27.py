@@ -30,7 +30,6 @@ def vcr_config():
 
 
 uri = uri_27
-    
 
 
 ise = ERS(
@@ -228,7 +227,6 @@ def test_add_device():
         name=device["dev_group"], description="temporary testgroup"
     )
 
-
     r1 = ise.add_device(
         name=device["name"],
         ip_address=device["ip_address"],
@@ -255,9 +253,7 @@ def test_add_device():
     assert r1["success"] is True
     assert r1["response"] == "test-name Added Successfully"
 
-    r2 = ise.delete_device_group(
-        name=device["dev_group"]
-    )
+    r2 = ise.delete_device_group(name=device["dev_group"])
 
 
 @pytest.mark.vcr
