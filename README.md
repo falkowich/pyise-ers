@@ -1,7 +1,7 @@
 
 [![Known Vulnerabilities](https://snyk.io/test/github/falkowich/ise/badge.svg?style=plastic)](https://snyk.io/test/github/falkowich/ise) [![Maintainability](https://api.codeclimate.com/v1/badges/b377fd23b5de7444c258/maintainability)](https://codeclimate.com/github/falkowich/ise/maintainability) ![Publish PyPI and TestPyPI](https://github.com/falkowich/ise/workflows/Publish%20ise%20to%20PyPI%20and%20TestPyPI%20%F0%9F%93%A6/badge.svg) [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/falkowich/ise) ![Discord](https://img.shields.io/discord/858319928703975454?logo=discord&style=plastic)
 
-# ISE
+# ISE-ERS Wrapper
 
 Python module to manage Cisco ISE via the REST API.  
 
@@ -20,11 +20,11 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
 * First publish to PyPi with the help of [https://github.com/JonasKs](https://github.com/JonasKs).
 * Add support for ISE CSRF and some TrustSec objects (SGT, SGACL, Egress Policy Matrix) [https://github.com/joshand](https://github.com/joshand).
 * Merged [Enhancement to Device Group and Device Functions](https://github.com/falkowich/ise/pull/152) with a big thanks to [https://github.com/hpreston](https://github.com/hpreston)
-  * New functions for devicegroups where added » add_device_group, update_device_group, delete_device_group. 
+  * New functions for devicegroups where added » add_device_group, update_device_group, delete_device_group.
   * New function to update devices where added » update_device
   * Updated get_device_group for looking up names
   * Updated add_device with new parameters and device_payload
-* Updated dependensies for dev and prod, created new manual testcases, cleaned up the code with black. 
+* Updated dependensies for dev and prod, created new manual testcases, cleaned up the code with black.
 
 ## Status
 
@@ -101,11 +101,11 @@ ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verif
 ```
 
 If ISE is configured to require CSRF for ERS requests for Enhanced Security, you can add the "use_csrf" tag:
+
 ```python
 from ise import ERS
 ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True, use_csrf=True)
 ```
-
 
 #### Methods return a result dictionary
 
@@ -357,7 +357,7 @@ ise.get_device_group(name="Device Types")
 ]
 ```
 
-#### Add a new device group 
+#### Add a new device group
 
 ```python
 ise.add_device_group(name="Device Type#All Device Types#Python Device Type", description="From Python")
@@ -367,7 +367,7 @@ ise.add_device_group(name="Device Type#All Device Types#Python Device Type", des
  'error': ''}
 ```
 
-#### Update a device group 
+#### Update a device group
 
 ```python
 ise.update_device_group(device_group_oid=group_id, name="Device Type#All Device Types#Updated Device Type", description="Update Description")
@@ -377,7 +377,7 @@ ise.update_device_group(device_group_oid=group_id, name="Device Type#All Device 
  'error': ''}
 ```
 
-#### Remove a device group 
+#### Remove a device group
 
 ```python
 ise.delete_device_group(name="Device Type#All Device Types#Python Device Type")
@@ -401,7 +401,7 @@ ise.add_device(name='testdevice03',
 {'error': '', 'response': 'testdevice03 Added Successfully', 'success': True}
 ```
 
-#### Update a device 
+#### Update a device
 
 ```python
 ise.update_device("PYTHON-DEVICE", tacacs_shared_secret="NEWTACACS")
@@ -448,7 +448,6 @@ ise.add_sgt("Python_Users", "Group used for all Python Users", 56789, return_obj
 {'success': True, 'response': {'id': 'd4696690-97ba-11ea-9614-caf56bcd6712', 'name': 'Python_Users', 'description': 'Group used for all Python Users', 'value': 56789, 'generationId': '0', 'propogateToApic': False, 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/sgt/d4696690-97ba-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
 ```
 
-
 #### Update a SGT
 
 ```python
@@ -457,7 +456,6 @@ ise.update_sgt("d4696690-97ba-11ea-9614-caf56bcd6712", "Python_Tests", "Testing 
 {'success': True, 'response': {'id': 'd4696690-97ba-11ea-9614-caf56bcd6712', 'name': 'Python_Tests', 'description': 'Testing for Python Users', 'value': 45678, 'generationId': '0', 'propogateToApic': False, 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/sgt/d4696690-97ba-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
 ```
 
-
 #### Delete a SGT
 
 ```python
@@ -465,7 +463,6 @@ ise.delete_sgt("d4696690-97ba-11ea-9614-caf56bcd6712")
 
 {'success': True, 'response': 'd4696690-97ba-11ea-9614-caf56bcd6712 Deleted Successfully', 'error': ''}
 ```
-
 
 #### Get all Security Groups ACLs (SGACLs)
 
@@ -492,7 +489,6 @@ ise.add_sgacl("Python_ACL", "Access List for Python Access", "IP_AGNOSTIC", ["pe
 {'success': True, 'response': {'id': '7a820000-97bb-11ea-9614-caf56bcd6712', 'name': 'Python_ACL', 'description': 'Access List for Python Access', 'generationId': '0', 'aclcontent': 'permit tcp dst eq 80', 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/sgacl/7a820000-97bb-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
 ```
 
-
 #### Update a SGACL
 
 ```python
@@ -500,16 +496,6 @@ ise.update_sgacl("7a820000-97bb-11ea-9614-caf56bcd6712", "Python_Access_List", "
 
 {'success': True, 'response': {'id': '7a820000-97bb-11ea-9614-caf56bcd6712', 'name': 'Python_Access_List', 'description': 'Python Access List', 'generationId': '1', 'ipVersion': 'IPV4', 'aclcontent': 'permit tcp src eq 80', 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/sgacl/7a820000-97bb-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
 ```
-
-
-#### Delete a SGT
-
-```python
-ise.delete_sgacl("7a820000-97bb-11ea-9614-caf56bcd6712")
-
-{'success': True, 'response': '7a820000-97bb-11ea-9614-caf56bcd6712 Deleted Successfully', 'error': ''}
-```
-
 
 #### Get all TrustSec Egress Matrix Cells (Policies)
 
@@ -536,7 +522,6 @@ ise.add_egressmatrixcell(source_sgt="Unknown", destination_sgt="TrustSec_Devices
 {'success': True, 'response': {'id': '6f76b621-97bf-11ea-9614-caf56bcd6712', 'name': 'Unknown-TrustSec_Devices', 'sourceSgtId': '92adf9f0-8c01-11e6-996c-525400b48521', 'destinationSgtId': '947832a0-8c01-11e6-996c-525400b48521', 'matrixCellStatus': 'ENABLED', 'defaultRule': 'PERMIT_IP', 'sgacls': ['92951ac0-8c01-11e6-996c-525400b48521'], 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/egressmatrixcell/6f76b621-97bf-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
 ```
 
-
 #### Update a Egress Matrix Cell
 
 ```python
@@ -545,7 +530,6 @@ ise.update_egressmatrixcell("6f76b621-97bf-11ea-9614-caf56bcd6712", source_sgt="
 {'success': True, 'response': {'id': '6f76b621-97bf-11ea-9614-caf56bcd6712', 'name': 'Unknown-TrustSec_Devices', 'description': 'Description', 'sourceSgtId': '92adf9f0-8c01-11e6-996c-525400b48521', 'destinationSgtId': '947832a0-8c01-11e6-996c-525400b48521', 'matrixCellStatus': 'ENABLED', 'defaultRule': 'DENY_IP', 'sgacls': ['92919850-8c01-11e6-996c-525400b48521'], 'link': {'rel': 'self', 'href': 'https://10.102.172.125:9060/ers/config/egressmatrixcell/6f76b621-97bf-11ea-9614-caf56bcd6712', 'type': 'application/json'}}, 'error': ''}
 ```
 
-
 #### Delete a Egress Matrix Cell
 
 ```python
@@ -553,4 +537,3 @@ ise.delete_egressmatrixcell("6f76b621-97bf-11ea-9614-caf56bcd6712")
 
 {'success': True, 'response': '6f76b621-97bf-11ea-9614-caf56bcd6712 Deleted Successfully', 'error': ''}
 ```
-
