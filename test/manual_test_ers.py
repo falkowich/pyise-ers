@@ -5,7 +5,7 @@ import sys
 
 sys.path.append("./")
 
-from ise import ERS  # noqa E402
+from pyiseers import ERS  # noqa E402
 from pprint import pprint  # noqa E402
 from config import (  # noqa E402
     uri_list,
