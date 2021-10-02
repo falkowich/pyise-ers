@@ -1,0 +1,183 @@
+interactions:
+- request:
+    body: null
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/sgt?filter=name.EQ.Python_Unit_Test
+  response:
+    body:
+      string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
+        [ {\n      \"id\" : \"3cbfa300-23a9-11ec-9954-d60cbf567311\",\n      \"name\"
+        : \"Python_Unit_Test\",\n      \"description\" : \"Unit Tests\",\n      \"link\"
+        : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/sgt/3cbfa300-23a9-11ec-9954-d60cbf567311\",\n
+        \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:32 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/sgt/3cbfa300-23a9-11ec-9954-d60cbf567311
+  response:
+    body:
+      string: "{\n  \"Sgt\" : {\n    \"id\" : \"3cbfa300-23a9-11ec-9954-d60cbf567311\",\n
+        \   \"name\" : \"Python_Unit_Test\",\n    \"description\" : \"Unit Tests\",\n
+        \   \"value\" : 56789,\n    \"generationId\" : \"0\",\n    \"propogateToApic\"
+        : false,\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.30:9060/ers/config/sgt/3cbfa300-23a9-11ec-9954-d60cbf567311\",\n
+        \     \"type\" : \"application/json\"\n    }\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:32 GMT
+      ETag:
+      - '"E74278C483440C0C9EF553090BE7A72A"'
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: '{"Sgt": {"name": "Test_Unit_Python", "description": "Python Unit Tests",
+      "value": 56789, "propogateToApic": false}}'
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Length:
+      - '115'
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: PUT
+    uri: https://192.168.1.30:9060/ers/config/sgt/3cbfa300-23a9-11ec-9954-d60cbf567311
+  response:
+    body:
+      string: "{\n  \"UpdatedFieldsList\" : {\n    \"updatedField\" : [ {\n      \"field\"
+        : \"name\",\n      \"oldValue\" : \"Python_Unit_Test\",\n      \"newValue\"
+        : \"Test_Unit_Python\"\n    }, {\n      \"field\" : \"description\",\n      \"oldValue\"
+        : \"Unit Tests\",\n      \"newValue\" : \"Python Unit Tests\"\n    } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:32 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+version: 1

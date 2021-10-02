@@ -8,7 +8,8 @@ sys.path.append("./")
 from pyiseers import ERS  # noqa E402
 from pprint import pprint  # noqa E402
 from config import (  # noqa E402
-    uri_list,
+    uri_27,
+    uri_30,
     endpoint,
     endpoint_group,
     user,
@@ -200,6 +201,10 @@ def delete_device_group():
 
 
 def add_device(device):
+    r1 = ise.add_device_group(
+        name=device["dev_group"], description="temporary testgroup"
+    )
+
     test = ise.add_device(
         name=device["name"],
         ip_address=device["ip_address"],
@@ -227,6 +232,10 @@ def add_device(device):
         print(test["response"])
     else:
         print("add_device » OK")
+
+    cleanup = ise.delete_device_group(
+        name=device["dev_group"]
+    )
 
 
 def update_device(device):
@@ -443,74 +452,74 @@ def delete_emc(id):
 
 
 if __name__ == "__main__":
-    for uri in uri_list:
-        ise = ERS(
-            ise_node=uri["ise_node"],
-            ers_user=uri["ers_user"],
-            ers_pass=uri["ers_pass"],
-            verify=False,
-            disable_warnings=True,
-            timeout=15,
-            use_csrf=uri["use_csrf"],
-        )
+    ise = ERS(
+    ise_node=uri_27["ise_node"],
+    ers_user=uri_27["ers_user"],
+    ers_pass=uri_27["ers_pass"],
+    verify=False,
+    disable_warnings=True,
+    timeout=15,
+    use_csrf=uri_27["use_csrf"]
+    )
+    
 
-        print(f"Testing {ise.ise_node}")
+    print(f"Testing {ise.ise_node}")
 
-        # Endpoint tests
-        add_endpoint(endpoint)
-        get_endpoints()
-        get_endpoint(endpoint)
-        delete_endpoint(endpoint)
+    # Endpoint tests
+    add_endpoint(endpoint)
+    get_endpoints()
+    get_endpoint(endpoint)
+    delete_endpoint(endpoint)
 
-        # EndpointGroup tests
-        get_endpoint_groups(21)
-        get_endpoint_group(endpoint_group)
+    # EndpointGroup tests
+    get_endpoint_groups(21)
+    get_endpoint_group(endpoint_group)
 
-        # User tests
-        get_identity_groups()
-        identity_group_id = get_identity_group(identity_group)
-        add_user(user, identity_group_id)
-        get_users()
-        get_user(user)
-        delete_user(user)
+    # User tests
+    get_identity_groups()
+    identity_group_id = get_identity_group(identity_group)
+    add_user(user, identity_group_id)
+    get_users()
+    get_user(user)
+    delete_user(user)
 
-        # Device group
-        add_device_group(device_group)
-        get_device_groups()
-        device_group_id = get_device_group_from_name()
-        get_device_group(device_group_id)
-        update_device_group(device_group_id)
-        delete_device_group()
+    # Device group
+    add_device_group(device_group)
+    get_device_groups()
+    device_group_id = get_device_group_from_name()
+    get_device_group(device_group_id)
+    update_device_group(device_group_id)
+    delete_device_group()
 
-        # Device tests
-        add_device(device)
-        get_devices()
-        get_device(device)
-        delete_device(device)
-        add_device_payload(device_payload)
-        get_device(device)
-        update_device(device)
-        get_updated_device(device)
-        delete_updated_device(device)
-        #  get_object()  # TODO
+    # Device tests
+    add_device(device)
+    get_devices()
+    get_device(device)
+    delete_device(device)
+    add_device_payload(device_payload)
+    get_device(device)
+    update_device(device)
+    get_updated_device(device)
+    delete_updated_device(device)
+    #  get_object()  # TODO
 
-        # TrustSec SGT tests
-        get_sgts()
-        get_sgt("Unknown")
-        sgtid = add_sgt(trustsec)
-        update_sgt(sgtid, trustsec)
-        delete_sgt(sgtid)
+    # TrustSec SGT tests
+    get_sgts()
+    get_sgt("Unknown")
+    sgtid = add_sgt(trustsec)
+    update_sgt(sgtid, trustsec)
+    delete_sgt(sgtid)
 
-        # TrustSec SGACL tests
-        get_sgacls()
-        get_sgacl("Permit IP")
-        sgaclid = add_sgacl(trustsec)
-        update_sgacl(sgaclid, trustsec)
-        delete_sgacl(sgaclid)
+    # TrustSec SGACL tests
+    get_sgacls()
+    get_sgacl("Permit IP")
+    sgaclid = add_sgacl(trustsec)
+    update_sgacl(sgaclid, trustsec)
+    delete_sgacl(sgaclid)
 
-        # TrustSec Egress Matrix Cell (Policy) tests
-        get_emcs()
-        get_emc("Default egress rule")
-        emcid = add_emc(trustsec)
-        update_emc(emcid, trustsec)
-        delete_emc(emcid)
+    # TrustSec Egress Matrix Cell (Policy) tests
+    get_emcs()
+    get_emc("Default egress rule")
+    emcid = add_emc(trustsec)
+    update_emc(emcid, trustsec)
+    delete_emc(emcid)

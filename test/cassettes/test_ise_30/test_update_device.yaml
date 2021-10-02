@@ -1,0 +1,309 @@
+interactions:
+- request:
+    body: null
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/networkdevice?filter=name.EQ.test-name
+  response:
+    body:
+      string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
+        [ {\n      \"id\" : \"3c218e40-23a9-11ec-9954-d60cbf567311\",\n      \"name\"
+        : \"test-name\",\n      \"description\" : \"test-description\",\n      \"link\"
+        : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevice/3c218e40-23a9-11ec-9954-d60cbf567311\",\n
+        \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:30 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/networkdevice/3c218e40-23a9-11ec-9954-d60cbf567311
+  response:
+    body:
+      string: "{\n  \"NetworkDevice\" : {\n    \"id\" : \"3c218e40-23a9-11ec-9954-d60cbf567311\",\n
+        \   \"name\" : \"test-name\",\n    \"description\" : \"test-description\",\n
+        \   \"authenticationSettings\" : {\n      \"enableKeyWrap\" : false,\n      \"dtlsRequired\"
+        : false,\n      \"enableMultiSecret\" : \"false\"\n    },\n    \"profileName\"
+        : \"Cisco\",\n    \"coaPort\" : 1700,\n    \"link\" : {\n      \"rel\" : \"self\",\n
+        \     \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevice/3c218e40-23a9-11ec-9954-d60cbf567311\",\n
+        \     \"type\" : \"application/json\"\n    },\n    \"NetworkDeviceIPList\"
+        : [ {\n      \"ipaddress\" : \"10.1.1.1\",\n      \"mask\" : 32\n    } ],\n
+        \   \"NetworkDeviceGroupList\" : [ \"Device Type#All Device Types\", \"Location#All
+        Locations\", \"IPSEC#Is IPSEC Device#No\" ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:30 GMT
+      ETag:
+      - '"3C152EC0648F96DE3D9C7F91F54C7D2F"'
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: '{"NetworkDevice": {"name": "new-test-name", "description": "test-description",
+      "authenticationSettings": {"enableKeyWrap": false, "dtlsRequired": false, "enableMultiSecret":
+      "false"}, "profileName": "Cisco", "coaPort": 1700, "NetworkDeviceIPList": [{"ipaddress":
+      "10.1.1.1", "mask": 32}], "NetworkDeviceGroupList": ["Device Type#All Device
+      Types", "Location#All Locations", "IPSEC#Is IPSEC Device#No"]}}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Length:
+      - '403'
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: PUT
+    uri: https://192.168.1.30:9060/ers/config/networkdevice/3c218e40-23a9-11ec-9954-d60cbf567311
+  response:
+    body:
+      string: "{\n  \"UpdatedFieldsList\" : {\n    \"updatedField\" : [ {\n      \"field\"
+        : \"DtlsRequired\",\n      \"newValue\" : \"false\"\n    }, {\n      \"field\"
+        : \"AuthenticationSettings.EnableKeyWrap\",\n      \"newValue\" : \"false\"\n
+        \   }, {\n      \"field\" : \"AuthenticationSettings.RadiusSharedSecret\",\n
+        \     \"newValue\" : \"\"\n    }, {\n      \"field\" : \"Name\",\n      \"oldValue\"
+        : \"test-name\",\n      \"newValue\" : \"new-test-name\"\n    }, {\n      \"field\"
+        : \"AuthenticationSettings.KeyInputFormat\",\n      \"newValue\" : \"ascii\"\n
+        \   } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:31 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/networkdevice?filter=name.EQ.new-test-name
+  response:
+    body:
+      string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
+        [ {\n      \"id\" : \"3c218e40-23a9-11ec-9954-d60cbf567311\",\n      \"name\"
+        : \"new-test-name\",\n      \"description\" : \"test-description\",\n      \"link\"
+        : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevice/3c218e40-23a9-11ec-9954-d60cbf567311\",\n
+        \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:31 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: DELETE
+    uri: https://192.168.1.30:9060/ers/config/networkdevice/3c218e40-23a9-11ec-9954-d60cbf567311
+  response:
+    body:
+      string: ''
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:31 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 204
+      message: ''
+version: 1

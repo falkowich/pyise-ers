@@ -1,0 +1,65 @@
+interactions:
+- request:
+    body: '{"ERSEndPoint": {"name": "test-endpoint", "description": "", "mac": "AA:BB:CC:00:11:22",
+      "profileId": "", "staticProfileAssignment": "false", "groupId": "aa0e8b20-8bff-11e6-996c-525400b48521",
+      "staticGroupAssignment": "true", "portalUser": "", "customAttributes": {"customAttributes":
+      {}}}}'
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Length:
+      - '290'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.25.1
+    method: POST
+    uri: https://192.168.1.27:9060/ers/config/endpoint
+  response:
+    body:
+      string: ''
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Length:
+      - '0'
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:08 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Location:
+      - https://192.168.1.27:9060/ers/config/endpoint/2ed83810-23a9-11ec-8ac2-f2c839b2fc61
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Set-Cookie:
+      - JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B; Path=/; Secure; HttpOnly
+      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; Path=/ers; Secure; HttpOnly
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 201
+      message: ''
+version: 1
