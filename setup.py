@@ -8,11 +8,11 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-    name="ISE",
+    name="pyise-ers",
     version="0.1.2.e1",
     py_modules=["ise"],
-    url="https://github.com/falkowich/ise",
-    download_url="https://pypi.python.org/pypi/ise",
+    url="https://github.com/falkowich/pyise-ers",
+    download_url="https://pypi.python.org/pypi/pyise-ers",
     license="LICENSE.md",
     maintainer="Andreas Falk",
     maintainer_email="falk@sadsloth.net",
