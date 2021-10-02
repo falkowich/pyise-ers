@@ -1,5 +1,65 @@
 interactions:
 - request:
+    body: '{"NetworkDeviceGroup": {"name": "testgroup#testgroup", "description": "temporary
+      testgroup", "othername": "testgroup"}}'
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Length:
+      - '119'
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: POST
+    uri: https://192.168.1.30:9060/ers/config/networkdevicegroup
+  response:
+    body:
+      string: ''
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Length:
+      - '0'
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:28 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Location:
+      - https://192.168.1.30:9060/ers/config/networkdevicegroup/3ae8e730-23a9-11ec-9954-d60cbf567311
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 201
+      message: ''
+- request:
     body: '{"NetworkDevice": {"name": "test-name", "description": "test-description",
       "profileName": "Cisco", "coaPort": "1700", "NetworkDeviceIPList": [{"ipaddress":
       "10.1.1.1", "mask": "32"}], "NetworkDeviceGroupList": ["Device Type#All Device
@@ -21,7 +81,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
       User-Agent:
       - python-requests/2.25.1
     method: POST
@@ -40,11 +100,11 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:23 GMT
+      - Sat, 02 Oct 2021 17:50:28 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Location:
-      - https://192.168.1.30:9060/ers/config/networkdevice/1195f430-bbef-11eb-a40b-96027a66c43b
+      - https://192.168.1.30:9060/ers/config/networkdevice/3b1a3060-23a9-11ec-9954-d60cbf567311
       Pragma:
       - no-cache
       Server:
@@ -65,5 +125,119 @@ interactions:
       - 1; mode=block
     status:
       code: 201
+      message: ''
+- request:
+    body: null
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://192.168.1.30:9060/ers/config/networkdevicegroup?filter=name.contains.testgroup%23testgroup
+  response:
+    body:
+      string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
+        [ {\n      \"id\" : \"3ae8e730-23a9-11ec-9954-d60cbf567311\",\n      \"name\"
+        : \"testgroup#testgroup\",\n      \"description\" : \"temporary testgroup\",\n
+        \     \"link\" : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevicegroup/3ae8e730-23a9-11ec-9954-d60cbf567311\",\n
+        \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:29 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      ACCEPT:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep_alive
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+      Cookie:
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      User-Agent:
+      - python-requests/2.25.1
+    method: DELETE
+    uri: https://192.168.1.30:9060/ers/config/networkdevicegroup/3ae8e730-23a9-11ec-9954-d60cbf567311
+  response:
+    body:
+      string: ''
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Sat, 02 Oct 2021 17:50:30 GMT
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - ''
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Content-Security-Policy:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-WebKit-CSP:
+      - default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src
+        'self' 'unsafe-inline'; img-src 'self' data:;
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 204
       message: ''
 version: 1

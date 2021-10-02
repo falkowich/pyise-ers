@@ -11,21 +11,21 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A45EBF108760269B2F088EBACC5E3832; JSESSIONIDSSO=6189BFE9A3118C1D7B81A1F33E3BE25A
+      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.30:9060/ers/config/networkdevice?size=100&page=1
+    uri: https://192.168.1.27:9060/ers/config/networkdevice?size=100&page=1
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 2,\n    \"resources\" :
-        [ {\n      \"id\" : \"f69366c0-ba74-11eb-88d5-52540000a923\",\n      \"name\"
+        [ {\n      \"id\" : \"582af6c0-2396-11ec-af8e-5254006f7dfa\",\n      \"name\"
         : \"ISE_EST_Local_Host\",\n      \"description\" : \"\",\n      \"link\" :
-        {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevice/f69366c0-ba74-11eb-88d5-52540000a923\",\n
+        {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/networkdevice/582af6c0-2396-11ec-af8e-5254006f7dfa\",\n
         \       \"type\" : \"application/json\"\n      }\n    }, {\n      \"id\" :
-        \"0add3860-bbef-11eb-a40b-96027a66c43b\",\n      \"name\" : \"test-name\",\n
+        \"3315e1c0-23a9-11ec-8ac2-f2c839b2fc61\",\n      \"name\" : \"test-name\",\n
         \     \"description\" : \"test-description\",\n      \"link\" : {\n        \"rel\"
-        : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevice/0add3860-bbef-11eb-a40b-96027a66c43b\",\n
+        : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/networkdevice/3315e1c0-23a9-11ec-8ac2-f2c839b2fc61\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -36,7 +36,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:12 GMT
+      - Sat, 02 Oct 2021 17:50:16 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

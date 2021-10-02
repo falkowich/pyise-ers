@@ -11,20 +11,20 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A45EBF108760269B2F088EBACC5E3832; JSESSIONIDSSO=6189BFE9A3118C1D7B81A1F33E3BE25A
+      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.30:9060/ers/config/identitygroup?size=1&page=1
+    uri: https://192.168.1.27:9060/ers/config/identitygroup?size=1&page=1
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 8,\n    \"resources\" :
         [ {\n      \"id\" : \"a176c430-8c01-11e6-996c-525400b48521\",\n      \"name\"
         : \"ALL_ACCOUNTS (default)\",\n      \"description\" : \"Default ALL_ACCOUNTS
         (default) User Group\",\n      \"link\" : {\n        \"rel\" : \"self\",\n
-        \       \"href\" : \"https://192.168.1.30:9060/ers/config/identitygroup/a176c430-8c01-11e6-996c-525400b48521\",\n
+        \       \"href\" : \"https://192.168.1.27:9060/ers/config/identitygroup/a176c430-8c01-11e6-996c-525400b48521\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ],\n    \"nextPage\"
-        : {\n      \"rel\" : \"next\",\n      \"href\" : \"https://192.168.1.30:9060/ers/config/identitygroup?size=1&page=2\",\n
+        : {\n      \"rel\" : \"next\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/identitygroup?size=1&page=2\",\n
         \     \"type\" : \"application/json\"\n    }\n  }\n}"
     headers:
       Cache-Control:
@@ -35,7 +35,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:08 GMT
+      - Sat, 02 Oct 2021 17:50:11 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

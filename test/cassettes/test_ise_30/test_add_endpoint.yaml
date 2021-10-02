@@ -33,18 +33,18 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:17 GMT
+      - Sat, 02 Oct 2021 17:50:23 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Location:
-      - https://192.168.1.30:9060/ers/config/endpoint/0e58ca90-bbef-11eb-a40b-96027a66c43b
+      - https://192.168.1.30:9060/ers/config/endpoint/37c7d110-23a9-11ec-9954-d60cbf567311
       Pragma:
       - no-cache
       Server:
       - ''
       Set-Cookie:
-      - JSESSIONIDSSO=BA7AEFF7219A9E76C57C4CC78FDAE4DC; Path=/; Secure; HttpOnly
-      - APPSESSIONID=33E42B9044F407F641BEFACAF1EBF00F; Path=/ers; Secure; HttpOnly
+      - JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212; Path=/; Secure; HttpOnly
+      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; Path=/ers; Secure; HttpOnly
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains
       X-Content-Security-Policy:

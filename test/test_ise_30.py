@@ -4,10 +4,10 @@ import urllib3
 
 sys.path.append("./")
 
-from ise import ERS  # noqa E402
+from pyiseers import ERS  # noqa E402
 from pprint import pprint  # noqa E402
 from config import (  # noqa E402
-    uri_list,
+    uri_30,
     endpoint,
     endpoint_group,
     user,
@@ -29,9 +29,7 @@ def vcr_config():
     }
 
 
-for uri in uri_list:
-    if uri["ise_version"] == "3.0":
-        uri = uri
+uri = uri_30
 
 
 ise = ERS(
@@ -225,6 +223,11 @@ def test_delete_device_group():
 
 @pytest.mark.vcr
 def test_add_device():
+    r0 = ise.add_device_group(
+        name=device["dev_group"], description="temporary testgroup"
+    )
+
+
     r1 = ise.add_device(
         name=device["name"],
         ip_address=device["ip_address"],
@@ -250,6 +253,10 @@ def test_add_device():
     )
     assert r1["success"] is True
     assert r1["response"] == "test-name Added Successfully"
+
+    r2 = ise.delete_device_group(
+        name=device["dev_group"]
+    )
 
 
 @pytest.mark.vcr

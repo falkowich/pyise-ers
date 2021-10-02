@@ -11,17 +11,17 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A45EBF108760269B2F088EBACC5E3832; JSESSIONIDSSO=6189BFE9A3118C1D7B81A1F33E3BE25A
+      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.30:9060/ers/config/egressmatrixcell?filter=description.EQ.Default%20egress%20rule
+    uri: https://192.168.1.27:9060/ers/config/egressmatrixcell?filter=description.EQ.Default%20egress%20rule
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
         [ {\n      \"id\" : \"92c1a900-8c01-11e6-996c-525400b48521\",\n      \"name\"
         : \"ANY-ANY\",\n      \"description\" : \"Default egress rule\",\n      \"link\"
-        : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/egressmatrixcell/92c1a900-8c01-11e6-996c-525400b48521\",\n
+        : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/egressmatrixcell/92c1a900-8c01-11e6-996c-525400b48521\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -32,7 +32,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:15 GMT
+      - Sat, 02 Oct 2021 17:50:21 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -70,11 +70,11 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A45EBF108760269B2F088EBACC5E3832; JSESSIONIDSSO=6189BFE9A3118C1D7B81A1F33E3BE25A
+      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.30:9060/ers/config/egressmatrixcell/92c1a900-8c01-11e6-996c-525400b48521
+    uri: https://192.168.1.27:9060/ers/config/egressmatrixcell/92c1a900-8c01-11e6-996c-525400b48521
   response:
     body:
       string: "{\n  \"EgressMatrixCell\" : {\n    \"id\" : \"92c1a900-8c01-11e6-996c-525400b48521\",\n
@@ -82,7 +82,7 @@ interactions:
         \   \"sourceSgtId\" : \"92bb1950-8c01-11e6-996c-525400b48521\",\n    \"destinationSgtId\"
         : \"92bb1950-8c01-11e6-996c-525400b48521\",\n    \"matrixCellStatus\" : \"ENABLED\",\n
         \   \"defaultRule\" : \"PERMIT_IP\",\n    \"sgacls\" : [ \"92951ac0-8c01-11e6-996c-525400b48521\"
-        ],\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.30:9060/ers/config/egressmatrixcell/92c1a900-8c01-11e6-996c-525400b48521\",\n
+        ],\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/egressmatrixcell/92c1a900-8c01-11e6-996c-525400b48521\",\n
         \     \"type\" : \"application/json\"\n    }\n  }\n}"
     headers:
       Cache-Control:
@@ -93,7 +93,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:15 GMT
+      - Sat, 02 Oct 2021 17:50:21 GMT
       ETag:
       - '"D7BD5C49988DBCF71B97D399DAADB1E8"'
       Expires:

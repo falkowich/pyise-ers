@@ -11,17 +11,17 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A45EBF108760269B2F088EBACC5E3832; JSESSIONIDSSO=6189BFE9A3118C1D7B81A1F33E3BE25A
+      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.30:9060/ers/config/networkdevice?filter=name.EQ.test-name
+    uri: https://192.168.1.27:9060/ers/config/networkdevice?filter=name.EQ.test-name
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
-        [ {\n      \"id\" : \"0b2564f0-bbef-11eb-a40b-96027a66c43b\",\n      \"name\"
+        [ {\n      \"id\" : \"340af020-23a9-11ec-8ac2-f2c839b2fc61\",\n      \"name\"
         : \"test-name\",\n      \"description\" : \"test-description\",\n      \"link\"
-        : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevice/0b2564f0-bbef-11eb-a40b-96027a66c43b\",\n
+        : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/networkdevice/340af020-23a9-11ec-8ac2-f2c839b2fc61\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -32,7 +32,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:12 GMT
+      - Sat, 02 Oct 2021 17:50:17 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -70,19 +70,19 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A45EBF108760269B2F088EBACC5E3832; JSESSIONIDSSO=6189BFE9A3118C1D7B81A1F33E3BE25A
+      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.30:9060/ers/config/networkdevice/0b2564f0-bbef-11eb-a40b-96027a66c43b
+    uri: https://192.168.1.27:9060/ers/config/networkdevice/340af020-23a9-11ec-8ac2-f2c839b2fc61
   response:
     body:
-      string: "{\n  \"NetworkDevice\" : {\n    \"id\" : \"0b2564f0-bbef-11eb-a40b-96027a66c43b\",\n
+      string: "{\n  \"NetworkDevice\" : {\n    \"id\" : \"340af020-23a9-11ec-8ac2-f2c839b2fc61\",\n
         \   \"name\" : \"test-name\",\n    \"description\" : \"test-description\",\n
         \   \"authenticationSettings\" : {\n      \"enableKeyWrap\" : false,\n      \"dtlsRequired\"
         : false,\n      \"enableMultiSecret\" : \"false\"\n    },\n    \"profileName\"
         : \"Cisco\",\n    \"coaPort\" : 1700,\n    \"link\" : {\n      \"rel\" : \"self\",\n
-        \     \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevice/0b2564f0-bbef-11eb-a40b-96027a66c43b\",\n
+        \     \"href\" : \"https://192.168.1.27:9060/ers/config/networkdevice/340af020-23a9-11ec-8ac2-f2c839b2fc61\",\n
         \     \"type\" : \"application/json\"\n    },\n    \"NetworkDeviceIPList\"
         : [ {\n      \"ipaddress\" : \"10.1.1.1\",\n      \"mask\" : 32\n    } ],\n
         \   \"NetworkDeviceGroupList\" : [ \"Device Type#All Device Types\", \"Location#All
@@ -96,9 +96,9 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:12 GMT
+      - Sat, 02 Oct 2021 17:50:17 GMT
       ETag:
-      - '"958219D2EB92838A2BC42C576A00F0D7"'
+      - '"974B4A009B65038F9C75AC8F405AF52D"'
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -142,21 +142,20 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A45EBF108760269B2F088EBACC5E3832; JSESSIONIDSSO=6189BFE9A3118C1D7B81A1F33E3BE25A
+      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
       User-Agent:
       - python-requests/2.25.1
     method: PUT
-    uri: https://192.168.1.30:9060/ers/config/networkdevice/0b2564f0-bbef-11eb-a40b-96027a66c43b
+    uri: https://192.168.1.27:9060/ers/config/networkdevice/340af020-23a9-11ec-8ac2-f2c839b2fc61
   response:
     body:
       string: "{\n  \"UpdatedFieldsList\" : {\n    \"updatedField\" : [ {\n      \"field\"
         : \"DtlsRequired\",\n      \"newValue\" : \"false\"\n    }, {\n      \"field\"
         : \"AuthenticationSettings.EnableKeyWrap\",\n      \"newValue\" : \"false\"\n
-        \   }, {\n      \"field\" : \"AuthenticationSettings.RadiusSharedSecret\",\n
-        \     \"newValue\" : \"\"\n    }, {\n      \"field\" : \"Name\",\n      \"oldValue\"
-        : \"test-name\",\n      \"newValue\" : \"new-test-name\"\n    }, {\n      \"field\"
-        : \"AuthenticationSettings.KeyInputFormat\",\n      \"newValue\" : \"ascii\"\n
-        \   } ]\n  }\n}"
+        \   }, {\n      \"field\" : \"Name\",\n      \"oldValue\" : \"test-name\",\n
+        \     \"newValue\" : \"new-test-name\"\n    }, {\n      \"field\" : \"AuthenticationSettings.NetworkProtocol\",\n
+        \     \"newValue\" : \"RADIUS\"\n    }, {\n      \"field\" : \"AuthenticationSettings.KeyInputFormat\",\n
+        \     \"newValue\" : \"ascii\"\n    } ]\n  }\n}"
     headers:
       Cache-Control:
       - no-cache, no-store, must-revalidate
@@ -166,7 +165,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:12 GMT
+      - Sat, 02 Oct 2021 17:50:17 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -204,17 +203,17 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A45EBF108760269B2F088EBACC5E3832; JSESSIONIDSSO=6189BFE9A3118C1D7B81A1F33E3BE25A
+      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.30:9060/ers/config/networkdevice?filter=name.EQ.new-test-name
+    uri: https://192.168.1.27:9060/ers/config/networkdevice?filter=name.EQ.new-test-name
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
-        [ {\n      \"id\" : \"0b2564f0-bbef-11eb-a40b-96027a66c43b\",\n      \"name\"
+        [ {\n      \"id\" : \"340af020-23a9-11ec-8ac2-f2c839b2fc61\",\n      \"name\"
         : \"new-test-name\",\n      \"description\" : \"test-description\",\n      \"link\"
-        : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.30:9060/ers/config/networkdevice/0b2564f0-bbef-11eb-a40b-96027a66c43b\",\n
+        : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/networkdevice/340af020-23a9-11ec-8ac2-f2c839b2fc61\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -225,7 +224,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:12 GMT
+      - Sat, 02 Oct 2021 17:50:17 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -265,11 +264,11 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A45EBF108760269B2F088EBACC5E3832; JSESSIONIDSSO=6189BFE9A3118C1D7B81A1F33E3BE25A
+      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
       User-Agent:
       - python-requests/2.25.1
     method: DELETE
-    uri: https://192.168.1.30:9060/ers/config/networkdevice/0b2564f0-bbef-11eb-a40b-96027a66c43b
+    uri: https://192.168.1.27:9060/ers/config/networkdevice/340af020-23a9-11ec-8ac2-f2c839b2fc61
   response:
     body:
       string: ''
@@ -282,7 +281,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sun, 23 May 2021 17:48:12 GMT
+      - Sat, 02 Oct 2021 17:50:17 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

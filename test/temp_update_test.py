@@ -5,7 +5,7 @@ import sys
 
 sys.path.append("./")
 
-from ise import ERS  # noqa E402
+from pyiseers import ERS  # noqa E402
 from pprint import pprint  # noqa E402
 
 uri = {
@@ -52,16 +52,21 @@ device_payload = {
 
 if __name__ == "__main__":
 
-    r1 = ise.add_device(device_payload=device_payload)
-    pprint(device_payload)
+    r0 = ise.get_device_groups()
+    print(r0)
 
-    r2 = ise.update_device(name=device["name"], new_name=device["new_name"])
-    print("\n------------ First device_update ------------\n")
-    pprint(r2["response"])
-    r3 = ise.update_device(name=device["new_name"], new_name=device["name"])
-    print("\n------------ Second device_update ------------\n")
-    pprint(r3["response"])
-    r4 = ise.update_device(name=device["name"], new_name=device["new_name"])
-    print("\n------------ Third device_update ------------\n")
-    pprint(r4["response"])
-    r5 = ise.delete_device(device["new_name"])
+    #r1 = ise.add_device(device_payload=device_payload)
+    #pprint(device_payload)
+
+    #r2 = ise.update_device(name=device["name"], new_name=device["new_name"])
+    #print("\n------------ First device_update ------------\n")
+    #pprint(r2["response"])
+    #r3 = ise.update_device(name=device["new_name"], new_name=device["name"])
+    #print("\n------------ Second device_update ------------\n")
+    #pprint(r3["response"])
+    #r4 = ise.update_device(name=device["name"], new_name=device["new_name"])
+    #print("\n------------ Third device_update ------------\n")
+    #pprint(r4["response"])
+    #r5 = ise.delete_device(device["new_name"])
+#
+
