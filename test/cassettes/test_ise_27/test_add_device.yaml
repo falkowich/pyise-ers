@@ -14,7 +14,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=F56E84770F83D32D2C5503F3354F6C9C; JSESSIONIDSSO=23226015C82DEA66A994F1805B324AB0
       User-Agent:
       - python-requests/2.25.1
     method: POST
@@ -38,7 +38,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:15 GMT
+      - Sat, 02 Oct 2021 18:40:56 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -86,7 +86,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=F56E84770F83D32D2C5503F3354F6C9C; JSESSIONIDSSO=23226015C82DEA66A994F1805B324AB0
       User-Agent:
       - python-requests/2.25.1
     method: POST
@@ -105,11 +105,11 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:15 GMT
+      - Sat, 02 Oct 2021 18:40:57 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Location:
-      - https://192.168.1.27:9060/ers/config/networkdevice/3315e1c0-23a9-11ec-8ac2-f2c839b2fc61
+      - https://192.168.1.27:9060/ers/config/networkdevice/481e3c00-23b0-11ec-8ac2-f2c839b2fc61
       Pragma:
       - no-cache
       Server:
@@ -143,7 +143,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=F56E84770F83D32D2C5503F3354F6C9C; JSESSIONIDSSO=23226015C82DEA66A994F1805B324AB0
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -164,7 +164,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:15 GMT
+      - Sat, 02 Oct 2021 18:40:57 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -204,7 +204,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=F56E84770F83D32D2C5503F3354F6C9C; JSESSIONIDSSO=23226015C82DEA66A994F1805B324AB0
       User-Agent:
       - python-requests/2.25.1
     method: DELETE
@@ -228,7 +228,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:16 GMT
+      - Sat, 02 Oct 2021 18:40:58 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

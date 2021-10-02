@@ -11,7 +11,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=F56E84770F83D32D2C5503F3354F6C9C; JSESSIONIDSSO=23226015C82DEA66A994F1805B324AB0
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -19,9 +19,9 @@ interactions:
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
-        [ {\n      \"id\" : \"2ed83810-23a9-11ec-8ac2-f2c839b2fc61\",\n      \"name\"
+        [ {\n      \"id\" : \"436fa810-23b0-11ec-8ac2-f2c839b2fc61\",\n      \"name\"
         : \"AA:BB:CC:00:11:22\",\n      \"link\" : {\n        \"rel\" : \"self\",\n
-        \       \"href\" : \"https://192.168.1.27:9060/ers/config/endpoint/2ed83810-23a9-11ec-8ac2-f2c839b2fc61\",\n
+        \       \"href\" : \"https://192.168.1.27:9060/ers/config/endpoint/436fa810-23b0-11ec-8ac2-f2c839b2fc61\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -32,7 +32,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:09 GMT
+      - Sat, 02 Oct 2021 18:40:50 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -70,19 +70,19 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=F56E84770F83D32D2C5503F3354F6C9C; JSESSIONIDSSO=23226015C82DEA66A994F1805B324AB0
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.27:9060/ers/config/endpoint/2ed83810-23a9-11ec-8ac2-f2c839b2fc61
+    uri: https://192.168.1.27:9060/ers/config/endpoint/436fa810-23b0-11ec-8ac2-f2c839b2fc61
   response:
     body:
-      string: "{\n  \"ERSEndPoint\" : {\n    \"id\" : \"2ed83810-23a9-11ec-8ac2-f2c839b2fc61\",\n
+      string: "{\n  \"ERSEndPoint\" : {\n    \"id\" : \"436fa810-23b0-11ec-8ac2-f2c839b2fc61\",\n
         \   \"name\" : \"AA:BB:CC:00:11:22\",\n    \"description\" : \"\",\n    \"mac\"
         : \"AA:BB:CC:00:11:22\",\n    \"profileId\" : \"\",\n    \"staticProfileAssignment\"
         : false,\n    \"groupId\" : \"aa0e8b20-8bff-11e6-996c-525400b48521\",\n    \"staticGroupAssignment\"
         : true,\n    \"portalUser\" : \"\",\n    \"identityStore\" : \"\",\n    \"identityStoreId\"
-        : \"\",\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/endpoint/2ed83810-23a9-11ec-8ac2-f2c839b2fc61\",\n
+        : \"\",\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/endpoint/436fa810-23b0-11ec-8ac2-f2c839b2fc61\",\n
         \     \"type\" : \"application/json\"\n    }\n  }\n}"
     headers:
       Cache-Control:
@@ -93,9 +93,9 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:09 GMT
+      - Sat, 02 Oct 2021 18:40:50 GMT
       ETag:
-      - '"B621782EFFC3070EE8D16F52F83CAC1B"'
+      - '"9280189A58DC45C803403BEB6C6DDF53"'
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

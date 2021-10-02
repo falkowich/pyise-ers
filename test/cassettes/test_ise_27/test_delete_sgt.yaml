@@ -11,7 +11,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=F56E84770F83D32D2C5503F3354F6C9C; JSESSIONIDSSO=23226015C82DEA66A994F1805B324AB0
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -19,9 +19,9 @@ interactions:
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
-        [ {\n      \"id\" : \"34b62440-23a9-11ec-8ac2-f2c839b2fc61\",\n      \"name\"
+        [ {\n      \"id\" : \"49d98090-23b0-11ec-8ac2-f2c839b2fc61\",\n      \"name\"
         : \"Test_Unit_Python\",\n      \"description\" : \"Python Unit Tests\",\n
-        \     \"link\" : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/sgt/34b62440-23a9-11ec-8ac2-f2c839b2fc61\",\n
+        \     \"link\" : {\n        \"rel\" : \"self\",\n        \"href\" : \"https://192.168.1.27:9060/ers/config/sgt/49d98090-23b0-11ec-8ac2-f2c839b2fc61\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -32,7 +32,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:19 GMT
+      - Sat, 02 Oct 2021 18:41:01 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -70,17 +70,17 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=F56E84770F83D32D2C5503F3354F6C9C; JSESSIONIDSSO=23226015C82DEA66A994F1805B324AB0
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.27:9060/ers/config/sgt/34b62440-23a9-11ec-8ac2-f2c839b2fc61
+    uri: https://192.168.1.27:9060/ers/config/sgt/49d98090-23b0-11ec-8ac2-f2c839b2fc61
   response:
     body:
-      string: "{\n  \"Sgt\" : {\n    \"id\" : \"34b62440-23a9-11ec-8ac2-f2c839b2fc61\",\n
+      string: "{\n  \"Sgt\" : {\n    \"id\" : \"49d98090-23b0-11ec-8ac2-f2c839b2fc61\",\n
         \   \"name\" : \"Test_Unit_Python\",\n    \"description\" : \"Python Unit
         Tests\",\n    \"value\" : 56789,\n    \"generationId\" : \"0\",\n    \"propogateToApic\"
-        : false,\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/sgt/34b62440-23a9-11ec-8ac2-f2c839b2fc61\",\n
+        : false,\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\" : \"https://192.168.1.27:9060/ers/config/sgt/49d98090-23b0-11ec-8ac2-f2c839b2fc61\",\n
         \     \"type\" : \"application/json\"\n    }\n  }\n}"
     headers:
       Cache-Control:
@@ -91,9 +91,9 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:19 GMT
+      - Sat, 02 Oct 2021 18:41:01 GMT
       ETag:
-      - '"DECADDB85D009557E063201B985A4E14"'
+      - '"F6039C1510168F95314B32D103208631"'
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -133,11 +133,11 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=A2665C804D9CC4A47743BB8B44B3C120; JSESSIONIDSSO=7922ACEC40B66B84E963823A74D15F2B
+      - APPSESSIONID=F56E84770F83D32D2C5503F3354F6C9C; JSESSIONIDSSO=23226015C82DEA66A994F1805B324AB0
       User-Agent:
       - python-requests/2.25.1
     method: DELETE
-    uri: https://192.168.1.27:9060/ers/config/sgt/34b62440-23a9-11ec-8ac2-f2c839b2fc61
+    uri: https://192.168.1.27:9060/ers/config/sgt/49d98090-23b0-11ec-8ac2-f2c839b2fc61
   response:
     body:
       string: ''
@@ -150,7 +150,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:19 GMT
+      - Sat, 02 Oct 2021 18:41:02 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:

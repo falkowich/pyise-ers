@@ -11,7 +11,7 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      - APPSESSIONID=EB406018DCE4054828B2D4015DA11B0E; JSESSIONIDSSO=3D9B3E16A22003D24330F9F29E7BDDE1
       User-Agent:
       - python-requests/2.25.1
     method: GET
@@ -19,10 +19,10 @@ interactions:
   response:
     body:
       string: "{\n  \"SearchResult\" : {\n    \"total\" : 1,\n    \"resources\" :
-        [ {\n      \"id\" : \"39799fc0-23a9-11ec-9954-d60cbf567311\",\n      \"name\"
+        [ {\n      \"id\" : \"4e7bb870-23b0-11ec-9954-d60cbf567311\",\n      \"name\"
         : \"Device Type#All Device Types#Python Device Type\",\n      \"description\"
         : \"From Python\",\n      \"link\" : {\n        \"rel\" : \"self\",\n        \"href\"
-        : \"https://192.168.1.30:9060/ers/config/networkdevicegroup/39799fc0-23a9-11ec-9954-d60cbf567311\",\n
+        : \"https://192.168.1.30:9060/ers/config/networkdevicegroup/4e7bb870-23b0-11ec-9954-d60cbf567311\",\n
         \       \"type\" : \"application/json\"\n      }\n    } ]\n  }\n}"
     headers:
       Cache-Control:
@@ -33,7 +33,7 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:26 GMT
+      - Sat, 02 Oct 2021 18:41:08 GMT
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
@@ -71,17 +71,17 @@ interactions:
       Content-Type:
       - application/json
       Cookie:
-      - APPSESSIONID=FE5C2BF995DA830CF00AC10302D52A83; JSESSIONIDSSO=E9537409CBADF883C6F9481B9FC06212
+      - APPSESSIONID=EB406018DCE4054828B2D4015DA11B0E; JSESSIONIDSSO=3D9B3E16A22003D24330F9F29E7BDDE1
       User-Agent:
       - python-requests/2.25.1
     method: GET
-    uri: https://192.168.1.30:9060/ers/config/networkdevicegroup/39799fc0-23a9-11ec-9954-d60cbf567311
+    uri: https://192.168.1.30:9060/ers/config/networkdevicegroup/4e7bb870-23b0-11ec-9954-d60cbf567311
   response:
     body:
-      string: "{\n  \"NetworkDeviceGroup\" : {\n    \"id\" : \"39799fc0-23a9-11ec-9954-d60cbf567311\",\n
+      string: "{\n  \"NetworkDeviceGroup\" : {\n    \"id\" : \"4e7bb870-23b0-11ec-9954-d60cbf567311\",\n
         \   \"name\" : \"Device Type#All Device Types#Python Device Type\",\n    \"description\"
         : \"From Python\",\n    \"link\" : {\n      \"rel\" : \"self\",\n      \"href\"
-        : \"https://192.168.1.30:9060/ers/config/networkdevicegroup/39799fc0-23a9-11ec-9954-d60cbf567311\",\n
+        : \"https://192.168.1.30:9060/ers/config/networkdevicegroup/4e7bb870-23b0-11ec-9954-d60cbf567311\",\n
         \     \"type\" : \"application/json\"\n    },\n    \"othername\" : \"Device
         Type\"\n  }\n}"
     headers:
@@ -93,9 +93,9 @@ interactions:
       Content-Type:
       - application/json;charset=utf-8
       Date:
-      - Sat, 02 Oct 2021 17:50:26 GMT
+      - Sat, 02 Oct 2021 18:41:08 GMT
       ETag:
-      - '"4B4121173C00494DF7BCAF42A1BFC1BE"'
+      - '"60C56E4BA9889FE8C9DBB0B27E06C3FE"'
       Expires:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Pragma:
