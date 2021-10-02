@@ -5,8 +5,10 @@ import re
 from furl import furl
 from datetime import datetime, timedelta
 from urllib.parse import quote
+from bs4 import BeautifulSoup
 
 import requests
+import logging
 
 base_dir = os.path.dirname(__file__)
 
@@ -28,6 +30,9 @@ class ERS(object):
         verify=False,
         disable_warnings=False,
         use_csrf=False,
+        version='',
+        enable_failover=False,
+        ise_node_2='',
         timeout=2,
         protocol="https",
     ):
@@ -35,13 +40,17 @@ class ERS(object):
         Class to interact with Cisco ISE via the ERS API.
 
         :param ise_node: IP Address of the primary admin ISE node
+        :param ise_node_2: IP Address of the secondary admin ISE node
         :param ers_user: ERS username
         :param ers_pass: ERS password
         :param verify: Verify SSL cert
         :param disable_warnings: Disable requests warnings
         :param timeout: Query timeout
+        :param version: Discovers Version via ISE MnT API
+        :param enable_failover: Discovers the primary ERS server
         """
         self.ise_node = ise_node
+        self.ise_node_2 = ise_node_2
         self.user_name = ers_user
         self.user_pass = ers_pass
         self.protocol = protocol
@@ -57,9 +66,82 @@ class ERS(object):
         self.csrf_expires = None
         self.timeout = timeout
         self.ise.headers.update({"Connection": "keep_alive"})
+        self.version = version  
+        self.enable_failover = enable_failover
+        self.log = logging.getLogger('ise')
+        logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
         if self.disable_warnings:
             requests.packages.urllib3.disable_warnings()
+        if self.version == '':
+            self.version = self.get_version()
+        if self.enable_failover:
+            self.ise_node = self.discover_primary_ers_node(self)
+
+    @staticmethod
+    def discover_primary_ers_node(self):
+        """
+        Loops through the seed node's knowledge of the ERS nodes.
+        Queries each node if it has the Primary Active Role for ERS
+        Returns the Primary Node ip address.
+        """
+        
+        # Choosing JSON instead of XML
+        self.ise.headers.update(
+            {"ACCEPT": "application/json", "Content-Type": "application/json"}
+        )
+        try:
+            resp = self._request(
+                "{0}/config/node".format(self.url_base), method="get"
+            )
+
+            if resp.status_code == 200:
+                nodes = [
+                    (i["id"],i["link"]["href"])
+                    for i in resp.json()["SearchResult"]["resources"]
+                ]
+                for node in nodes:
+                    ip = node_response.json()["Node"]["ipAddress"]
+                    try:
+                        node_response = self._request(
+                        "{0}/config/node/{1}".format(self.url_base, node[0]), method="get"
+                        )
+                        if(node_response.json()["Node"]["primaryPapNode"]):
+                            self.log.info("Found Primary ERS Node")
+                            return ip
+                    except requests.exceptions.RequestException as e:
+                        self.log.error("Connection Error to ISE Node ERS API. IP: %s ", ip)
+        except requests.exceptions.RequestException as e:
+            self.log.error("The Primary ISE Node %s is not responding, trying secondary node.", self.ise_node)
+            # If we get here, the first node failed to respond, we try the second node.
+
+            try:
+                secondary_url_base = "{0}://{1}:9060/ers".format(self.protocol, self.ise_node_2)
+                resp = self._request(
+                "{0}/config/node".format(secondary_url_base), method="get"
+                )
+
+                if resp.status_code == 200:
+                    nodes = [
+                    (i["id"],i["link"]["href"])
+                    for i in resp.json()["SearchResult"]["resources"]
+                ]
+                for node in nodes:
+                    # Because all the nodes are known, they may timeout here also.
+                    ip = node_response.json()["Node"]["ipAddress"]
+                    try:
+                        node_response = self._request(
+                        "{0}/config/node/{1}".format(secondary_url_base, node[0]), method="get"
+                        )
+                        if(node_response.json()["Node"]["primaryPapNode"]):
+                            self.log.info("Found Primary ERS Node")
+                            return ip
+                    except requests.exceptions.RequestException as e:
+                        self.log.error("Connection Error to ISE Node ERS API. IP: %s.", self.secondary_url_base)
+                        raise
+            except requests.exceptions.RequestException as e:
+                self.log.error("Connection Error to Secondary ISE Node ERS API. IP: %s.", self.ise_node_2)
+                # raise
 
     @staticmethod
     def _mac_test(mac):
@@ -169,6 +251,23 @@ class ERS(object):
             req = self.ise.request(method, url, data=data, timeout=self.timeout)
 
         return req
+
+    def get_version(self):
+        try:
+            # Build MnT API URL
+            url =  "https://" + self.ise_node + "/admin/API/mnt/Version"
+            # Access MnT API
+            req = self.ise.request('get', url, data=None, timeout=self.timeout)
+            # Extract version of first node
+            soup = BeautifulSoup(req.content,'xml')
+            full_version = soup.find_all('version')[0].get_text()
+            # Get simple version ie: 2.7
+            short_version = float(full_version[0:3])
+            # print("ISE Initializing - Version Check " + full_version)
+            return short_version
+        except:
+            self.log.warning("Could not obtain ISE version ")
+            return ""
 
     def _get_groups(self, url, filter: str = None, size: int = 20, page: int = 1):
         """
