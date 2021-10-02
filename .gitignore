@@ -70,4 +70,4 @@ settings.json
 # test config stuff
 config.py
 test.py
-test/cassettes
+cassettes/
