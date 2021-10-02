@@ -30,9 +30,9 @@ class ERS(object):
         verify=False,
         disable_warnings=False,
         use_csrf=False,
-        version='',
+        version="",
         enable_failover=False,
-        ise_node_2='',
+        ise_node_2="",
         timeout=2,
         protocol="https",
     ):
@@ -66,14 +66,14 @@ class ERS(object):
         self.csrf_expires = None
         self.timeout = timeout
         self.ise.headers.update({"Connection": "keep_alive"})
-        self.version = version  
+        self.version = version
         self.enable_failover = enable_failover
-        self.log = logging.getLogger('ise')
-        logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+        self.log = logging.getLogger("ise")
+        logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.INFO)
 
         if self.disable_warnings:
             requests.packages.urllib3.disable_warnings()
-        if self.version == '':
+        if self.version == "":
             self.version = self.get_version()
         if self.enable_failover:
             self.ise_node = self.discover_primary_ers_node(self)
@@ -85,62 +85,75 @@ class ERS(object):
         Queries each node if it has the Primary Active Role for ERS
         Returns the Primary Node ip address.
         """
-        
+
         # Choosing JSON instead of XML
         self.ise.headers.update(
             {"ACCEPT": "application/json", "Content-Type": "application/json"}
         )
         try:
-            resp = self._request(
-                "{0}/config/node".format(self.url_base), method="get"
-            )
+            resp = self._request("{0}/config/node".format(self.url_base), method="get")
 
             if resp.status_code == 200:
                 nodes = [
-                    (i["id"],i["link"]["href"])
+                    (i["id"], i["link"]["href"])
                     for i in resp.json()["SearchResult"]["resources"]
                 ]
                 for node in nodes:
                     ip = node_response.json()["Node"]["ipAddress"]
                     try:
                         node_response = self._request(
-                        "{0}/config/node/{1}".format(self.url_base, node[0]), method="get"
+                            "{0}/config/node/{1}".format(self.url_base, node[0]),
+                            method="get",
                         )
-                        if(node_response.json()["Node"]["primaryPapNode"]):
+                        if node_response.json()["Node"]["primaryPapNode"]:
                             self.log.info("Found Primary ERS Node")
                             return ip
                     except requests.exceptions.RequestException as e:
-                        self.log.error("Connection Error to ISE Node ERS API. IP: %s ", ip)
+                        self.log.error(
+                            "Connection Error to ISE Node ERS API. IP: %s ", ip
+                        )
         except requests.exceptions.RequestException as e:
-            self.log.error("The Primary ISE Node %s is not responding, trying secondary node.", self.ise_node)
+            self.log.error(
+                "The Primary ISE Node %s is not responding, trying secondary node.",
+                self.ise_node,
+            )
             # If we get here, the first node failed to respond, we try the second node.
 
             try:
-                secondary_url_base = "{0}://{1}:9060/ers".format(self.protocol, self.ise_node_2)
+                secondary_url_base = "{0}://{1}:9060/ers".format(
+                    self.protocol, self.ise_node_2
+                )
                 resp = self._request(
-                "{0}/config/node".format(secondary_url_base), method="get"
+                    "{0}/config/node".format(secondary_url_base), method="get"
                 )
 
                 if resp.status_code == 200:
                     nodes = [
-                    (i["id"],i["link"]["href"])
-                    for i in resp.json()["SearchResult"]["resources"]
-                ]
+                        (i["id"], i["link"]["href"])
+                        for i in resp.json()["SearchResult"]["resources"]
+                    ]
                 for node in nodes:
                     # Because all the nodes are known, they may timeout here also.
                     ip = node_response.json()["Node"]["ipAddress"]
                     try:
                         node_response = self._request(
-                        "{0}/config/node/{1}".format(secondary_url_base, node[0]), method="get"
+                            "{0}/config/node/{1}".format(secondary_url_base, node[0]),
+                            method="get",
                         )
-                        if(node_response.json()["Node"]["primaryPapNode"]):
+                        if node_response.json()["Node"]["primaryPapNode"]:
                             self.log.info("Found Primary ERS Node")
                             return ip
                     except requests.exceptions.RequestException as e:
-                        self.log.error("Connection Error to ISE Node ERS API. IP: %s.", self.secondary_url_base)
+                        self.log.error(
+                            "Connection Error to ISE Node ERS API. IP: %s.",
+                            self.secondary_url_base,
+                        )
                         raise
             except requests.exceptions.RequestException as e:
-                self.log.error("Connection Error to Secondary ISE Node ERS API. IP: %s.", self.ise_node_2)
+                self.log.error(
+                    "Connection Error to Secondary ISE Node ERS API. IP: %s.",
+                    self.ise_node_2,
+                )
                 # raise
 
     @staticmethod
@@ -255,12 +268,12 @@ class ERS(object):
     def get_version(self):
         try:
             # Build MnT API URL
-            url =  "https://" + self.ise_node + "/admin/API/mnt/Version"
+            url = "https://" + self.ise_node + "/admin/API/mnt/Version"
             # Access MnT API
-            req = self.ise.request('get', url, data=None, timeout=self.timeout)
+            req = self.ise.request("get", url, data=None, timeout=self.timeout)
             # Extract version of first node
-            soup = BeautifulSoup(req.content,'xml')
-            full_version = soup.find_all('version')[0].get_text()
+            soup = BeautifulSoup(req.content, "xml")
+            full_version = soup.find_all("version")[0].get_text()
             # Get simple version ie: 2.7
             short_version = float(full_version[0:3])
             # print("ISE Initializing - Version Check " + full_version)
