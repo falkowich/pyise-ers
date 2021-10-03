@@ -9,8 +9,8 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="pyise-ers",
-    version="0.1.2.e1",
-    py_modules=["ise"],
+    version="0.2.0",
+    py_modules=["pyise-ers"],
     url="https://github.com/falkowich/pyise-ers",
     download_url="https://pypi.python.org/pypi/pyise-ers",
     license="LICENSE.md",
@@ -20,10 +20,10 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     include_package_data=True,
     zip_safe=False,
-    install_requires=["furl>=2.1.2", "requests>=2.25.1"],
+    install_requires=["furl>=2.1.3", "requests>=2.26.0", ""],
     extras_require={
         "test": ["pytest", "coverage"],
     },
