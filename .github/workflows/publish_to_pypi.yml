@@ -1,5 +1,5 @@
 # Inspired by https://github.com/JonasKs/django-guid/blob/master/.github/workflows/publish_to_pypi.yml
-name: Publish ise to PyPI and TestPyPI 📦
+name: Publish pyise-ers to PyPI and TestPyPI 📦
 
 on: push
 
@@ -20,7 +20,7 @@ jobs:
     - name: Build
       run: |
         python setup.py sdist bdist_wheel
-    - name: Publish distribution of ise to Test PyPI 📦
+    - name: Publish distribution of pyiseers to Test PyPI 📦
       # If it's a push, and the push includes a tag with `-rc` in it, release to TestPyPi
       if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && contains(github.ref, '-rc')
       uses: pypa/gh-action-pypi-publish@master

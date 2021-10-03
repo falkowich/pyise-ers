@@ -1,11 +1,22 @@
 
-[![Known Vulnerabilities](https://snyk.io/test/github/falkowich/pyise-ers/badge.svg)](https://snyk.io/test/github/falkowich/pyise-ers) [![Maintainability](https://api.codeclimate.com/v1/badges/a5dc22865c8c47377448/maintainability)](https://codeclimate.com/github/falkowich/pyise-ers/maintainability) ![Publish PyPI and TestPyPI](https://github.com/falkowich/ise/workflows/Publish%20ise%20to%20PyPI%20and%20TestPyPI%20%F0%9F%93%A6/badge.svg) [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/falkowich/ise) ![Discord](https://img.shields.io/discord/858319928703975454?logo=discord) [![CodeQL](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml)
+[![Known Vulnerabilities](https://snyk.io/test/github/falkowich/pyise-ers/badge.svg)](https://snyk.io/test/github/falkowich/pyise-ers) [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/falkowich/ise) ![Discord](https://img.shields.io/discord/858319928703975454?logo=discord) [![CodeQL](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml)
 
 # ISE-ERS API Wrapper
 
 Python module to manage Cisco ISE via the REST API.  
 
-[Join Discord Server](https://discord.gg/CA6FphRgF4)
+## Namechange information
+
+### After 0.2.0 information
+
+In 2021 I tried to publish the library to DevNet and beq modulename was just "ise" I had to do a rename on the package, module and repository.  
+
+* Repository is named pyise-ers,
+* The PyPI package is namde pyise-ers.
+* The module is named pyiseers (for conveniens of imports wihtout dashes in them)
+
+If you use the "old 0.1.2.x" ise packages in PyPi, please update your requirements to pyise-ers to get continued updates.
+(after testing everything in your environment offcourse)
 
 ## History
 
@@ -15,20 +26,27 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
 * 2021-10-01 » All history before 0.2 and the namechange to pyiseers is located [here](#History-before-0.2)
 * 2021-10-01 » Deforked from upstream for simpler handling of PR's as of this [discusson](https://github.com/falkowich/ise/discussions/161)
 * 2021-10-02 » Started work with namechange as of this [issue](https://github.com/falkowich/ise/issues/164) to pyise-ers
+* 2021-10-03 » Pushed pyise-ers 0.2.0-rc to test.pypi.com
   
 ## Status
 
 Tested and used in our environment at work. But as usual it's up to you to test this out in a test environment so everything works as intended.
+If you have any suggestions or find a bug, create a issue and we will try to fix it :)
 
-Is you have any suggestions or find a bug, create a issue and we will try to fix it :)
+Feel free to [Join Discord Server](https://discord.gg/CA6FphRgF4) and contact me there too.
+I moved away from slack to Discord to try it out when 0.2.0 will be released.
 
 ## Testing
 
-Testing has been completed on the following ISE versions:
+These versions has been tested with pytest.
 
-* v2.4.0.357 and with python 3.7.3
-* v2.4.0.357 (Patch 11), Python 3.7.7 (joshand)
-* v2.7.0.356 (Patch 1), Python 3.7.7 (joshand)
+|pyise-ers|ise|ise patch|python|date|status|
+|---|---|---|---|---|---|
+|0.1.1|2.4.0.357|none|3.7.3|2019|depricated|
+|0.1.2|2.7.0.356|11|3.7.7|2020|depricated|
+|0.1.2|2.7.0.356|1|3.7.7|2020|depricated|
+|0.2.0|2.7.0.356|none|3.7.12|2021-10-02|active|
+|0.2.0|3.0.0.458|none|3.7.12|2021-10-02|active|
 
 There are two tests available in tests/ directory.
 
@@ -37,7 +55,7 @@ There are two tests available in tests/ directory.
 To run the "manual" tests:
 
 * make a copy of config-DEFAULT.py to config.py
-* edit uri_list with settings to your test ise server
+* edit uri_27 and/or uri_30 with settings to your test ise server
 * run python manual_test_ers.py
 
 ### Pytest
@@ -53,7 +71,7 @@ That is so that the tests can be repeated without contacting ISE everytime.
   * pytest --record-mode=rewrite (To rewrite cassettes with live data)
   * pytest (to reuse the recorded cassetes)
 
-The plan is to extend the testing with pytest, and hopefully get good testcoverage on this library.
+The plan is to extend the testing with testcoverage on this library.
 
 ### Enable REST API
 
@@ -528,7 +546,7 @@ ise.delete_egressmatrixcell("6f76b621-97bf-11ea-9614-caf56bcd6712")
 {'success': True, 'response': '6f76b621-97bf-11ea-9614-caf56bcd6712 Deleted Successfully', 'error': ''}
 ```
 
-# History before 0.2
+# History before namechange » 0.2.0
 
 * Merged back from the work that [https://github.com/karrots](https://github.com/karrots) has done efter I paused the updates.  
 * Converted to pipenv packages instead of requirements.txt

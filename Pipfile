@@ -16,8 +16,6 @@ pytest-recording = "*"
 [packages]
 requests = "*"
 furl = "*"
-lxml = "*"
-beautifulsoup4 = "*"
 
 [requires]
 python_version = "3.7"
