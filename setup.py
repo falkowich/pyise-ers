@@ -9,7 +9,7 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="pyise-ers",
-    version="0.2.0",
+    version="0.2.0.1",
     py_modules=["pyiseers"],
     url="https://github.com/falkowich/pyise-ers",
     download_url="https://pypi.python.org/pypi/pyise-ers",
