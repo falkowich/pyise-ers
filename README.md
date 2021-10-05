@@ -7,7 +7,7 @@ Python module to manage Cisco ISE via the REST API.
 
 ## Namechange information
 
-### After 0.2.0 information
+### After 0.2.0.1 information
 
 In 2021 I tried to publish the library to DevNet and beq modulename was just "ise" I had to do a rename on the package, module and repository.  
 
@@ -27,6 +27,7 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
 * 2021-10-01 » Deforked from upstream for simpler handling of PR's as of this [discusson](https://github.com/falkowich/ise/discussions/161)
 * 2021-10-02 » Started work with namechange as of this [issue](https://github.com/falkowich/ise/issues/164) to pyise-ers
 * 2021-10-03 » Pushed pyise-ers 0.2.0-rc to test.pypi.com
+* 2021-10-05 » Pushed pyise-ers 0.2.0.1 to pypi.com
   
 ## Status
 
@@ -34,7 +35,7 @@ Tested and used in our environment at work. But as usual it's up to you to test 
 If you have any suggestions or find a bug, create a issue and we will try to fix it :)
 
 Feel free to [Join Discord Server](https://discord.gg/CA6FphRgF4) and contact me there too.
-I moved away from slack to Discord to try it out when 0.2.0 will be released.
+I moved away from slack to Discord to try it out when 0.2.0.1 will be released.
 
 ## Testing
 
@@ -45,8 +46,8 @@ These versions has been tested with pytest.
 |0.1.1|2.4.0.357|none|3.7.3|2019|depricated|
 |0.1.2|2.7.0.356|11|3.7.7|2020|depricated|
 |0.1.2|2.7.0.356|1|3.7.7|2020|depricated|
-|0.2.0|2.7.0.356|none|3.7.12|2021-10-02|active|
-|0.2.0|3.0.0.458|none|3.7.12|2021-10-02|active|
+|0.2.0.1|2.7.0.356|none|3.7.12|2021-10-05|active|
+|0.2.0.1|3.0.0.458|none|3.7.12|2021-10-05|active|
 
 There are two tests available in tests/ directory.
 
