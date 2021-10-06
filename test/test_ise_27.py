@@ -32,6 +32,24 @@ def vcr_config():
 uri = uri_27
 
 
+fail_ise = ERS(
+    ise_node=uri["ise_node"],
+    ers_user=uri["ers_user"],
+    ers_pass="fail",
+    verify=False,
+    disable_warnings=True,
+    timeout=15,
+    use_csrf=uri["use_csrf"],
+)
+
+@pytest.mark.vcr
+def test_fail_connection_401():  # noqa D103
+
+    r1 = fail_ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
+    assert r1["response"] == "Unauthorized"
+    assert r1["error"] == 401
+
+
 ise = ERS(
     ise_node=uri["ise_node"],
     ers_user=uri["ers_user"],
@@ -51,11 +69,21 @@ def test_add_endpoint():  # noqa D103
     assert r1["response"] == "test-endpoint Added Successfully"
 
 
-# Endpoint tests
+def test_add_endpoint_mac_fail():  # noqa D103
+    with pytest.raises(Exception, match="AA:BB:CC:00:11:2Q. Must be in the form of AA:BB:CC:00:11:22"):
+        r1 = ise.add_endpoint(endpoint["name"], endpoint["faulty_mac"], endpoint["group-id"])
+
 @pytest.mark.vcr
 def test_get_endpoints():  # noqa D103
 
     r1 = ise.get_endpoints(size=1, page=1)
+    assert r1["success"] is True
+    assert "AA:BB:CC:00:11:22" in str(r1["response"])
+
+@pytest.mark.vcr
+def test_get_endpoints_groupid():  # noqa D103
+
+    r1 = ise.get_endpoints(groupID=endpoint["group-id"], size=1, page=1)
     assert r1["success"] is True
     assert "AA:BB:CC:00:11:22" in str(r1["response"])
 
@@ -93,6 +121,22 @@ def test_get_endpoint_group():  # noqa D103
     assert r1["success"] is True
     assert "'description': 'Unknown Identity Group'" in str(r1["response"])
 
+
+@pytest.mark.vcr
+def test_get_endpoint_group_group_id():  # noqa D103
+
+    r1 = ise.get_endpoint_group(endpoint["group-id"])
+    assert r1["success"] is True
+    assert "'description': 'Unknown Identity Group'" in str(r1["response"])
+
+
+@pytest.mark.vcr
+def test_get_endpoint_fail():  # noqa D103
+
+    r1 = ise.get_endpoint_group("NO GROUP THAT EXISTS")
+    assert r1["success"] is False
+    assert r1["response"] == None
+    assert r1["error"] == 200
 
 @pytest.mark.vcr
 def test_get_identity_groups():  # noqa D103
@@ -316,6 +360,25 @@ def test_add_sgt():
     )
     assert r1["success"] is True
 
+def test_add_sgt_fail_to_large():
+    r1 = ise.add_sgt(
+        name="Python_Unit_Test 12345678901234567890123456798",
+        description="Unit Tests",
+        value=trustsec["test_sgt_value"],
+        return_object=True,
+    )
+    assert r1["success"] is False
+
+
+def test_add_sgt_fail_zero():
+    r1 = ise.add_sgt(
+        name="",
+        description="Unit Tests",
+        value="",
+        return_object=True,
+    )
+    assert r1["success"] is False
+
 
 @pytest.mark.vcr
 def test_update_sgt():
@@ -360,6 +423,28 @@ def test_add_sgacl():
         return_object=True,
     )
     assert r1["success"] is True
+
+
+def test_add_sgacl_start_number():
+    r1 = ise.add_sgacl(
+        name="0Python_Unit_Test",
+        description="Unit Tests",
+        ip_version="IPV4",
+        acl_content=["permit ip"],
+        return_object=True,
+    )
+    assert r1["success"] is False
+
+
+def test_add_sgacl_space():
+    r1 = ise.add_sgacl(
+        name="Python Unit_Test",
+        description="Unit Tests",
+        ip_version="IPV4",
+        acl_content=["permit ip"],
+        return_object=True,
+    )
+    assert r1["success"] is False
 
 
 @pytest.mark.vcr

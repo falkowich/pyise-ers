@@ -12,10 +12,12 @@ wheel = "*"
 twine = "*"
 black = "*"
 pytest-recording = "*"
+pytest-cov = "*"
 
 [packages]
 requests = "*"
 furl = "*"
+codecov = "*"
 
 [requires]
 python_version = "3.7"
