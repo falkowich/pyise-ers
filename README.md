@@ -1,5 +1,8 @@
 
-[![Known Vulnerabilities](https://snyk.io/test/github/falkowich/pyise-ers/badge.svg)](https://snyk.io/test/github/falkowich/pyise-ers) [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/falkowich/ise) ![Discord](https://img.shields.io/discord/858319928703975454?logo=discord) [![CodeQL](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml)
+[![Known Vulnerabilities](https://snyk.io/test/github/falkowich/pyise-ers/badge.svg)](https://snyk.io/test/github/falkowich/pyise-ers)
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/falkowich/pyise-ers)
+![Discord](https://img.shields.io/discord/858319928703975454?logo=discord) 
+[![CodeQL](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml)
 
 # ISE-ERS API Wrapper
 
