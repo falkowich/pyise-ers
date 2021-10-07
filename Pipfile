@@ -13,6 +13,7 @@ twine = "*"
 black = "*"
 pytest-recording = "*"
 pytest-cov = "*"
+ptpython = "*"
 
 [packages]
 requests = "*"

@@ -3,6 +3,7 @@
 
 import sys
 from config import endpoint
+
 sys.path.append("./")
 
 from pyiseers import ERS  # noqa E402
@@ -52,10 +53,10 @@ device_payload = {
 
 if __name__ == "__main__":
 
-    #r0 = ise.get_device_groups()
-    #print(r0)
+    # r0 = ise.get_device_groups()
+    # print(r0)
 
-    r1 = ise.get_endpoint_group("NO GROUP THAT EXISTS")  
+    r1 = ise.get_endpoint_group("NO GROUP THAT EXISTS")
     print(r1)
 
     # r1 = ise.add_device(device_payload=device_payload)
