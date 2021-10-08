@@ -320,6 +320,42 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
+    def add_endpoint_group(self, name, description=""):
+        """
+        Add an endpoint group.
+        :param name: Group name
+        :param description: Group description
+        :return: result dictionary
+        """
+        result = {
+            "success": False,
+            "response": "",
+            "error": "",
+        }
+
+        self.ise.headers.update(
+            {"ACCEPT": "application/json", "Content-Type": "application/json"}
+        )
+
+        data = {
+            "EndPointGroup": {
+                "name": name,
+                "description": description,
+            }
+        }
+
+        resp = self._request(
+            "{0}/config/endpointgroup".format(self.url_base),
+            method="post",
+            data=json.dumps(data),
+        )
+        if resp.status_code == 201:
+            result["success"] = True
+            result["response"] = "{0} Added Successfully".format(name)
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
     def get_endpoints(self, groupID=None, size=20, page=1):
         """
         Get all endpoints.

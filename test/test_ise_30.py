@@ -93,6 +93,12 @@ def test_get_endpoint_group():  # noqa D103
     assert r1["success"] is True
     assert "'description': 'Unknown Identity Group'" in str(r1["response"])
 
+@pytest.mark.vcr
+def test_add_endpoint_group():  # noqa D103
+
+    r1 = ise.add_endpoint_group(endpoint_group["name"], endpoint_group['description'])
+    assert r1["success"] is True
+    assert "'description': 'Unknown Identity Group'" in str(r1["response"])
 
 @pytest.mark.vcr
 def test_get_identity_groups():  # noqa D103
