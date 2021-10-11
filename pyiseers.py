@@ -117,8 +117,6 @@ class ERS(object):
 
     @staticmethod
     def _pass_ersresponse(result, resp):
-        if resp.status_code == 401:
-            print("VAFAN")
         try:
             rj = resp.json()
             if "SearchResult" in rj:
@@ -127,7 +125,7 @@ class ERS(object):
                 result["response"] = rj["ERSResponse"]["messages"][0]["title"]
             result["error"] = resp.status_code
             return result
-        except Exception as e:
+        except ValueError:
             if "<title>HTTP Status 401 – Unauthorized</title>" in resp.text:
                 result["response"] = "Unauthorized"
                 result["error"] = resp.status_code
