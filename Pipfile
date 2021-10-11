@@ -12,6 +12,9 @@ wheel = "*"
 twine = "*"
 black = "*"
 pytest-recording = "*"
+pytest-cov = "*"
+ptpython = "*"
+codecov = "*"
 
 [packages]
 requests = "*"

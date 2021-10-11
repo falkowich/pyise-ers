@@ -4,7 +4,7 @@ uri_list = [
         "ise_node": "ip_to_ise_version_x",
         "ers_user": "ers-user",
         "ers_pass": "Password27",
-        "use_csrf": False,
+        "use_csrf": True,
     },
     {
         "ise_version": "3.0",
@@ -18,6 +18,7 @@ uri_list = [
 endpoint = {
     "name": "test-endpoint",
     "mac": "AA:BB:CC:00:11:22",
+    "faulty_mac": "AA:BB:CC:00:11:2Q",
     "group-id": "aa0e8b20-8bff-11e6-996c-525400b48521",
 }
 

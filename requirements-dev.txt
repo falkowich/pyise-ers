@@ -11,9 +11,12 @@
 ################################################################################
 
 black
+codecov
 flake8
 pipenv-to-requirements
+ptpython
 pytest
+pytest-cov
 pytest-recording
 setuptools
 twine
