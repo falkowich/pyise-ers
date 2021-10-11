@@ -1,5 +1,8 @@
 [run]
-omit = test/*
+omit = 
+  test/*
+  setup.py
+
 branch = True
 
 [report]
