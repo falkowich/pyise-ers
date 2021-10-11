@@ -1,7 +1,7 @@
 
 [![Known Vulnerabilities](https://snyk.io/test/github/falkowich/pyise-ers/badge.svg)](https://snyk.io/test/github/falkowich/pyise-ers)
 [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/falkowich/pyise-ers)
-![Discord](https://img.shields.io/discord/858319928703975454?logo=discord) 
+![Discord](https://img.shields.io/discord/858319928703975454?logo=discord)
 [![CodeQL](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml)
 
 # ISE-ERS API Wrapper
@@ -12,22 +12,22 @@ Python module to manage Cisco ISE via the REST API.
 
 ### After 0.2.0.1 information
 
-In 2021 I tried to publish the library to DevNet and beq modulename was just "ise" I had to do a rename on the package, module and repository.  
+In 2021 I tried to publish the library to DevNet and beq modulname was just "ise" I had to do a rename on the package, module and repository.  
 
 * Repository is named pyise-ers,
-* The PyPI package is namde pyise-ers.
-* The module is named pyiseers (for conveniens of imports wihtout dashes in them)
+* The PyPI package is named pyise-ers.
+* The module is named pyiseers (for convenience of imports without dashes in them)
 
 If you use the "old 0.1.2.x" ise packages in PyPi, please update your requirements to pyise-ers to get continued updates.
 (after testing everything in your environment offcourse)
 
 ## History
 
-All initial work is done by [https://github.com/bobthebutcher](https://github.com/bobthebutcher) and [https://github.com/mpenning](https://github.com/mpenning.).  
+All initial work is done by [https://github.com/bobthebutcher](https://github.com/bobthebutcher) and [https://github.com/mpenning](https://github.com/mpenning).  
 I forked from them and updated so it worked with ISE 2.2.x and changed all functions to json calls.  
 
 * 2021-10-01 » All history before 0.2 and the namechange to pyiseers is located [here](#History-before-0.2)
-* 2021-10-01 » Deforked from upstream for simpler handling of PR's as of this [discusson](https://github.com/falkowich/ise/discussions/161)
+* 2021-10-01 » Deforked from upstream for simpler handling of PR's as of this [discussion](https://github.com/falkowich/ise/discussions/161)
 * 2021-10-02 » Started work with namechange as of this [issue](https://github.com/falkowich/ise/issues/164) to pyise-ers
 * 2021-10-03 » Pushed pyise-ers 0.2.0-rc to test.pypi.com
 * 2021-10-05 » Pushed pyise-ers 0.2.0.1 to pypi.com
