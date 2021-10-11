@@ -3,6 +3,7 @@
 [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/falkowich/pyise-ers)
 ![Discord](https://img.shields.io/discord/858319928703975454?logo=discord)
 [![CodeQL](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml)
+[![codecov](https://codecov.io/gh/falkowich/pyise-ers/branch/master/graph/badge.svg?token=SX8BKVKZQL)](https://codecov.io/gh/falkowich/pyise-ers)
 
 # ISE-ERS API Wrapper
 
