@@ -19,7 +19,6 @@ codecov = "*"
 [packages]
 requests = "*"
 furl = "*"
-codecov = "*"
 
 [requires]
 python_version = "3.7"
