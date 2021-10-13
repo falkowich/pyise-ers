@@ -371,7 +371,6 @@ class ERS(object):
         self.ise.headers.update(
             {"ACCEPT": "application/json", "Content-Type": "application/json"}
         )
-        print("{0}/config/endpointgroup/{1}".format(self.url_base, id))
         resp = self._request(
             "{0}/config/endpointgroup/{1}".format(self.url_base, id),
             method="delete",
