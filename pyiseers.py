@@ -356,6 +356,38 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
+    def delete_endpoint_group(self, id):
+        """
+         Deletes an endpoint group.
+         :param id: Group ID
+         :return: result dictionary
+         """
+        result = {
+            "success": False,
+            "response": "",
+            "error": "",
+        }
+
+        self.ise.headers.update(
+            {"ACCEPT": "application/json", "Content-Type": "application/json"}
+        )
+        print("{0}/config/endpointgroup/{1}".format(self.url_base, id))
+        resp = self._request(
+            "{0}/config/endpointgroup/{1}".format(self.url_base, id),
+            method="delete",
+        )
+
+        if resp.status_code == 204:
+            result["success"] = True
+            result["response"] = "{0} Deleted Successfully".format(id)
+            return result
+        elif resp.status_code == 404:
+            result["response"] = "{0} not found".format(id)
+            result["error"] = resp.status_code
+            return result
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
     def get_endpoints(self, groupID=None, size=20, page=1):
         """
         Get all endpoints.

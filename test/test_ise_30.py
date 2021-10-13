@@ -87,18 +87,29 @@ def test_get_endpoint_groups():  # noqa D103
 
 
 @pytest.mark.vcr
+def test_add_endpoint_group():  # noqa D103
+
+    r1 = ise.add_endpoint_group(endpoint_group["name"], endpoint_group['description'])
+    assert r1["success"] is True
+    assert "'description': 'Unknown Identity Group'" in str(r1["response"])
+
+
+@pytest.mark.vcr
 def test_get_endpoint_group():  # noqa D103
 
     r1 = ise.get_endpoint_group(endpoint_group["name"])
     assert r1["success"] is True
     assert "'description': 'Unknown Identity Group'" in str(r1["response"])
 
-@pytest.mark.vcr
-def test_add_endpoint_group():  # noqa D103
 
-    r1 = ise.add_endpoint_group(endpoint_group["name"], endpoint_group['description'])
+@pytest.mark.vcr
+def test_delete_endpoint_group():  # noqa D103
+
+    r1 = ise.get_endpoint_group(endpoint_group["name"])
     assert r1["success"] is True
-    assert "'description': 'Unknown Identity Group'" in str(r1["response"])
+    r2 = ise.delete_endpoint_group(r1['response']['id'])
+    assert "{0} Deleted Successfully".format(r1['response']['id']) in str(r2["response"])
+
 
 @pytest.mark.vcr
 def test_get_identity_groups():  # noqa D103
