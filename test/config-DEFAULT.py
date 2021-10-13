@@ -21,7 +21,10 @@ endpoint = {
     "group-id": "aa0e8b20-8bff-11e6-996c-525400b48521",
 }
 
-endpoint_group = {"name": "Unknown", "description": "Endpoint group description"}
+endpoint_group = {
+    "name": "TestEndpointGroup",
+    "description": "TestEndpointGroup Endpoint group description",
+}
 
 user = {
     "user_id": "test-user",
