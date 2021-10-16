@@ -31,6 +31,27 @@ def vcr_config():
 
 uri = uri_30
 
+<<<<<<< HEAD
+=======
+fail_ise = ERS(
+    ise_node=uri["ise_node"],
+    ers_user="non_active_testuser",
+    ers_pass=uri["ers_pass"],
+    verify=False,
+    disable_warnings=True,
+    timeout=15,
+    use_csrf=uri["use_csrf"],
+)
+
+
+#@pytest.mark.vcr
+#def test_fail_connection_401():  # noqa D103
+#
+#    r1 = fail_ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
+#    assert r1["response"] == "Unauthorized"
+#    assert r1["error"] == 401
+
+>>>>>>> codecov
 
 ise = ERS(
     ise_node=uri["ise_node"],
@@ -88,6 +109,14 @@ def test_get_endpoint_groups():  # noqa D103
 
 @pytest.mark.vcr
 def test_add_endpoint_group():  # noqa D103
+<<<<<<< HEAD
+
+    r1 = ise.add_endpoint_group(endpoint_group["name"], endpoint_group["description"])
+    epg = endpoint_group["name"]
+    assert r1["success"] is True
+    assert f"{epg} Added Successfully" in r1["response"]
+
+=======
 
     r1 = ise.add_endpoint_group(endpoint_group["name"], endpoint_group["description"])
     epg = endpoint_group["name"]
@@ -102,7 +131,29 @@ def test_get_endpoint_group():  # noqa D103
     epg = endpoint_group["name"]
     assert r1["success"] is True
     assert f"'name': '{epg}'" in str(r1["response"])
+>>>>>>> codecov
 
+@pytest.mark.vcr
+def test_get_endpoint_group():  # noqa D103
+
+    r1 = ise.get_endpoint_group(endpoint_group["name"])
+    epg = endpoint_group["name"]
+    assert r1["success"] is True
+    assert f"'name': '{epg}'" in str(r1["response"])
+
+
+@pytest.mark.vcr
+<<<<<<< HEAD
+def test_delete_endpoint_group():  # noqa D103
+=======
+def test_get_endpoint_group_fail():  # noqa D103
+>>>>>>> codecov
+
+    r1 = ise.get_endpoint_group(endpoint_group["name"])
+    r2 = ise.delete_endpoint_group(r1["response"]["id"])
+    assert "{0} Deleted Successfully".format(r1["response"]["id"]) in str(
+        r2["response"]
+    )
 
 @pytest.mark.vcr
 def test_delete_endpoint_group():  # noqa D103
@@ -382,6 +433,32 @@ def test_add_sgacl():
     assert r1["success"] is True
 
 
+<<<<<<< HEAD
+=======
+@pytest.mark.vcr
+def test_add_sgacl_start_number():
+    r1 = ise.add_sgacl(
+        name="0Python_Unit_Test",
+        description="Unit Tests",
+        ip_version="IPV4",
+        acl_content=["permit ip"],
+        return_object=True,
+    )
+    assert r1["success"] is False
+
+@pytest.mark.vcr
+def test_add_sgacl_space():
+    r1 = ise.add_sgacl(
+        name="Python Unit_Test",
+        description="Unit Tests",
+        ip_version="IPV4",
+        acl_content=["permit ip"],
+        return_object=True,
+    )
+    assert r1["success"] is False
+
+
+>>>>>>> codecov
 @pytest.mark.vcr
 def test_update_sgacl():
     res = ise.get_sgacl("Python_Unit_Test")
