@@ -43,12 +43,12 @@ fail_ise = ERS(
 )
 
 
-# @pytest.mark.vcr
-# def test_fail_connection_401():  # noqa D103
-#
-#    r1 = fail_ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
-#    assert r1["response"] == "Unauthorized"
-#    assert r1["error"] == 401
+@pytest.mark.vcr
+def test_fail_connection_401():  # noqa D103
+
+    r1 = fail_ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
+    assert r1["response"] == "Unauthorized"
+    assert r1["error"] == 401
 
 
 ise = ERS(
