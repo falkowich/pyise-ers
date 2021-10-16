@@ -149,12 +149,21 @@ def test_get_endpoint_groups():  # noqa D103
 
 
 @pytest.mark.vcr
+def test_add_endpoint_group():  # noqa D103
+
+    r1 = ise.add_endpoint_group(endpoint_group["name"], endpoint_group["description"])
+    epg = endpoint_group["name"]
+    assert r1["success"] is True
+    assert f"{epg} Added Successfully" in r1["response"]
+
+
+@pytest.mark.vcr
 def test_get_endpoint_group():  # noqa D103
 
     r1 = ise.get_endpoint_group(endpoint_group["name"])
+    epg = endpoint_group["name"]
     assert r1["success"] is True
-    assert "'description': 'Unknown Identity Group'" in str(r1["response"])
-
+    assert f"'name': '{epg}'" in str(r1["response"])
 
 @pytest.mark.vcr
 def test_get_endpoint_group_group_id():  # noqa D103
@@ -165,12 +174,21 @@ def test_get_endpoint_group_group_id():  # noqa D103
 
 
 @pytest.mark.vcr
-def test_get_endpoint_fail():  # noqa D103
+def test_get_endpoint_group_fail():  # noqa D103
 
     r1 = ise.get_endpoint_group("NO GROUP THAT EXISTS")
     assert r1["success"] is False
     assert r1["response"] == None
     assert r1["error"] == 200
+
+@pytest.mark.vcr
+def test_delete_endpoint_group():  # noqa D103
+
+    r1 = ise.get_endpoint_group(endpoint_group["name"])
+    r2 = ise.delete_endpoint_group(r1["response"]["id"])
+    assert "{0} Deleted Successfully".format(r1["response"]["id"]) in str(
+        r2["response"]
+    )
 
 
 @pytest.mark.vcr
@@ -596,6 +614,7 @@ def test_add_sgacl():
     assert r1["success"] is True
 
 
+@pytest.mark.vcr
 def test_add_sgacl_start_number():
     r1 = ise.add_sgacl(
         name="0Python_Unit_Test",
@@ -606,7 +625,7 @@ def test_add_sgacl_start_number():
     )
     assert r1["success"] is False
 
-
+@pytest.mark.vcr
 def test_add_sgacl_space():
     r1 = ise.add_sgacl(
         name="Python Unit_Test",
