@@ -17,6 +17,7 @@ from config import (  # noqa E402
     device_payload,
     device_group,
     trustsec,
+    updated_device_payload,
 )
 
 urllib3.disable_warnings()
@@ -165,6 +166,7 @@ def test_get_endpoint_group():  # noqa D103
     assert r1["success"] is True
     assert f"'name': '{epg}'" in str(r1["response"])
 
+
 @pytest.mark.vcr
 def test_get_endpoint_group_group_id():  # noqa D103
 
@@ -180,6 +182,7 @@ def test_get_endpoint_group_fail():  # noqa D103
     assert r1["success"] is False
     assert r1["response"] == None
     assert r1["error"] == 200
+
 
 @pytest.mark.vcr
 def test_delete_endpoint_group():  # noqa D103
@@ -404,8 +407,6 @@ def test_add_device():
     assert r1["success"] is True
     assert r1["response"] == "test-name Added Successfully"
 
-    r2 = ise.delete_device_group(name=device["dev_group"])
-
 
 @pytest.mark.vcr
 def test_add_device_no_name():
@@ -481,13 +482,225 @@ def test_add_device_payload():
 
 
 @pytest.mark.vcr
-def test_update_device():
+def test_update_device_name():
     r1 = ise.update_device(name=device["name"], new_name=device["new_name"])
-    assert r1["success"] is True
-    # TODO assert r1["response"]["updatedField"][0]["newValue"] == "new-test-name"
 
+    assert r1["success"] is True
+    assert "test-name" in str(r1["response"])
+    assert "new-test-name" in str(r1["response"])
+
+
+@pytest.mark.vcr
+def test_update_device_dev_profile():
+    r1 = ise.update_device(name=device["new_name"], dev_profile="HPWired")
+
+    assert r1["success"] is True
+    assert "HPWired" in str(r1["response"])
+
+
+@pytest.mark.vcr
+def test_update_device_coa_port():
+    r1 = ise.update_device(name=device["new_name"], coa_port="1701")
+
+    assert r1["success"] is True
+    assert "1701" in str(r1["response"])
+
+
+@pytest.mark.vcr
+def test_update_device_ip():
+    r1 = ise.update_device(name=device["new_name"], ip_address="10.1.1.2", mask=32)
+
+    assert r1["success"] is True
+    assert "10.1.1.2" in str(r1["response"])
+    assert "32" in str(r1["response"])
+
+
+@pytest.mark.vcr
+def test_update_device_disable_radius_error():
+    r1 = ise.update_device(name=device["new_name"], disable_radius=True)
+    assert r1["success"] is False
+    assert (
+        r1["error"]
+        == "Error: ERS API doesn't support disabling RADIUS. You'll need to delete/add the device"
+    )
+
+
+@pytest.mark.vcr
+def test_update_device_radius_key():
+    r1 = ise.update_device(name=device["new_name"], radius_key="new-test-radius-key")
+
+    assert r1["success"] is True
+    assert "new-test-radius-key" in str(r1["response"])
+
+
+@pytest.mark.vcr
+def test_update_device_tacacs_shared_secret():
+    r1 = ise.update_device(
+        name=device["new_name"], tacacs_shared_secret="new-tacacs-shared-secret"
+    )
+
+    assert r1["success"] is True
+    assert "new-tacacs-shared-secret" in str(r1["response"])
+
+
+@pytest.mark.vcr
+def test_update_device_tacacs_connect_mode():
+    r1 = ise.update_device(
+        name=device["new_name"], tacacs_connect_mode_options="ON_DRAFT_COMPLIANT"
+    )
+
+    assert r1["success"] is True
+    assert "ON_DRAFT_COMPLIANT" in str(r1["response"])
+
+
+@pytest.mark.vcr
+def test_update_device_disable_tacacs():
+    r1 = ise.update_device(name=device["new_name"], disable_tacacs=True)
+
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_device_description():
+    r1 = ise.update_device(name=device["new_name"], description="new-description")
+
+    assert r1["success"] is True
+    assert "new-description" in str(r1["response"])
+
+
+@pytest.mark.vcr
+def test_update_device_disable_snmp():
+    r1 = ise.update_device(name=device["new_name"], disable_snmp=True)
+
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_snmp_settings_ro():
+    r1 = ise.update_device(
+        name=device["new_name"],
+        snmp_ro="new-snmpcommunity",
+    )
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_snmp_settings_version():
+    r1 = ise.update_device(
+        name=device["new_name"],
+        snmp_version="ONE",
+    )
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_snmp_settings_link_trap_query():
+    r1 = ise.update_device(
+        name=device["new_name"],
+        snmp_link_trap_query="false",
+    )
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_snmp_settings_mac_trap_query():
+    r1 = ise.update_device(
+        name=device["new_name"],
+        snmp_mac_trap_query="false",
+    )
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_snmp_settings_service_node():
+    r1 = ise.update_device(
+        name=device["new_name"],
+        snmp_originating_policy_services_node=None,
+    )
+    assert r1["success"] is True
+    r2 = ise.update_device(
+        name=device["new_name"],
+        snmp_originating_policy_services_node="Auto",
+    )
+    assert r2["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_snmp_settings_pollin_interval():
+    r1 = ise.update_device(
+        name=device["new_name"],
+        snmp_polling_interval="3601",
+    )
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_snmp_settings_pollin_interval():
+    r1 = ise.update_device(
+        name=device["new_name"],
+        snmp_polling_interval="3601",
+    )
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_dev_group():
+    r0 = ise.add_device_group(
+        name="changetotestgroup#changetotestgroup",
+        description="temporary changeto testgroup",
+    )
+    r1 = ise.update_device(
+        name=device["new_name"],
+        dev_group="changetotestgroup#changetotestgroup",
+    )
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_dev_location():
+    r1 = ise.update_device(
+        name=device["new_name"],
+        dev_location="Location#All Locations",
+    )
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_dev_type():
+    r1 = ise.update_device(
+        name=device["new_name"],
+        dev_type="Device Type#All Device Types",
+    )
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_dev_ipsec():
+    r1 = ise.update_device(
+        name=device["new_name"],
+        dev_ipsec="IPSEC#Is IPSEC Device#Yes",
+    )
+    assert r1["success"] is True
+
+
+@pytest.mark.vcr
+def test_update_device_with_payload():
+    r1 = ise.update_device(
+        name=device["new_name"], device_payload=updated_device_payload
+    )
+    assert r1["success"] is True
     # cleanup
-    ise.delete_device(device["new_name"])
+    ise.delete_device("payload" + device["name"])
+    ise.delete_device_group(name=device["dev_group"])
+    ise.delete_device_group(name="changetotestgroup#changetotestgroup")
+
+
+@pytest.mark.vcr
+def test_update_device_not_found():
+    r1 = ise.update_device(name="NOT_FOUND", new_name=device["new_name"])
+    assert r1["success"] is False
+    assert r1["response"] == "NOT_FOUND not found"
+    assert r1["error"] == 404
 
 
 @pytest.mark.vcr
@@ -624,6 +837,7 @@ def test_add_sgacl_start_number():
         return_object=True,
     )
     assert r1["success"] is False
+
 
 @pytest.mark.vcr
 def test_add_sgacl_space():
