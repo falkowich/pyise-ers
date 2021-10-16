@@ -32,7 +32,6 @@ def vcr_config():
 uri = uri_30
 
 
-
 ise = ERS(
     ise_node=uri["ise_node"],
     ers_user=uri["ers_user"],
@@ -86,13 +85,15 @@ def test_get_endpoint_groups():  # noqa D103
         in str(r1["response"])
     )
 
+
 @pytest.mark.vcr
 def test_add_endpoint_group():  # noqa D103
 
-    r1 = ise.add_endpoint_group(endpoint_group["name"], endpoint_group['description'])
+    r1 = ise.add_endpoint_group(endpoint_group["name"], endpoint_group["description"])
     epg = endpoint_group["name"]
     assert r1["success"] is True
-    assert f"{epg} Added Successfully" in r1['response']
+    assert f"{epg} Added Successfully" in r1["response"]
+
 
 @pytest.mark.vcr
 def test_get_endpoint_group():  # noqa D103
@@ -102,12 +103,16 @@ def test_get_endpoint_group():  # noqa D103
     assert r1["success"] is True
     assert f"'name': '{epg}'" in str(r1["response"])
 
+
 @pytest.mark.vcr
 def test_delete_endpoint_group():  # noqa D103
 
     r1 = ise.get_endpoint_group(endpoint_group["name"])
-    r2 = ise.delete_endpoint_group(r1['response']['id'])
-    assert "{0} Deleted Successfully".format(r1['response']['id']) in str(r2["response"])
+    r2 = ise.delete_endpoint_group(r1["response"]["id"])
+    assert "{0} Deleted Successfully".format(r1["response"]["id"]) in str(
+        r2["response"]
+    )
+
 
 @pytest.mark.vcr
 def test_get_identity_groups():  # noqa D103

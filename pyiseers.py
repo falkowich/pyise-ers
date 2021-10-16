@@ -358,10 +358,10 @@ class ERS(object):
 
     def delete_endpoint_group(self, id):
         """
-         Deletes an endpoint group.
-         :param id: Group ID
-         :return: result dictionary
-         """
+        Deletes an endpoint group.
+        :param id: Group ID
+        :return: result dictionary
+        """
         result = {
             "success": False,
             "response": "",
