@@ -1760,7 +1760,7 @@ class ERS(object):
     def add_device(
         self,
         name=None,
-        ip_address=None,
+        *ip_address=None,
         mask=32,
         description="",
         dev_group=None,
@@ -1825,20 +1825,22 @@ class ERS(object):
         # If no payload provided, build from provided details
         elif name and ip_address:
             data = {
-                "NetworkDevice": {
-                    "name": name,
-                    "description": description,
-                    "profileName": dev_profile,
-                    "coaPort": coa_port,
-                    "NetworkDeviceIPList": [
-                        {
-                            "ipaddress": ip_address,
-                            "mask": mask,
+                            "NetworkDevice": {
+                                "name": name,
+                                "description": description,
+                                "profileName": dev_profile,
+                                "coaPort": coa_port,
+                                "NetworkDeviceIPList": [
+                                ],
+                                "NetworkDeviceGroupList": [dev_type, dev_location, dev_ipsec],
+                            }
                         }
-                    ],
-                    "NetworkDeviceGroupList": [dev_type, dev_location, dev_ipsec],
-                }
-            }
+            for ip in ip_address:
+                data["NetworkDevice"]["NetworkDeviceIPList"].append(
+                    {
+                        "ipaddress": ip,
+                        "mask": mask,
+                    })
 
             if tacacs_shared_secret is not None:
                 data["NetworkDevice"]["tacacsSettings"] = {
