@@ -1840,6 +1840,21 @@ class ERS(object):
                 }
             }
 
+            if type(ip_address) is str:
+                data["NetworkDevice"]["NetworkDeviceIPList"].append(
+                    {
+                        "ipaddress": ip_address,
+                        "mask": mask,
+                    })
+
+            elif type(ip_address) is list:
+                for ips in ip_address:
+                    data["NetworkDevice"]["NetworkDeviceIPList"].append(
+                        {
+                            "ipaddress": ips,
+                            "mask": mask,
+                        })
+
             if tacacs_shared_secret is not None:
                 data["NetworkDevice"]["tacacsSettings"] = {
                     "sharedSecret": tacacs_shared_secret,
