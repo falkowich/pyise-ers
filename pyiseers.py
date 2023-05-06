@@ -1831,14 +1831,25 @@ class ERS(object):
                     "profileName": dev_profile,
                     "coaPort": coa_port,
                     "NetworkDeviceIPList": [
-                        {
-                            "ipaddress": ip_address,
-                            "mask": mask,
-                        }
                     ],
                     "NetworkDeviceGroupList": [dev_type, dev_location, dev_ipsec],
                 }
             }
+
+            if type(ip_address) is str:
+                data["NetworkDevice"]["NetworkDeviceIPList"].append(
+                    {
+                        "ipaddress": ip_address,
+                        "mask": mask,
+                    })
+
+            elif type(ip_address) is list:
+                for ips in ip_address:
+                    data["NetworkDevice"]["NetworkDeviceIPList"].append(
+                        {
+                            "ipaddress": ips,
+                            "mask": mask,
+                        })
 
             if tacacs_shared_secret is not None:
                 data["NetworkDevice"]["tacacsSettings"] = {
