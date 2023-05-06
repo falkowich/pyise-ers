@@ -2,11 +2,11 @@
 import json
 import os
 import re
-from furl import furl
 from datetime import datetime, timedelta
 from urllib.parse import quote
 
 import requests
+from furl import furl
 
 base_dir = os.path.dirname(__file__)
 
@@ -1963,7 +1963,6 @@ class ERS(object):
         disable_snmp=False,
         device_payload=None,
     ):
-
         """
         Update a Network Device with provided settings.
 

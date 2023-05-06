@@ -5,20 +5,23 @@ import sys
 
 sys.path.append("./")
 
-from pyiseers import ERS  # noqa E402
 from pprint import pprint  # noqa E402
+
 from config import (  # noqa E402
-    uri_27,
-    uri_30,
-    endpoint,
-    endpoint_group,
-    user,
-    identity_group,
     device,
     device_group,
-    trustsec,
     device_payload,
+    endpoint,
+    endpoint_group,
+    identity_group,
+    trustsec,
+    uri_27,
+    uri_30,
+    uri_31,
+    user,
 )
+
+from pyiseers import ERS  # noqa E402
 
 
 def test_groups():
@@ -69,6 +72,23 @@ def get_endpoint_groups(size):
         print(test["response"])
     else:
         print("get_endpoint_groups » OK")
+
+
+def add_endpoint_group(endpoint_group):
+    test = ise.add_endpoint_group(endpoint_group["name"], endpoint_group["description"])
+    if test["error"]:
+        print(test["response"])
+    else:
+        print("add_endpoint_group » OK")
+
+
+def delete_endpoint_group(endpoint_group):
+    r1 = ise.get_endpoint_group(endpoint_group["name"])
+    test = ise.delete_endpoint_group(r1["response"]["id"])
+    if test["error"]:
+        print(test["response"])
+    else:
+        print("delete_endpoint_group » OK")
 
 
 def get_endpoint_group(endpoint_group):
@@ -191,9 +211,8 @@ def update_device_group(device_group_id):
 
 
 def delete_device_group():
-    test = ise.delete_device_group(
-        name="Device Type#All Device Types#Updated Device Type"
-    )
+    #r1 = ise.get_device_group(name="Device Type#All Device Types#Updated Device Type")
+    test = ise.delete_device_group(name="Device Type#All Device Types#Updated Device Type")
     if test["error"]:
         print(test["response"])
     else:
@@ -451,13 +470,13 @@ def delete_emc(id):
 
 if __name__ == "__main__":
     ise = ERS(
-        ise_node=uri_27["ise_node"],
-        ers_user=uri_27["ers_user"],
-        ers_pass=uri_27["ers_pass"],
+        ise_node=uri_31["ise_node"],
+        ers_user=uri_31["ers_user"],
+        ers_pass=uri_31["ers_pass"],
         verify=False,
         disable_warnings=True,
         timeout=15,
-        use_csrf=uri_27["use_csrf"],
+        use_csrf=uri_31["use_csrf"],
     )
 
     print(f"Testing {ise.ise_node}")
@@ -469,8 +488,10 @@ if __name__ == "__main__":
     delete_endpoint(endpoint)
 
     # EndpointGroup tests
+    add_endpoint_group(endpoint_group)
     get_endpoint_groups(21)
     get_endpoint_group(endpoint_group)
+    delete_endpoint_group(endpoint_group)
 
     # User tests
     get_identity_groups()

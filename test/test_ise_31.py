@@ -15,8 +15,7 @@ from config import (  # noqa E402
     endpoint_group,
     identity_group,
     trustsec,
-    updated_device_payload,
-    uri_30,
+    uri_31,
     user,
 )
 
@@ -25,15 +24,15 @@ from pyiseers import ERS  # noqa E402
 urllib3.disable_warnings()
 
 
-@pytest.fixture(scope="module")
-def vcr_config():
-    return {
-        "filter_headers": ["authorization"],
-        "ignore_localhost": True,
-    }
+#@pytest.fixture(scope="module")
+#def vcr_config():
+#    return {
+#        "filter_headers": ["authorization"],
+#        "ignore_localhost": True,
+#    }
 
 
-uri = uri_30
+uri = uri_31
 
 fail_ise = ERS(
     ise_node=uri["ise_node"],
@@ -46,7 +45,7 @@ fail_ise = ERS(
 )
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_fail_connection_401():  # noqa D103
     r1 = fail_ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
     assert r1["response"] == "Unauthorized"
@@ -64,7 +63,7 @@ ise = ERS(
 )
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_endpoint():  # noqa D103
     r1 = ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
     assert r1["success"] is True
@@ -80,28 +79,28 @@ def test_add_endpoint_mac_fail():  # noqa D103
         )
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_endpoints():  # noqa D103
     r1 = ise.get_endpoints(size=1, page=1)
     assert r1["success"] is True
     assert "AA:BB:CC:00:11:22" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_endpoints_groupid():  # noqa D103
     r1 = ise.get_endpoints(groupID=endpoint["group-id"], size=1, page=1)
     assert r1["success"] is True
     assert "AA:BB:CC:00:11:22" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_endpoint():  # noqa D103
     r1 = ise.get_endpoint(endpoint["mac"])
     assert r1["success"] is True
     assert "'name': 'AA:BB:CC:00:11:22'" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_endpoint_not_found():  # noqa D103
     r1 = ise.get_endpoint("00:00:00:00:00:00:")
     assert r1["success"] is False
@@ -109,7 +108,7 @@ def test_get_endpoint_not_found():  # noqa D103
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_endpoint_faulty_mac():  # noqa D103
     with pytest.raises(
         Exception, match="AA:BB:CC:00:11:2Q. Must be in the form of AA:BB:CC:00:11:22"
@@ -117,14 +116,14 @@ def test_get_endpoint_faulty_mac():  # noqa D103
         r1 = ise.get_endpoint("AA:BB:CC:00:11:2Q")
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_endpoint():  # noqa D103
     r1 = ise.delete_endpoint(endpoint["mac"])
     assert r1["success"] is True
     assert r1["response"] == "AA:BB:CC:00:11:22 Deleted Successfully"
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_endpoin_not_found():  # noqa D103
     r1 = ise.delete_endpoint("00:00:00:00:00:00")
     assert r1["success"] is False
@@ -132,7 +131,7 @@ def test_delete_endpoin_not_found():  # noqa D103
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_endpoint_groups():  # noqa D103
     r1 = ise.get_endpoint_groups(size=1, page=1)
     assert r1["success"] is True
@@ -142,7 +141,7 @@ def test_get_endpoint_groups():  # noqa D103
     )
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_endpoint_group():  # noqa D103
     r1 = ise.add_endpoint_group(endpoint_group["name"], endpoint_group["description"])
     epg = endpoint_group["name"]
@@ -150,7 +149,7 @@ def test_add_endpoint_group():  # noqa D103
     assert f"{epg} Added Successfully" in r1["response"]
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_endpoint_group():  # noqa D103
     r1 = ise.get_endpoint_group(endpoint_group["name"])
     epg = endpoint_group["name"]
@@ -158,14 +157,14 @@ def test_get_endpoint_group():  # noqa D103
     assert f"'name': '{epg}'" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_endpoint_group_group_id():  # noqa D103
     r1 = ise.get_endpoint_group(endpoint["group-id"])
     assert r1["success"] is True
     assert "'description': 'Unknown Identity Group'" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_endpoint_group_fail():  # noqa D103
     r1 = ise.get_endpoint_group("NO GROUP THAT EXISTS")
     assert r1["success"] is False
@@ -173,7 +172,7 @@ def test_get_endpoint_group_fail():  # noqa D103
     assert r1["error"] == 200
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_endpoint_group():  # noqa D103
     r1 = ise.get_endpoint_group(endpoint_group["name"])
     r2 = ise.delete_endpoint_group(r1["response"]["id"])
@@ -182,7 +181,7 @@ def test_delete_endpoint_group():  # noqa D103
     )
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_identity_groups():  # noqa D103
     r1 = ise.get_identity_groups(size=1, page=1)
     assert r1["success"] is True
@@ -195,14 +194,14 @@ def test_get_identity_groups():  # noqa D103
     ]
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_identity_group():  # noqa D103
     r1 = ise.get_identity_group(identity_group["name"])
     assert r1["success"] is True
     assert "Default Employee User Group" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_identity_group_not_found():  # noqa D103
     r1 = ise.get_identity_group("znonexistantz")
     assert r1["success"] is False
@@ -210,7 +209,7 @@ def test_get_identity_group_not_found():  # noqa D103
     assert "znonexistantz not found" in r1["response"]
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_user():  # noqa D103
     r1 = ise.get_identity_group(identity_group["name"])
     identity_group_id = r1["response"]["id"]
@@ -226,35 +225,35 @@ def test_add_user():  # noqa D103
     assert r2["response"] == "test-user Added Successfully"
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_users():  # noqa D103
     r1 = ise.get_users(size=1, page=1)
     assert r1["success"] is True
     assert "test-user" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_user():  # noqa D103
     r1 = ise.get_user(user["user_id"])
     assert r1["success"] is True
     assert ("Firstname" and "Lastname") in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_user_not_found():  # noqa D103
     r1 = ise.get_user(99999999999999999)
     assert r1["success"] is False
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_user():  # noqa D103
     r1 = ise.delete_user(user["user_id"])
     assert r1["success"] is True
     assert r1["response"] == "test-user Deleted Successfully"
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_user_not_found():  # noqa D103
     r1 = ise.delete_user(99999999999999999)
     assert r1["success"] is False
@@ -262,7 +261,7 @@ def test_delete_user_not_found():  # noqa D103
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_device_group():
     r1 = ise.add_device_group(
         name=device_group["name"], description=device_group["description"]
@@ -273,7 +272,7 @@ def test_add_device_group():
     )
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_device_groups():
     r1 = ise.get_device_groups(size=1, page=1)
     assert r1["success"] is True
@@ -286,21 +285,21 @@ def test_get_device_groups():
     ]
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_device_group_from_name():
     r1 = ise.get_device_group(name="Python")
     assert r1["success"] is True
     assert "Device Type#All Device Types#Python Device Type" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_device_group_from_name_not_found():
     r1 = ise.get_device_group(name="NOFOUNDPython")
     assert r1["success"] is False
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_device_group():
     r1 = ise.get_device_group(name="Python")
     device_group_id = r1["response"]["id"]
@@ -309,7 +308,7 @@ def test_get_device_group():
     assert "Device Type#All Device Types#Python Device Type" in str(r2["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_group():
     r1 = ise.get_device_group(name="Python")
     device_group_id = r1["response"]["id"]
@@ -322,7 +321,7 @@ def test_update_device_group():
     assert "Updated Successfully" in str(r2["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_device_group():
     r1 = ise.delete_device_group(
         name="Device Type#All Device Types#Updated Device Type"
@@ -333,7 +332,7 @@ def test_delete_device_group():
     )
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_device_group_not_found():
     r1 = ise.delete_device_group(
         name="NOTFOUNDDevice Type#NOTFOUNDAll Device Types#NOTFOUNDUpdated Device Type"
@@ -343,7 +342,7 @@ def test_delete_device_group_not_found():
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_group_not_found():
     r2 = ise.update_device_group(
         device_group_oid="99999999-99999999",
@@ -354,7 +353,7 @@ def test_update_device_group_not_found():
     assert r2["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_device():
     r0 = ise.add_device_group(
         name=device["dev_group"], description="temporary testgroup"
@@ -387,7 +386,7 @@ def test_add_device():
     assert r1["response"] == "test-name Added Successfully"
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_device_no_name():
     r1 = ise.add_device(
         name="",
@@ -416,21 +415,21 @@ def test_add_device_no_name():
     assert "You must provide either" in r1["error"]
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_devices():
     r1 = ise.get_devices(size=100, page=1)
     assert r1["success"] is True
     assert "test-name" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_device():
     r1 = ise.get_device(device["name"])
     assert r1["success"] is True
     assert "test-name" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_device_not_found():
     r1 = ise.get_device("SNART_E_DET_JUL")
     assert r1["success"] is False
@@ -438,14 +437,14 @@ def test_get_device_not_found():
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_device():
     r1 = ise.delete_device(device["name"])
     assert r1["success"] is True
     assert r1["response"] == "test-name Deleted Successfully"
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_device_not_found():
     r1 = ise.delete_device("SNART E DET SOMMAR")
     assert r1["success"] is False
@@ -453,14 +452,14 @@ def test_delete_device_not_found():
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_device_payload():
     r1 = ise.add_device(device_payload=device_payload)
     assert r1["success"] is True
     assert r1["response"] == "test-name Added Successfully"
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_name():
     r1 = ise.update_device(name=device["name"], new_name=device["new_name"])
 
@@ -469,7 +468,7 @@ def test_update_device_name():
     assert "new-test-name" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_dev_profile():
     r1 = ise.update_device(name=device["new_name"], dev_profile="HPWired")
 
@@ -477,7 +476,7 @@ def test_update_device_dev_profile():
     assert "HPWired" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_coa_port():
     r1 = ise.update_device(name=device["new_name"], coa_port="1701")
 
@@ -485,7 +484,7 @@ def test_update_device_coa_port():
     assert "1701" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_ip():
     r1 = ise.update_device(name=device["new_name"], ip_address="10.1.1.2", mask=32)
 
@@ -494,7 +493,7 @@ def test_update_device_ip():
     assert "32" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_disable_radius_error():
     r1 = ise.update_device(name=device["new_name"], disable_radius=True)
     assert r1["success"] is False
@@ -504,7 +503,7 @@ def test_update_device_disable_radius_error():
     )
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_radius_key():
     r1 = ise.update_device(name=device["new_name"], radius_key="new-test-radius-key")
 
@@ -512,7 +511,7 @@ def test_update_device_radius_key():
     assert "new-test-radius-key" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_tacacs_shared_secret():
     r1 = ise.update_device(
         name=device["new_name"], tacacs_shared_secret="new-tacacs-shared-secret"
@@ -522,7 +521,7 @@ def test_update_device_tacacs_shared_secret():
     assert "new-tacacs-shared-secret" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_tacacs_connect_mode():
     r1 = ise.update_device(
         name=device["new_name"], tacacs_connect_mode_options="ON_DRAFT_COMPLIANT"
@@ -532,14 +531,14 @@ def test_update_device_tacacs_connect_mode():
     assert "ON_DRAFT_COMPLIANT" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_disable_tacacs():
     r1 = ise.update_device(name=device["new_name"], disable_tacacs=True)
 
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_device_description():
     r1 = ise.update_device(name=device["new_name"], description="new-description")
 
@@ -547,14 +546,14 @@ def test_update_device_device_description():
     assert "new-description" in str(r1["response"])
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_disable_snmp():
     r1 = ise.update_device(name=device["new_name"], disable_snmp=True)
 
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_snmp_settings_ro():
     r1 = ise.update_device(
         name=device["new_name"],
@@ -563,7 +562,7 @@ def test_update_device_snmp_settings_ro():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_snmp_settings_version():
     r1 = ise.update_device(
         name=device["new_name"],
@@ -572,7 +571,7 @@ def test_update_device_snmp_settings_version():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_snmp_settings_link_trap_query():
     r1 = ise.update_device(
         name=device["new_name"],
@@ -581,7 +580,7 @@ def test_update_device_snmp_settings_link_trap_query():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_snmp_settings_mac_trap_query():
     r1 = ise.update_device(
         name=device["new_name"],
@@ -590,7 +589,7 @@ def test_update_device_snmp_settings_mac_trap_query():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_snmp_settings_service_node():
     r1 = ise.update_device(
         name=device["new_name"],
@@ -604,7 +603,7 @@ def test_update_device_snmp_settings_service_node():
     assert r2["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_snmp_settings_pollin_interval():
     r1 = ise.update_device(
         name=device["new_name"],
@@ -613,7 +612,7 @@ def test_update_device_snmp_settings_pollin_interval():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_snmp_settings_pollin_interval():
     r1 = ise.update_device(
         name=device["new_name"],
@@ -622,7 +621,7 @@ def test_update_device_snmp_settings_pollin_interval():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_dev_group():
     r0 = ise.add_device_group(
         name="changetotestgroup#changetotestgroup",
@@ -635,7 +634,7 @@ def test_update_device_dev_group():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_dev_location():
     r1 = ise.update_device(
         name=device["new_name"],
@@ -644,7 +643,7 @@ def test_update_device_dev_location():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_dev_type():
     r1 = ise.update_device(
         name=device["new_name"],
@@ -653,7 +652,7 @@ def test_update_device_dev_type():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_dev_ipsec():
     r1 = ise.update_device(
         name=device["new_name"],
@@ -662,7 +661,7 @@ def test_update_device_dev_ipsec():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_with_payload():
     r1 = ise.update_device(
         name=device["new_name"], device_payload=updated_device_payload
@@ -674,7 +673,7 @@ def test_update_device_with_payload():
     ise.delete_device_group(name="changetotestgroup#changetotestgroup")
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_device_not_found():
     r1 = ise.update_device(name="NOT_FOUND", new_name=device["new_name"])
     assert r1["success"] is False
@@ -682,25 +681,25 @@ def test_update_device_not_found():
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_sgts():
     r1 = ise.get_sgts(size=1, page=1)
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_sgts_sgt_num():
     r1 = ise.get_sgts(sgtNum=9, size=1, page=1)
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_sgt():
     r1 = ise.get_sgt("Unknown")
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_sgt():
     r1 = ise.add_sgt(
         name="Python_Unit_Test",
@@ -731,7 +730,7 @@ def test_add_sgt_fail_zero():
     assert r1["success"] is False
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_sgt():
     res = ise.get_sgt("Python_Unit_Test")
     id = res["response"]["id"]
@@ -744,7 +743,7 @@ def test_update_sgt():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_sgt_empty_name():
     id = 0
     r1 = ise.update_sgt(
@@ -757,7 +756,7 @@ def test_update_sgt_empty_name():
     assert "Invalid Security Group name" in r1["error"]
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_sgt():
     res = ise.get_sgt("Test_Unit_Python")
     id = res["response"]["id"]
@@ -765,7 +764,7 @@ def test_delete_sgt():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_sgt_null():
     r1 = ise.delete_sgt("9999999999")
     assert r1["success"] is False
@@ -773,19 +772,19 @@ def test_delete_sgt_null():
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_sgacls():
     r1 = ise.get_sgacls(size=1, page=1)
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_sgacl():
     r1 = ise.get_sgacl("Permit IP")
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_sgacl():
     r1 = ise.get_sgacl("Permit IP")
     scal = r1["response"]["id"]
@@ -793,7 +792,7 @@ def test_get_sgacl():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_sgacl():
     r1 = ise.add_sgacl(
         name="Python_Unit_Test",
@@ -805,7 +804,7 @@ def test_add_sgacl():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_sgacl_start_number():
     r1 = ise.add_sgacl(
         name="0Python_Unit_Test",
@@ -817,7 +816,7 @@ def test_add_sgacl_start_number():
     assert r1["success"] is False
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_sgacl_space():
     r1 = ise.add_sgacl(
         name="Python Unit_Test",
@@ -829,7 +828,7 @@ def test_add_sgacl_space():
     assert r1["success"] is False
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_sgacl():
     res = ise.get_sgacl("Python_Unit_Test")
     id = res["response"]["id"]
@@ -843,7 +842,7 @@ def test_update_sgacl():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_sgacl_empty_name():
     id = 0
     r1 = ise.update_sgacl(
@@ -857,7 +856,7 @@ def test_update_sgacl_empty_name():
     assert "Invalid SGACL name" in r1["error"]
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_sgacl():
     res = ise.get_sgacl("Test_Unit_Python")
     id = res["response"]["id"]
@@ -865,7 +864,7 @@ def test_delete_sgacl():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_sgacl_fail():
     r1 = ise.delete_sgacl("999999999999999")
     assert r1["success"] is False
@@ -873,31 +872,31 @@ def test_delete_sgacl_fail():
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_egressmatrixcells():
     r1 = ise.get_egressmatrixcells(size=1, page=1)
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_egressmatrixcell():
     r1 = ise.get_egressmatrixcell("Default egress rule")
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_get_egressmatrixcell_singe_oid():
     r1 = ise.get_egressmatrixcell("92c1a900-8c01-11e6-996c-525400b48521")
     assert r1["success"] is True
 
 
-# @pytest.mark.vcr
+# #@pytest.mark.vcr
 # def test_get_egressmatrixcell_not_found():
 #    r1 = ise.get_egressmatrixcell("not found")
 #    assert r1["success"] is False
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_egressmatrixcell():
     r1 = ise.add_egressmatrixcell(
         trustsec["emc_source_sgt"],
@@ -909,7 +908,7 @@ def test_add_egressmatrixcell():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_egressmatrixcell_duplicate():
     r1 = ise.add_egressmatrixcell(
         trustsec["emc_source_sgt"],
@@ -922,7 +921,7 @@ def test_add_egressmatrixcell_duplicate():
     assert "already a policy present" in r1["error"]
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_update_egressmatrixcell():
     res = ise.get_egressmatrixcell("Python Unit Tests")
     id = res["response"]["id"]
@@ -937,7 +936,7 @@ def test_update_egressmatrixcell():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_egressmatrixcell():
     res = ise.get_egressmatrixcell("Test_Unit_Python")
     id = res["response"]["id"]
@@ -945,7 +944,7 @@ def test_delete_egressmatrixcell():
     assert r1["success"] is True
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_delete_egressmatrixcell_not_found():
     r1 = ise.delete_egressmatrixcell(9999999999999999)
     assert r1["success"] is False
@@ -953,7 +952,7 @@ def test_delete_egressmatrixcell_not_found():
     assert r1["error"] == 404
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_egressmatrixcell_no_celldata():
     r1 = ise.add_egressmatrixcell(
         trustsec["emc_source_sgt"],
@@ -966,7 +965,7 @@ def test_add_egressmatrixcell_no_celldata():
     assert "You must specify one or more acls as a list" in r1["error"]
 
 
-@pytest.mark.vcr
+#@pytest.mark.vcr
 def test_add_egressmatrixcell_list_fail():
     r1 = ise.add_egressmatrixcell(
         trustsec["emc_source_sgt"],
