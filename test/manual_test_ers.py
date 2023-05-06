@@ -254,6 +254,42 @@ def add_device(device):
 
     cleanup = ise.delete_device_group(name=device["dev_group"])
 
+def add_device_multi_ip(device):
+    r1 = ise.add_device_group(
+        name=device["dev_group"], description="temporary testgroup"
+    )
+
+    test = ise.add_device(
+        name=device["name_mip"],
+        ip_address=device["ip_addresses"],
+        mask=device["mask"],
+        description=device["description"],
+        dev_group=device["dev_group"],
+        dev_location=device["dev_location"],
+        dev_type=device["dev_type"],
+        dev_ipsec=device["dev_ipsec"],
+        radius_key=device["radius_key"],
+        snmp_ro=device["snmp_ro"],
+        dev_profile=device["dev_profile"],
+        tacacs_shared_secret=device["tacacs_shared_secret"],
+        tacacs_connect_mode_options=device["tacacs_connect_mode_options"],
+        coa_port=device["coa_port"],
+        snmp_version=device["snmp_version"],
+        snmp_polling_interval=device["snmp_polling_interval"],
+        snmp_link_trap_query=device["snmp_link_trap_query"],
+        snmp_mac_trap_query=device["snmp_mac_trap_query"],
+        snmp_originating_policy_services_node=device[
+            "snmp_originating_policy_services_node"
+        ],
+    )
+    if test["error"]:
+        print(test["response"])
+    else:
+        print("add_device » OK")
+
+    cleanup = ise.delete_device_group(name=device["dev_group"])
+    cleanup = ise.delete_device(device["name_mip"])
+
 
 def update_device(device):
     test = ise.update_device(name=device["name"], new_name=device["new_name"])
@@ -511,6 +547,7 @@ if __name__ == "__main__":
 
     # Device tests
     add_device(device)
+    add_device_multi_ip(device)
     get_devices()
     get_device(device)
     delete_device(device)

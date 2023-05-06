@@ -1830,12 +1830,7 @@ class ERS(object):
                     "description": description,
                     "profileName": dev_profile,
                     "coaPort": coa_port,
-                    "NetworkDeviceIPList": [
-                        {
-                            "ipaddress": ip_address,
-                            "mask": mask,
-                        }
-                    ],
+                    "NetworkDeviceIPList": [],
                     "NetworkDeviceGroupList": [dev_type, dev_location, dev_ipsec],
                 }
             }
