@@ -47,9 +47,9 @@ These versions has been tested with pytest.
 
 |pyise-ers|ise|ise patch|python|date|status|
 |---|---|---|---|---|---|
-|0.1.1|2.4.0.357|none|3.7.3|2019|depricated|
-|0.1.2|2.7.0.356|11|3.7.7|2020|depricated|
-|0.1.2|2.7.0.356|1|3.7.7|2020|depricated|
+|0.1.1|2.4.0.357|none|3.7.3|2019|deprecated|
+|0.1.2|2.7.0.356|11|3.7.7|2020|deprecated|
+|0.1.2|2.7.0.356|1|3.7.7|2020|deprecated|
 |0.2.0.1|2.7.0.356|none|3.7.12|2021-10-05|active|
 |0.2.0.1|3.0.0.458|none|3.7.12|2021-10-05|active|
 
@@ -60,7 +60,7 @@ There are two tests available in tests/ directory.
 To run the "manual" tests:
 
 * make a copy of config-DEFAULT.py to config.py
-* edit uri_27 and/or uri_30 with settings to your test ise server
+* edit uri_27, uri_30 and/or uri_31 with settings to your test ise server
 * run python manual_test_ers.py
 
 ### Pytest

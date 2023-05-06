@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "pyise-ers"
+version = "0.3-dev"
+description = "ISE-ERS API Wrapper"
+authors = ["Falk <falk@mockel.se>"]
+license = "GPL"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "*"
+furl = "*"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "*"
+pytest = "*"
+black = "*"
+pytest-cov = "*"
+ptpython = "*"
+codecov = "*"
+setuptools = "*"
+twine = "*"
+wheel = "*"
+isort = "*"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

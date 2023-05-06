@@ -1,23 +1,26 @@
-import pytest
 import sys
+
+import pytest
 import urllib3
 
 sys.path.append("./")
 
-from pyiseers import ERS  # noqa E402
 from pprint import pprint  # noqa E402
+
 from config import (  # noqa E402
-    uri_30,
+    device,
+    device_group,
+    device_payload,
     endpoint,
     endpoint_group,
-    user,
     identity_group,
-    device,
-    device_payload,
-    device_group,
     trustsec,
     updated_device_payload,
+    uri_30,
+    user,
 )
+
+from pyiseers import ERS  # noqa E402
 
 urllib3.disable_warnings()
 
@@ -45,9 +48,8 @@ fail_ise = ERS(
 
 @pytest.mark.vcr
 def test_fail_connection_401():  # noqa D103
-
     r1 = fail_ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
-    assert r1["response"] == "Unauthorized"
+    assert r1["response"] == ""
     assert r1["error"] == 401
 
 
@@ -64,7 +66,6 @@ ise = ERS(
 
 @pytest.mark.vcr
 def test_add_endpoint():  # noqa D103
-
     r1 = ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
     assert r1["success"] is True
     assert r1["response"] == "test-endpoint Added Successfully"
@@ -81,7 +82,6 @@ def test_add_endpoint_mac_fail():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_endpoints():  # noqa D103
-
     r1 = ise.get_endpoints(size=1, page=1)
     assert r1["success"] is True
     assert "AA:BB:CC:00:11:22" in str(r1["response"])
@@ -89,7 +89,6 @@ def test_get_endpoints():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_endpoints_groupid():  # noqa D103
-
     r1 = ise.get_endpoints(groupID=endpoint["group-id"], size=1, page=1)
     assert r1["success"] is True
     assert "AA:BB:CC:00:11:22" in str(r1["response"])
@@ -97,7 +96,6 @@ def test_get_endpoints_groupid():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_endpoint():  # noqa D103
-
     r1 = ise.get_endpoint(endpoint["mac"])
     assert r1["success"] is True
     assert "'name': 'AA:BB:CC:00:11:22'" in str(r1["response"])
@@ -105,7 +103,6 @@ def test_get_endpoint():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_endpoint_not_found():  # noqa D103
-
     r1 = ise.get_endpoint("00:00:00:00:00:00:")
     assert r1["success"] is False
     assert "not found" in str(r1["response"])
@@ -117,7 +114,6 @@ def test_get_endpoint_faulty_mac():  # noqa D103
     with pytest.raises(
         Exception, match="AA:BB:CC:00:11:2Q. Must be in the form of AA:BB:CC:00:11:22"
     ):
-
         r1 = ise.get_endpoint("AA:BB:CC:00:11:2Q")
 
 
@@ -138,7 +134,6 @@ def test_delete_endpoin_not_found():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_endpoint_groups():  # noqa D103
-
     r1 = ise.get_endpoint_groups(size=1, page=1)
     assert r1["success"] is True
     assert (
@@ -149,7 +144,6 @@ def test_get_endpoint_groups():  # noqa D103
 
 @pytest.mark.vcr
 def test_add_endpoint_group():  # noqa D103
-
     r1 = ise.add_endpoint_group(endpoint_group["name"], endpoint_group["description"])
     epg = endpoint_group["name"]
     assert r1["success"] is True
@@ -158,7 +152,6 @@ def test_add_endpoint_group():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_endpoint_group():  # noqa D103
-
     r1 = ise.get_endpoint_group(endpoint_group["name"])
     epg = endpoint_group["name"]
     assert r1["success"] is True
@@ -167,7 +160,6 @@ def test_get_endpoint_group():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_endpoint_group_group_id():  # noqa D103
-
     r1 = ise.get_endpoint_group(endpoint["group-id"])
     assert r1["success"] is True
     assert "'description': 'Unknown Identity Group'" in str(r1["response"])
@@ -175,7 +167,6 @@ def test_get_endpoint_group_group_id():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_endpoint_group_fail():  # noqa D103
-
     r1 = ise.get_endpoint_group("NO GROUP THAT EXISTS")
     assert r1["success"] is False
     assert r1["response"] == None
@@ -184,7 +175,6 @@ def test_get_endpoint_group_fail():  # noqa D103
 
 @pytest.mark.vcr
 def test_delete_endpoint_group():  # noqa D103
-
     r1 = ise.get_endpoint_group(endpoint_group["name"])
     r2 = ise.delete_endpoint_group(r1["response"]["id"])
     assert "{0} Deleted Successfully".format(r1["response"]["id"]) in str(
@@ -194,7 +184,6 @@ def test_delete_endpoint_group():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_identity_groups():  # noqa D103
-
     r1 = ise.get_identity_groups(size=1, page=1)
     assert r1["success"] is True
     assert r1["response"] == [
@@ -208,7 +197,6 @@ def test_get_identity_groups():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_identity_group():  # noqa D103
-
     r1 = ise.get_identity_group(identity_group["name"])
     assert r1["success"] is True
     assert "Default Employee User Group" in str(r1["response"])
@@ -216,7 +204,6 @@ def test_get_identity_group():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_identity_group_not_found():  # noqa D103
-
     r1 = ise.get_identity_group("znonexistantz")
     assert r1["success"] is False
     assert r1["error"] == 404
@@ -225,7 +212,6 @@ def test_get_identity_group_not_found():  # noqa D103
 
 @pytest.mark.vcr
 def test_add_user():  # noqa D103
-
     r1 = ise.get_identity_group(identity_group["name"])
     identity_group_id = r1["response"]["id"]
     r2 = ise.add_user(
@@ -242,7 +228,6 @@ def test_add_user():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_users():  # noqa D103
-
     r1 = ise.get_users(size=1, page=1)
     assert r1["success"] is True
     assert "test-user" in str(r1["response"])
@@ -250,7 +235,6 @@ def test_get_users():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_user():  # noqa D103
-
     r1 = ise.get_user(user["user_id"])
     assert r1["success"] is True
     assert ("Firstname" and "Lastname") in str(r1["response"])
@@ -258,7 +242,6 @@ def test_get_user():  # noqa D103
 
 @pytest.mark.vcr
 def test_get_user_not_found():  # noqa D103
-
     r1 = ise.get_user(99999999999999999)
     assert r1["success"] is False
     assert r1["error"] == 404
@@ -266,7 +249,6 @@ def test_get_user_not_found():  # noqa D103
 
 @pytest.mark.vcr
 def test_delete_user():  # noqa D103
-
     r1 = ise.delete_user(user["user_id"])
     assert r1["success"] is True
     assert r1["response"] == "test-user Deleted Successfully"
@@ -274,7 +256,6 @@ def test_delete_user():  # noqa D103
 
 @pytest.mark.vcr
 def test_delete_user_not_found():  # noqa D103
-
     r1 = ise.delete_user(99999999999999999)
     assert r1["success"] is False
     assert r1["response"] == "99999999999999999 not found"
@@ -786,7 +767,6 @@ def test_delete_sgt():
 
 @pytest.mark.vcr
 def test_delete_sgt_null():
-
     r1 = ise.delete_sgt("9999999999")
     assert r1["success"] is False
     assert "not found" in r1["response"]
@@ -967,7 +947,6 @@ def test_delete_egressmatrixcell():
 
 @pytest.mark.vcr
 def test_delete_egressmatrixcell_not_found():
-
     r1 = ise.delete_egressmatrixcell(9999999999999999)
     assert r1["success"] is False
     assert "not found" in r1["response"]

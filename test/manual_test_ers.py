@@ -5,20 +5,23 @@ import sys
 
 sys.path.append("./")
 
-from pyiseers import ERS  # noqa E402
 from pprint import pprint  # noqa E402
+
 from config import (  # noqa E402
-    uri_27,
-    uri_30,
-    endpoint,
-    endpoint_group,
-    user,
-    identity_group,
     device,
     device_group,
-    trustsec,
     device_payload,
+    endpoint,
+    endpoint_group,
+    identity_group,
+    trustsec,
+    uri_27,
+    uri_30,
+    uri_31,
+    user,
 )
+
+from pyiseers import ERS  # noqa E402
 
 
 def test_groups():
@@ -69,6 +72,23 @@ def get_endpoint_groups(size):
         print(test["response"])
     else:
         print("get_endpoint_groups » OK")
+
+
+def add_endpoint_group(endpoint_group):
+    test = ise.add_endpoint_group(endpoint_group["name"], endpoint_group["description"])
+    if test["error"]:
+        print(test["response"])
+    else:
+        print("add_endpoint_group » OK")
+
+
+def delete_endpoint_group(endpoint_group):
+    r1 = ise.get_endpoint_group(endpoint_group["name"])
+    test = ise.delete_endpoint_group(r1["response"]["id"])
+    if test["error"]:
+        print(test["response"])
+    else:
+        print("delete_endpoint_group » OK")
 
 
 def get_endpoint_group(endpoint_group):
@@ -191,6 +211,7 @@ def update_device_group(device_group_id):
 
 
 def delete_device_group():
+    # r1 = ise.get_device_group(name="Device Type#All Device Types#Updated Device Type")
     test = ise.delete_device_group(
         name="Device Type#All Device Types#Updated Device Type"
     )
@@ -236,12 +257,57 @@ def add_device(device):
     cleanup = ise.delete_device_group(name=device["dev_group"])
 
 
-def update_device(device):
+def add_device_multi_ip(device):
+    r1 = ise.add_device_group(
+        name=device["dev_group"], description="temporary testgroup"
+    )
+
+    test = ise.add_device(
+        name=device["name_mip"],
+        ip_address=device["ip_addresses"],
+        mask=device["mask"],
+        description=device["description"],
+        dev_group=device["dev_group"],
+        dev_location=device["dev_location"],
+        dev_type=device["dev_type"],
+        dev_ipsec=device["dev_ipsec"],
+        radius_key=device["radius_key"],
+        snmp_ro=device["snmp_ro"],
+        dev_profile=device["dev_profile"],
+        tacacs_shared_secret=device["tacacs_shared_secret"],
+        tacacs_connect_mode_options=device["tacacs_connect_mode_options"],
+        coa_port=device["coa_port"],
+        snmp_version=device["snmp_version"],
+        snmp_polling_interval=device["snmp_polling_interval"],
+        snmp_link_trap_query=device["snmp_link_trap_query"],
+        snmp_mac_trap_query=device["snmp_mac_trap_query"],
+        snmp_originating_policy_services_node=device[
+            "snmp_originating_policy_services_node"
+        ],
+    )
+    if test["error"]:
+        print(test["response"])
+    else:
+        print("add_device_multi_ip » OK")
+
+    cleanup = ise.delete_device_group(name=device["dev_group"])
+    cleanup = ise.delete_device(device["name_mip"])
+
+
+def update_device_name(device):
     test = ise.update_device(name=device["name"], new_name=device["new_name"])
     if test["error"]:
         print(test["response"])
     else:
         print("update_device » OK")
+
+
+def update_device_radius_key(device):
+    test = ise.update_device(name=device["new_name"], radius_key="new-test-radius-key")
+    if test["error"]:
+        print(test["response"])
+    else:
+        print("update_device_radius_key » OK")
 
 
 def add_device_payload(device_payload):
@@ -451,62 +517,67 @@ def delete_emc(id):
 
 if __name__ == "__main__":
     ise = ERS(
-        ise_node=uri_27["ise_node"],
-        ers_user=uri_27["ers_user"],
-        ers_pass=uri_27["ers_pass"],
+        ise_node=uri_31["ise_node"],
+        ers_user=uri_31["ers_user"],
+        ers_pass=uri_31["ers_pass"],
         verify=False,
         disable_warnings=True,
         timeout=15,
-        use_csrf=uri_27["use_csrf"],
+        use_csrf=uri_31["use_csrf"],
     )
 
     print(f"Testing {ise.ise_node}")
 
-    # Endpoint tests
-    add_endpoint(endpoint)
-    get_endpoints()
-    get_endpoint(endpoint)
-    delete_endpoint(endpoint)
-
-    # EndpointGroup tests
-    get_endpoint_groups(21)
-    get_endpoint_group(endpoint_group)
-
-    # User tests
-    get_identity_groups()
-    identity_group_id = get_identity_group(identity_group)
-    add_user(user, identity_group_id)
-    get_users()
-    get_user(user)
-    delete_user(user)
-
-    # Device group
-    add_device_group(device_group)
-    get_device_groups()
-    device_group_id = get_device_group_from_name()
-    get_device_group(device_group_id)
-    update_device_group(device_group_id)
-    delete_device_group()
-
+    ## Endpoint tests
+    # add_endpoint(endpoint)
+    # get_endpoints()
+    # get_endpoint(endpoint)
+    # delete_endpoint(endpoint)
+    #
+    ## EndpointGroup tests
+    # add_endpoint_group(endpoint_group)
+    # get_endpoint_groups(21)
+    # get_endpoint_group(endpoint_group)
+    # delete_endpoint_group(endpoint_group)
+    #
+    ## User tests
+    # get_identity_groups()
+    # identity_group_id = get_identity_group(identity_group)
+    # add_user(user, identity_group_id)
+    # get_users()
+    # get_user(user)
+    # delete_user(user)
+    #
+    ## Device group
+    # add_device_group(device_group)
+    # get_device_groups()
+    # device_group_id = get_device_group_from_name()
+    # get_device_group(device_group_id)
+    # update_device_group(device_group_id)
+    # delete_device_group()
+    #
     # Device tests
-    add_device(device)
-    get_devices()
-    get_device(device)
-    delete_device(device)
-    add_device_payload(device_payload)
-    get_device(device)
-    update_device(device)
-    get_updated_device(device)
-    delete_updated_device(device)
+    # add_device(device)
+    # add_device_multi_ip(device)
+    # get_devices()
+    # get_device(device)
+    # delete_device(device)
+    # add_device_payload(device_payload)
+    # get_device(device)
+    # update_device_name(device)
+    # update_device_radius_key(device)
+    #
+    # get_updated_device(device)
+    # delete_updated_device(device)
     #  get_object()  # TODO
 
-    # TrustSec SGT tests
-    get_sgts()
-    get_sgt("Unknown")
-    sgtid = add_sgt(trustsec)
-    update_sgt(sgtid, trustsec)
-    delete_sgt(sgtid)
-
+    ## TrustSec SGT tests
+    # get_sgts()
+    # get_sgt("Unknown")
+    # sgtid = add_sgt(trustsec)
+    # update_sgt(sgtid, trustsec)
+    # delete_sgt(sgtid)
+    #
     # TrustSec SGACL tests
     get_sgacls()
     get_sgacl("Permit IP")
@@ -514,9 +585,10 @@ if __name__ == "__main__":
     update_sgacl(sgaclid, trustsec)
     delete_sgacl(sgaclid)
 
-    # TrustSec Egress Matrix Cell (Policy) tests
-    get_emcs()
-    get_emc("Default egress rule")
-    emcid = add_emc(trustsec)
-    update_emc(emcid, trustsec)
-    delete_emc(emcid)
+#
+## TrustSec Egress Matrix Cell (Policy) tests
+# get_emcs()
+# get_emc("Default egress rule")
+# emcid = add_emc(trustsec)
+# update_emc(emcid, trustsec)
+# delete_emc(emcid)
