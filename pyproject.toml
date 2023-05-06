@@ -20,9 +20,9 @@ pytest-cov = "*"
 ptpython = "*"
 codecov = "*"
 setuptools = "*"
-twine = "^*"
+twine = "*"
 wheel = "*"
-isort = "*0"
+isort = "*"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
