@@ -1,7 +1,7 @@
 # Inspired by https://github.com/JonasKs/django-guid/blob/master/.github/workflows/publish_to_pypi.yml
 name: Publish pyise-ers to PyPI and TestPyPI 📦
 
-on: push
+#on: push
 
 jobs:
   build-and-publish:
