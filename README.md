@@ -13,7 +13,9 @@ Python module to manage Cisco ISE via the REST API.
 
 ### As of May 6, 2023
 
-The master branch is currently being developed towards a 0.3 release. As a result, it is possible that some features may not work as expected until the 0.3 release is finalized and published as a package on PyPI. Please keep this in mind when using the code from this branch.
+The master branch is currently being developed towards a 0.3 release.  
+As a result, it is possible that some features may not work as expected until the 0.3 release is finalized and published as a package on PyPI.  
+Please keep this in mind when using the code from this branch.
 
 ## Namechange information
 
