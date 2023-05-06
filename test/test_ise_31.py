@@ -177,9 +177,7 @@ def test_get_endpoint_group_fail():  # noqa D103
 def test_delete_endpoint_group():  # noqa D103
     r1 = ise.get_endpoint_group(endpoint_group["name"])
     r2 = ise.delete_endpoint_group(r1["response"]["id"])
-    assert "{0} Deleted Successfully".format(r1["response"]["id"]) in str(
-        r2["response"]
-    )
+    assert f"{r1['response']['id']} Deleted Successfully" in str(r2["response"])
 
 
 # @pytest.mark.vcr
@@ -667,7 +665,8 @@ def test_update_device_with_payload():
     )
     assert r1["success"] is True
     # cleanup
-    ise.delete_device("payload" + device["name"])
+    ise.delete_device(device["new_name"])
+    ise.delete_device(device["name"])
     ise.delete_device_group(name=device["dev_group"])
     ise.delete_device_group(name="changetotestgroup#changetotestgroup")
 
