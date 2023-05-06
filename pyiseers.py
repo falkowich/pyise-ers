@@ -121,8 +121,14 @@ class ERS(object):
             rj = resp.json()
             if "SearchResult" in rj:
                 result["response"] = None
-            else:
+            elif rj["ERSResponse"]["messages"][0].get("title"):
                 result["response"] = rj["ERSResponse"]["messages"][0]["title"]
+            else:
+                # No "title" in message as of ISE 3.1
+                # https://community.cisco.com/t5/network-access-control/ise-3-1-ers-delete-ers-config-sgacl-500-internal-server-error/td-p/4829897
+                result["response"] = rj["ERSResponse"]["messages"][0]["code"]
+                result["response"] = f"Undefined {result['response']} error"
+
             result["error"] = resp.status_code
             return result
         except ValueError:
@@ -1840,7 +1846,8 @@ class ERS(object):
                     {
                         "ipaddress": ip_address,
                         "mask": mask,
-                    })
+                    }
+                )
 
             elif type(ip_address) is list:
                 for ips in ip_address:
@@ -1848,7 +1855,8 @@ class ERS(object):
                         {
                             "ipaddress": ips,
                             "mask": mask,
-                        })
+                        }
+                    )
 
             if tacacs_shared_secret is not None:
                 data["NetworkDevice"]["tacacsSettings"] = {

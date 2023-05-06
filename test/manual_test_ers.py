@@ -211,8 +211,10 @@ def update_device_group(device_group_id):
 
 
 def delete_device_group():
-    #r1 = ise.get_device_group(name="Device Type#All Device Types#Updated Device Type")
-    test = ise.delete_device_group(name="Device Type#All Device Types#Updated Device Type")
+    # r1 = ise.get_device_group(name="Device Type#All Device Types#Updated Device Type")
+    test = ise.delete_device_group(
+        name="Device Type#All Device Types#Updated Device Type"
+    )
     if test["error"]:
         print(test["response"])
     else:
@@ -254,6 +256,7 @@ def add_device(device):
 
     cleanup = ise.delete_device_group(name=device["dev_group"])
 
+
 def add_device_multi_ip(device):
     r1 = ise.add_device_group(
         name=device["dev_group"], description="temporary testgroup"
@@ -285,18 +288,26 @@ def add_device_multi_ip(device):
     if test["error"]:
         print(test["response"])
     else:
-        print("add_device » OK")
+        print("add_device_multi_ip » OK")
 
     cleanup = ise.delete_device_group(name=device["dev_group"])
     cleanup = ise.delete_device(device["name_mip"])
 
 
-def update_device(device):
+def update_device_name(device):
     test = ise.update_device(name=device["name"], new_name=device["new_name"])
     if test["error"]:
         print(test["response"])
     else:
         print("update_device » OK")
+
+
+def update_device_radius_key(device):
+    test = ise.update_device(name=device["new_name"], radius_key="new-test-radius-key")
+    if test["error"]:
+        print(test["response"])
+    else:
+        print("update_device_radius_key » OK")
 
 
 def add_device_payload(device_payload):
@@ -517,54 +528,56 @@ if __name__ == "__main__":
 
     print(f"Testing {ise.ise_node}")
 
-    # Endpoint tests
-    add_endpoint(endpoint)
-    get_endpoints()
-    get_endpoint(endpoint)
-    delete_endpoint(endpoint)
-
-    # EndpointGroup tests
-    add_endpoint_group(endpoint_group)
-    get_endpoint_groups(21)
-    get_endpoint_group(endpoint_group)
-    delete_endpoint_group(endpoint_group)
-
-    # User tests
-    get_identity_groups()
-    identity_group_id = get_identity_group(identity_group)
-    add_user(user, identity_group_id)
-    get_users()
-    get_user(user)
-    delete_user(user)
-
-    # Device group
-    add_device_group(device_group)
-    get_device_groups()
-    device_group_id = get_device_group_from_name()
-    get_device_group(device_group_id)
-    update_device_group(device_group_id)
-    delete_device_group()
-
+    ## Endpoint tests
+    # add_endpoint(endpoint)
+    # get_endpoints()
+    # get_endpoint(endpoint)
+    # delete_endpoint(endpoint)
+    #
+    ## EndpointGroup tests
+    # add_endpoint_group(endpoint_group)
+    # get_endpoint_groups(21)
+    # get_endpoint_group(endpoint_group)
+    # delete_endpoint_group(endpoint_group)
+    #
+    ## User tests
+    # get_identity_groups()
+    # identity_group_id = get_identity_group(identity_group)
+    # add_user(user, identity_group_id)
+    # get_users()
+    # get_user(user)
+    # delete_user(user)
+    #
+    ## Device group
+    # add_device_group(device_group)
+    # get_device_groups()
+    # device_group_id = get_device_group_from_name()
+    # get_device_group(device_group_id)
+    # update_device_group(device_group_id)
+    # delete_device_group()
+    #
     # Device tests
-    add_device(device)
-    add_device_multi_ip(device)
-    get_devices()
-    get_device(device)
-    delete_device(device)
-    add_device_payload(device_payload)
-    get_device(device)
-    update_device(device)
-    get_updated_device(device)
-    delete_updated_device(device)
+    # add_device(device)
+    # add_device_multi_ip(device)
+    # get_devices()
+    # get_device(device)
+    # delete_device(device)
+    # add_device_payload(device_payload)
+    # get_device(device)
+    # update_device_name(device)
+    # update_device_radius_key(device)
+    #
+    # get_updated_device(device)
+    # delete_updated_device(device)
     #  get_object()  # TODO
 
-    # TrustSec SGT tests
-    get_sgts()
-    get_sgt("Unknown")
-    sgtid = add_sgt(trustsec)
-    update_sgt(sgtid, trustsec)
-    delete_sgt(sgtid)
-
+    ## TrustSec SGT tests
+    # get_sgts()
+    # get_sgt("Unknown")
+    # sgtid = add_sgt(trustsec)
+    # update_sgt(sgtid, trustsec)
+    # delete_sgt(sgtid)
+    #
     # TrustSec SGACL tests
     get_sgacls()
     get_sgacl("Permit IP")
@@ -572,9 +585,10 @@ if __name__ == "__main__":
     update_sgacl(sgaclid, trustsec)
     delete_sgacl(sgaclid)
 
-    # TrustSec Egress Matrix Cell (Policy) tests
-    get_emcs()
-    get_emc("Default egress rule")
-    emcid = add_emc(trustsec)
-    update_emc(emcid, trustsec)
-    delete_emc(emcid)
+#
+## TrustSec Egress Matrix Cell (Policy) tests
+# get_emcs()
+# get_emc("Default egress rule")
+# emcid = add_emc(trustsec)
+# update_emc(emcid, trustsec)
+# delete_emc(emcid)
