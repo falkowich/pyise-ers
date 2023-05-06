@@ -1816,12 +1816,7 @@ class ERS(object):
                     "description": description,
                     "profileName": dev_profile,
                     "coaPort": coa_port,
-<<<<<<< HEAD
-                    "NetworkDeviceIPList": [
-                    ],
-=======
                     "NetworkDeviceIPList": [],
->>>>>>> 0.3-dev
                     "NetworkDeviceGroupList": [dev_type, dev_location, dev_ipsec],
                 }
             }
@@ -1831,12 +1826,8 @@ class ERS(object):
                     {
                         "ipaddress": ip_address,
                         "mask": mask,
-<<<<<<< HEAD
-                    })
-=======
                     }
                 )
->>>>>>> 0.3-dev
 
             elif type(ip_address) is list:
                 for ips in ip_address:
@@ -1844,12 +1835,8 @@ class ERS(object):
                         {
                             "ipaddress": ips,
                             "mask": mask,
-<<<<<<< HEAD
-                        })
-=======
                         }
                     )
->>>>>>> 0.3-dev
 
             if tacacs_shared_secret is not None:
                 data["NetworkDevice"]["tacacsSettings"] = {
