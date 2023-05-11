@@ -526,7 +526,7 @@ if __name__ == "__main__":
     )
 
     print(f"Testing {ise.ise_node}")
-
+#
     # Endpoint tests
     add_endpoint(endpoint)
     get_endpoints()

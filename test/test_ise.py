@@ -129,7 +129,7 @@ def test_delete_endpoint():  # noqa D103
 
 
 # @pytest.mark.vcr
-def test_delete_endpoin_not_found():  # noqa D103
+def test_delete_endpoint_not_found():  # noqa D103
     r1 = ise.delete_endpoint("00:00:00:00:00:00")
     assert r1["success"] is False
     assert r1["response"] == "00:00:00:00:00:00 not found"
@@ -182,6 +182,13 @@ def test_delete_endpoint_group():  # noqa D103
     r1 = ise.get_endpoint_group(endpoint_group["name"])
     r2 = ise.delete_endpoint_group(r1["response"]["id"])
     assert f"{r1['response']['id']} Deleted Successfully" in str(r2["response"])
+
+
+def test_delete_endpoint_group_fail():  # noqa D103
+    r1 = ise.delete_endpoint_group("does_not_exist")
+    assert r1["success"] is False
+    assert r1["error"] == 404
+    assert "does_not_exist not found"
 
 
 # @pytest.mark.vcr
