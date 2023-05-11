@@ -1,3 +1,4 @@
+# I use this file often when trying out new functions and debugging with vscode.
 # This file will be fixed with pytest or unittest.
 # But untill then this will work as a crude non-automagic testbed. // Falk
 
@@ -15,9 +16,7 @@ from config import (  # noqa E402
     endpoint_group,
     identity_group,
     trustsec,
-    uri_27,
-    uri_30,
-    uri_31,
+    uri,
     user,
 )
 
@@ -517,67 +516,67 @@ def delete_emc(id):
 
 if __name__ == "__main__":
     ise = ERS(
-        ise_node=uri_31["ise_node"],
-        ers_user=uri_31["ers_user"],
-        ers_pass=uri_31["ers_pass"],
+        ise_node=uri["ise_node"],
+        ers_user=uri["ers_user"],
+        ers_pass=uri["ers_pass"],
         verify=False,
         disable_warnings=True,
         timeout=15,
-        use_csrf=uri_31["use_csrf"],
+        use_csrf=uri["use_csrf"],
     )
 
     print(f"Testing {ise.ise_node}")
 
-    ## Endpoint tests
-    # add_endpoint(endpoint)
-    # get_endpoints()
-    # get_endpoint(endpoint)
-    # delete_endpoint(endpoint)
-    #
-    ## EndpointGroup tests
-    # add_endpoint_group(endpoint_group)
-    # get_endpoint_groups(21)
-    # get_endpoint_group(endpoint_group)
-    # delete_endpoint_group(endpoint_group)
-    #
-    ## User tests
-    # get_identity_groups()
-    # identity_group_id = get_identity_group(identity_group)
-    # add_user(user, identity_group_id)
-    # get_users()
-    # get_user(user)
-    # delete_user(user)
-    #
-    ## Device group
-    # add_device_group(device_group)
-    # get_device_groups()
-    # device_group_id = get_device_group_from_name()
-    # get_device_group(device_group_id)
-    # update_device_group(device_group_id)
-    # delete_device_group()
-    #
+    # Endpoint tests
+    add_endpoint(endpoint)
+    get_endpoints()
+    get_endpoint(endpoint)
+    delete_endpoint(endpoint)
+    
+    # EndpointGroup tests
+    add_endpoint_group(endpoint_group)
+    get_endpoint_groups(21)
+    get_endpoint_group(endpoint_group)
+    delete_endpoint_group(endpoint_group)
+    
+    # User tests
+    get_identity_groups()
+    identity_group_id = get_identity_group(identity_group)
+    add_user(user, identity_group_id)
+    get_users()
+    get_user(user)
+    delete_user(user)
+    
+    # Device group
+    add_device_group(device_group)
+    get_device_groups()
+    device_group_id = get_device_group_from_name()
+    get_device_group(device_group_id)
+    update_device_group(device_group_id)
+    delete_device_group()
+    
     # Device tests
-    # add_device(device)
-    # add_device_multi_ip(device)
-    # get_devices()
-    # get_device(device)
-    # delete_device(device)
-    # add_device_payload(device_payload)
-    # get_device(device)
-    # update_device_name(device)
-    # update_device_radius_key(device)
-    #
-    # get_updated_device(device)
-    # delete_updated_device(device)
-    #  get_object()  # TODO
+    add_device(device)
+    add_device_multi_ip(device)
+    get_devices()
+    get_device(device)
+    delete_device(device)
+    add_device_payload(device_payload)
+    get_device(device)
+    update_device_name(device)
+    update_device_radius_key(device)
 
-    ## TrustSec SGT tests
-    # get_sgts()
-    # get_sgt("Unknown")
-    # sgtid = add_sgt(trustsec)
-    # update_sgt(sgtid, trustsec)
-    # delete_sgt(sgtid)
-    #
+    get_updated_device(device)
+    delete_updated_device(device)
+    #  get_object()  # TODO
+    
+    # TrustSec SGT tests
+    get_sgts()
+    get_sgt("Unknown")
+    sgtid = add_sgt(trustsec)
+    update_sgt(sgtid, trustsec)
+    delete_sgt(sgtid)
+    
     # TrustSec SGACL tests
     get_sgacls()
     get_sgacl("Permit IP")
@@ -585,10 +584,10 @@ if __name__ == "__main__":
     update_sgacl(sgaclid, trustsec)
     delete_sgacl(sgaclid)
 
-#
-## TrustSec Egress Matrix Cell (Policy) tests
-# get_emcs()
-# get_emc("Default egress rule")
-# emcid = add_emc(trustsec)
-# update_emc(emcid, trustsec)
-# delete_emc(emcid)
+
+    # TrustSec Egress Matrix Cell (Policy) tests
+    get_emcs()
+    get_emc("Default egress rule")
+    emcid = add_emc(trustsec)
+    update_emc(emcid, trustsec)
+    delete_emc(emcid)

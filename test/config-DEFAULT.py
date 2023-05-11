@@ -1,19 +1,30 @@
-uri_list = [
-    {
-        "ise_version": "2.7",
-        "ise_node": "ip_to_ise_version_x",
-        "ers_user": "ers-user",
-        "ers_pass": "Password27",
-        "use_csrf": True,
-    },
-    {
-        "ise_version": "3.0",
-        "ise_node": "ip_to_ise_version_y",
-        "ers_user": "ers-user",
-        "ers_pass": "Password30",
-        "use_csrf": False,
-    },
-]
+
+## 2.7 conf
+#uri = {
+#        "ise_version": "2.7",
+#        "ise_node": "ip/fqdn",
+#        "ers_user": "ers-operator",
+#        "ers_pass": "Password27",
+#        "use_csrf": False,
+#    }
+
+## 3.0 conf
+#uri = {
+#        "ise_version": "3.0",
+#        "ise_node": "ip/fqdn",
+#        "ers_user": "ers-operator",
+#        "ers_pass": "Password30",
+#        "use_csrf": False,
+#    }
+
+## 3.1 conf
+#uri = {
+#        "ise_version": "3.1",
+#        "ise_node": "ip/fqdn",
+#        "ers_user": "ers-operator",
+#        "ers_pass": "Password31",
+#        "use_csrf": False,
+#    }
 
 endpoint = {
     "name": "test-endpoint",
@@ -47,8 +58,10 @@ device_group = {
 
 device = {
     "name": "test-name",
+    "name_mip": "test-name-multiple_ip",
     "new_name": "new-test-name",
     "ip_address": "10.1.1.1",
+    "ip_addresses": ["10.1.1.2", "10.1.1.3"],
     "mask": "32",
     "description": "test-description",
     "dev_group": "testgroup#testgroup",
@@ -68,7 +81,27 @@ device = {
     "snmp_originating_policy_services_node": "Auto",
 }
 
+
+
 device_payload = {
+    "name": device["name"],
+    "description": device["description"],
+    "profileName": device["dev_profile"],
+    "coaPort": device["coa_port"],
+    "NetworkDeviceIPList": [
+        {
+            "ipaddress": device["ip_address"],
+            "mask": device["mask"],
+        }
+    ],
+    "NetworkDeviceGroupList": [
+        device["dev_type"],
+        device["dev_location"],
+        device["dev_ipsec"],
+    ],
+}
+
+updated_device_payload = {
     "name": device["name"],
     "description": device["description"],
     "profileName": device["dev_profile"],
