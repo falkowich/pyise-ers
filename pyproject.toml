@@ -1,9 +1,22 @@
 [tool.poetry]
 name = "pyise-ers"
-version = "0.3-dev"
-description = "ISE-ERS API Wrapper"
-authors = ["Falk <falk@mockel.se>"]
-license = "GPL"
+version = "0.3-dev2"
+description = "Python wrapper for Cisco ISE ERS API"
+authors = ["Andreas Falk <falk@mockel.se>"]
+keywords=['poetry']
+classifiers = [
+    # http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    'Development Status :: 5 - Production/Stable',
+    'Environment :: Console',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Topic :: System :: Networking',
+    'Topic :: Utilities',
+]
+include = ['LICENSE']
 readme = "README.md"
 packages = [
     { include = "pyise_ers" },
