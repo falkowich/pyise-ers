@@ -1,6 +1,5 @@
-
 ## 2.7 conf
-#uri = {
+# uri = {
 #        "ise_version": "2.7",
 #        "ise_node": "ip/fqdn",
 #        "ers_user": "ers-operator",
@@ -9,7 +8,7 @@
 #    }
 
 ## 3.0 conf
-#uri = {
+# uri = {
 #        "ise_version": "3.0",
 #        "ise_node": "ip/fqdn",
 #        "ers_user": "ers-operator",
@@ -18,7 +17,7 @@
 #    }
 
 ## 3.1 conf
-#uri = {
+# uri = {
 #        "ise_version": "3.1",
 #        "ise_node": "ip/fqdn",
 #        "ers_user": "ers-operator",
@@ -80,7 +79,6 @@ device = {
     "snmp_mac_trap_query": "true",
     "snmp_originating_policy_services_node": "Auto",
 }
-
 
 
 device_payload = {

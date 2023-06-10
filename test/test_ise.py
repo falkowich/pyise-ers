@@ -3,7 +3,7 @@ import sys
 import pytest
 import urllib3
 
-sys.path.append("./")
+sys.path.append("./pyise_ers")
 
 from pprint import pprint  # noqa E402
 
@@ -54,7 +54,6 @@ def test_fail_connection_401():  # noqa D103
     else:
         assert r1["response"] == ""
     assert r1["error"] == 401
-
 
 
 ise = ERS(
