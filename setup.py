@@ -9,7 +9,7 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="pyise-ers",
-    version="0.2.0.1",
+    version="0.3.0",
     py_modules=["pyiseers"],
     url="https://github.com/falkowich/pyise-ers",
     download_url="https://pypi.python.org/pypi/pyise-ers",
@@ -20,10 +20,10 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     include_package_data=True,
     zip_safe=False,
-    install_requires=["furl>=2.1.3", "requests>=2.26.0", ""],
+    install_requires=["furl>=2.1.3", "requests>=2.30.0", ""],
     extras_require={
         "test": ["pytest", "coverage"],
     },
