@@ -23,6 +23,8 @@ setuptools = "*"
 twine = "*"
 wheel = "*"
 isort = "*"
+bandit = "^1.7.5"
+safety = "^2.3.5"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

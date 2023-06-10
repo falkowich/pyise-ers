@@ -1,4 +1,0 @@
-schedule: "every day"
-requirements:
-  - Pipfile
-branch_prefix: pyup/
