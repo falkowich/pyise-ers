@@ -1499,14 +1499,16 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_device_groups(self, size=20, page=1):
+    def get_device_groups(self, size=20, page=1, filter=None):
         """
         Get a list tuples of device groups.
+        
+        :param filter: ISE style filter syntax. Default: None
 
         :return:
         """
         return self._get_groups(
-            f"{self.url_base}/config/networkdevicegroup", size=size, page=page
+            f"{self.url_base}/config/networkdevicegroup", size=size, page=page, filter=filter
         )
 
     def get_device_group(self, device_group_oid=None, name=None):
