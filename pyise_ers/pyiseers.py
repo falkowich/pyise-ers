@@ -176,55 +176,11 @@ class ERS(object):
 
         return req
 
-    def _get_groups(self, url, filter: str = None, size: int = 20, page: int = 1):
+    def _get_groups(self, url, filter: str = None):
         """
         Get generic group lists.
 
         :param url: Base URL for requesting lists
-        :param size: size of the page to return. Default: 20
-        :param page: page to return. Default: 1
-        :return: result dictionary
-        """
-        result = {
-            "success": False,
-            "response": "",
-            "error": "",
-        }
-
-        # https://github.com/gruns/furl
-        f = furl(url)
-        # TODO test for valid size 1<=x>=100
-        f.args["size"] = size
-        # TODO test for valid page number?
-        f.args["page"] = page
-        # TODO add filter valication
-        if filter:
-            f.args["filter"] = filter
-
-        self.ise.headers.update(
-            {"ACCEPT": "application/json", "Content-Type": "application/json"}
-        )
-        resp = self.ise.get(f.url, timeout=self.timeout)
-
-        if resp.status_code == 200:
-            result["success"] = True
-            result["response"] = [
-                (i["name"], i["id"], i["description"])
-                for i in resp.json()["SearchResult"]["resources"]
-            ]
-            result["total"] = resp.json()["SearchResult"]["total"]
-            return result
-        else:
-            return ERS._pass_ersresponse(result, resp)
-
-    def _get_objects(self, url, filter: str = None, size: int = 20, page: int = 1):
-        """
-        Generic method for requesting objects lists.
-
-        :param url: Base URL for requesting lists
-        :param filter: argument side of a ERS filter string. Default: None
-        :param size: size of the page to return. Default: 20
-        :param page: page to return. Default: 1
         :return: result dictionary
         """
         result = {
@@ -238,29 +194,73 @@ class ERS(object):
         )
 
         f = furl(url)
-        # TODO test for valid size 1<=x>=100
-        f.args["size"] = size
-        # TODO test for valid page number?
-        f.args["page"] = page
+        # Max resources per page cannot be more then 100 resources.
+        f.args["size"] = 100
         # TODO add filter valication
         if filter:
             f.args["filter"] = filter
 
         resp = self.ise.get(f.url, timeout=self.timeout)
 
-        # TODO add dynamic paging?
+        if resp.status_code == 200:
+            result["success"] = True
+            result["total"] = resp.json()["SearchResult"]["total"]
+            result["response"] = []
+            for page in range(1, int((result["total"] / f.args["size"] + 1) + 1)):
+                f.args["page"] = page
+                resp = self.ise.get(f.url, timeout=self.timeout)
+                if resp.status_code == 200:
+                    result["response"] += [
+                        (i["name"], i["id"], i["description"])
+                        for i in resp.json()["SearchResult"]["resources"]
+                    ]
+            return result
+
+        else:
+            return ERS._pass_ersresponse(result, resp)
+
+    def _get_objects(self, url, filter: str = None):
+        """
+        Generic method for requesting objects lists.
+
+        :param url: Base URL for requesting lists
+        :param filter: argument side of a ERS filter string. Default: None
+        :return: result dictionary
+        """
+        result = {
+            "success": False,
+            "response": "",
+            "error": "",
+        }
+
+        self.ise.headers.update(
+            {"Accept": "application/json", "Content-Type": "application/json"}
+        )
+
+        f = furl(url)
+        # Max resources per page cannot be more then 100 resources.
+        f.args["size"] = 100
+        # TODO add filter valication
+        if filter:
+            f.args["filter"] = filter
+
+        resp = self.ise.get(f.url, timeout=self.timeout)
+
         if resp.status_code == 200:
             json_res = resp.json()["SearchResult"]
+
             if int(json_res["total"]) >= 1:
                 result["success"] = True
-                if json_res.get("nextPage"):
-                    result["nextPage"] = json_res["nextPage"]["href"].split("=")[-1]
-                if json_res.get("previousPage"):
-                    result["prev"] = json_res["previousPage"]["href"].split("=")[-1]
                 result["total"] = json_res["total"]
-                result["response"] = [
-                    (i["name"], i["id"]) for i in json_res["resources"]
-                ]
+                result["response"] = []
+                for page in range(1, int((result["total"] / f.args["size"] + 1) + 1)):
+                    f.args["page"] = page
+                    resp = self.ise.get(f.url, timeout=self.timeout)
+                    if resp.status_code == 200:
+                        json_res = resp.json()["SearchResult"]
+                        result["response"] += [
+                            (i["name"], i["id"]) for i in json_res["resources"]
+                        ]
                 return result
 
             elif int(json_res["total"]) == 0:
@@ -271,7 +271,7 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_endpoint_groups(self, size=20, page=1):
+    def get_endpoint_groups(self):
         """
         Get all endpoint identity groups.
 
@@ -279,7 +279,7 @@ class ERS(object):
         :return: result dictionary
         """
         return self._get_groups(
-            f"{self.url_base}/config/endpointgroup", size=size, page=page
+            f"{self.url_base}/config/endpointgroup"
         )
 
     def get_endpoint_group(self, group):
@@ -391,7 +391,7 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_endpoints(self, groupID=None, size=20, page=1):
+    def get_endpoints(self, groupID=None):
         """
         Get all endpoints.
 
@@ -405,12 +405,10 @@ class ERS(object):
 
         return self._get_objects(
             f"{self.url_base}/config/endpoint",
-            filter=filter,
-            size=size,
-            page=page,
+            filter=filter
         )
 
-    def get_sgts(self, sgtNum=None, size=20, page=1):
+    def get_sgts(self, sgtNum=None):
         """
         Get all Secure Group Tags.
 
@@ -423,7 +421,8 @@ class ERS(object):
             filter = None
 
         return self._get_objects(
-            f"{self.url_base}/config/sgt", filter=filter, size=size, page=page
+            f"{self.url_base}/config/sgt",
+            filter=filter
         )
 
     def get_sgt(self, sgt):
@@ -621,7 +620,7 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_sgacls(self, size=20, page=1):
+    def get_sgacls(self):
         """
         Get all Secure Group ACLs.
 
@@ -633,9 +632,7 @@ class ERS(object):
 
         return self._get_objects(
             f"{self.url_base}/config/sgacl",
-            filter=filter,
-            size=size,
-            page=page,
+            filter=filter
         )
 
     def get_sgacl(self, sgacl):
@@ -821,7 +818,7 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_egressmatrixcells(self, size=20, page=1):
+    def get_egressmatrixcells(self):
         """
         Get all TrustSec Egress Matrix Cells.
 
@@ -833,9 +830,7 @@ class ERS(object):
 
         return self._get_objects(
             f"{self.url_base}/config/egressmatrixcell",
-            filter=filter,
-            size=size,
-            page=page,
+            filter=filter
         )
 
     def get_egressmatrixcell(self, emc, src_sgt=None, dst_sgt=None):
@@ -1290,7 +1285,7 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_identity_groups(self, filter=None, size=20, page=1):
+    def get_identity_groups(self, filter=None):
         """
         Get all identity groups.
 
@@ -1299,9 +1294,7 @@ class ERS(object):
         """
         return self._get_groups(
             f"{self.url_base}/config/identitygroup",
-            filter=filter,
-            size=size,
-            page=page,
+            filter=filter
         )
 
     def get_identity_group(self, group):
@@ -1344,14 +1337,14 @@ class ERS(object):
             result["error"] = resp.status_code
             return result
 
-    def get_users(self, size=20, page=1):
+    def get_users(self):
         """
         Get all internal users.
 
         :return: List of tuples of user details
         """
         return self._get_objects(
-            f"{self.url_base}/config/internaluser", size=size, page=page
+            f"{self.url_base}/config/internaluser"
         )
 
     def get_user(self, user_id):
@@ -1499,7 +1492,7 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_device_groups(self, size=20, page=1, filter=None):
+    def get_device_groups(self, filter=None):
         """
         Get a list tuples of device groups.
         
@@ -1508,7 +1501,8 @@ class ERS(object):
         :return:
         """
         return self._get_groups(
-            f"{self.url_base}/config/networkdevicegroup", size=size, page=page, filter=filter
+            f"{self.url_base}/config/networkdevicegroup",
+            filter=filter
         )
 
     def get_device_group(self, device_group_oid=None, name=None):
@@ -1695,7 +1689,7 @@ class ERS(object):
         else:
             return ERS._pass_ersresponse(result, resp)
 
-    def get_devices(self, filter=None, size=20, page=1):
+    def get_devices(self, filter=None):
         """
         Get a list of devices.
 
@@ -1703,9 +1697,7 @@ class ERS(object):
         """
         return self._get_objects(
             f"{self.url_base}/config/networkdevice",
-            filter=filter,
-            size=size,
-            page=page,
+            filter=filter
         )
 
     def get_device(self, device):
