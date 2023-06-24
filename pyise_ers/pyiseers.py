@@ -1393,6 +1393,45 @@ class ERS(object):
             result["error"] = resp.status_code
             return result
 
+    def get_admin_user(self, user_id):
+        """
+        Get admin user detailed info.
+
+        :param user_id: User ID
+        :return: result dictionary
+        """
+        self.ise.headers.update(
+            {"ACCEPT": "application/json", "Content-Type": "application/json"}
+        )
+
+        result = {
+            "success": False,
+            "response": "",
+            "error": "",
+        }
+
+        resp = self.ise.get(
+            f"{self.url_base}/config/adminuser?filter=name.EQ.{user_id}",
+            timeout=self.timeout,
+        )
+        found_user = resp.json()
+
+        if found_user["SearchResult"]["total"] == 1:
+            result = self.get_object(
+                f"{self.url_base}/config/adminuser/",
+                found_user["SearchResult"]["resources"][0]["id"],
+                "AdminUser",
+            )
+            return result
+        elif found_user["SearchResult"]["total"] == 0:
+            result["response"] = f"{user_id} not found"
+            result["error"] = 404
+            return result
+        else:
+            result["response"] = "Unknown error"
+            result["error"] = resp.status_code
+            return result
+
     def add_user(
         self,
         user_id,
