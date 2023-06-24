@@ -118,14 +118,14 @@ sys.path.append('/path/to/parent/pyise-ers/')
 
 ```python
 from pyiseers import ERS
-ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True)
+ise = ERS(ise_node='8.8.8.8', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True)
 ```
 
 If ISE is configured to require CSRF for ERS requests for Enhanced Security, you can add the "use_csrf" tag:
 
 ```python
 from pyiseers import ERS
-ise = ERS(ise_node='192.168.0.10', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True, use_csrf=True)
+ise = ERS(ise_node='8.8.8.8', ers_user='ers', ers_pass='supersecret', verify=False, disable_warnings=True, use_csrf=True)
 ```
 
 #### Methods return a result dictionary
@@ -162,7 +162,7 @@ ise.get_identity_group(group='Employee')['response']
 
 {'description': 'Default Employee User Group',
  'id': 'f80e5ce0-f42e-11e2-bd54-005056bf2f0a',
- 'link': {'href': 'https://10.8.2.61:9060/ers/config/identitygroup/f80e5ce0-f42e-11e2-bd54-005056bf2f0a',
+ 'link': {'href': 'https://8.8.8.8:9060/ers/config/identitygroup/f80e5ce0-f42e-11e2-bd54-005056bf2f0a',
           'rel': 'self',
           'type': 'application/xml'},
  'name': 'Employee',
@@ -177,7 +177,7 @@ ise.get_endpoint_group(group='Resurs')['response']
 
  {'description': '',
  'id': 'bf6bdcf0-14ed-11e5-a7a6-00505683258b',
- 'link': {'href': 'https://10.8.2.61:9060/ers/config/endpointgroup/bf6bdcf0-14ed-11e5-a7a6-00505683258b',
+ 'link': {'href': 'https://8.8.8.8:9060/ers/config/endpointgroup/bf6bdcf0-14ed-11e5-a7a6-00505683258b',
           'rel': 'self',
           'type': 'application/xml'},
  'name': 'Resurs',
@@ -236,7 +236,7 @@ ise.get_user(user_id='test02')['response']
  'expiryDateEnabled': False,
  'id': '54fd1eb0-c5fb-54e5-b6b6-00204597b28b1',
  'identityGroups': '5f0b74f0-14e9-11e5-a7a6-00505683258b',
- 'link': {'href': 'https://10.8.2.61:9060/ers/config/internaluser/a837bd55-f2b7-41e3-b0ff-c5ddf9af398c',
+ 'link': {'href': 'https://8.8.8.8:9060/ers/config/internaluser/a837bd55-f2b7-41e3-b0ff-c5ddf9af398c',
           'rel': 'self',
           'type': 'application/xml'},
  'name': 'test02',
@@ -260,6 +260,41 @@ ise.add_user(user_id='test11', password='TeStInG11', user_group_oid='5f0b74f0-14
 ise.delete_user(user_id='test11')
 
 {'error': '', 'response': 'test11 Deleted Successfully', 'success': True}
+
+```
+
+#### Get details about an admin user
+
+```python
+ise.get_admin_user(user_id='admin')
+
+{
+  "SearchResult": {
+    "total": 2,
+    "resources": [
+      {
+        "id": "c2428e12-105f-4d5f-88ae-5885516d7ac5",
+        "name": "admin",
+        "description": "Default Admin User",
+        "link": {
+          "rel": "self",
+          "href": "https://8.8.8.8:9060/ers/config/adminuser/c2428e12-105f-4d5f-88ae-5885516d7ac5",
+          "type": "application/json"
+        }
+      },
+      {
+        "id": "e0884628-8d13-451c-b3f7-117f9d0336ad",
+        "name": "ers-operator",
+        "description": "",
+        "link": {
+          "rel": "self",
+          "href": "https://8.8.8.8:9060/ers/config/adminuser/e0884628-8d13-451c-b3f7-117f9d0336ad",
+          "type": "application/json"
+        }
+      }
+    ]
+  }
+}
 
 ```
 
@@ -289,7 +324,7 @@ ise.get_device(device='TestDevice02')['response']
                             'radiusSharedSecret': '******'},
  'coaPort': 0,
  'id': '74d9b830-5c76-11e5-9a52-00505683258b',
- 'link': {'href': 'https://10.8.2.61:9060/ers/config/networkdevice/74d9b830-5c76-11e5-9a52-00505683258b',
+ 'link': {'href': 'https://8.8.8.8:9060/ers/config/networkdevice/74d9b830-5c76-11e5-9a52-00505683258b',
           'rel': 'self',
           'type': 'application/xml'},
  'modelName': 'Linux',
@@ -325,7 +360,7 @@ ise.get_device_group(device_group_id="4b26b5b0-71a6-11eb-b5e0-52cf9299494c")
   'name': 'Device Type#All Device Types#NXOS',
   'description': '',
   'link': {'rel': 'self',
-   'href': 'https://tst01-z0-vm-ise-01:9060/ers/config/networkdevicegroup/4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
+   'href': 'https://8.8.8.8:9060/ers/config/networkdevicegroup/4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
    'type': 'application/json'},
   'othername': 'Device Type'},
  'error': ''}
@@ -339,7 +374,7 @@ ise.get_device_group(name="NXOS")
   'name': 'Device Type#All Device Types#NXOS',
   'description': '',
   'link': {'rel': 'self',
-   'href': 'https://tst01-z0-vm-ise-01:9060/ers/config/networkdevicegroup/4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
+   'href': 'https://8.8.8.8:9060/ers/config/networkdevicegroup/4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
    'type': 'application/json'},
   'othername': 'Device Type'},
  'error': ''}
@@ -353,7 +388,7 @@ ise.get_device_group(name="Device Types")
    'name': 'Device Type#All Device Types',
    'description': 'All Device Types',
    'link': {'rel': 'self',
-    'href': 'https://tst01-z0-vm-ise-01:9060/ers/config/networkdevicegroup/70c79c30-8bff-11e6-996c-525400b48521',
+    'href': 'https://8.8.8.8:9060/ers/config/networkdevicegroup/70c79c30-8bff-11e6-996c-525400b48521',
     'type': 'application/json'},
    'othername': 'Device Type'},
   'error': ''},
@@ -362,7 +397,7 @@ ise.get_device_group(name="Device Types")
    'name': 'Device Type#All Device Types#IOS-XE',
    'description': '',
    'link': {'rel': 'self',
-    'href': 'https://tst01-z0-vm-ise-01:9060/ers/config/networkdevicegroup/ee45c0a0-7fbc-11eb-ac01-36750594a888',
+    'href': 'https://8.8.8.8:9060/ers/config/networkdevicegroup/ee45c0a0-7fbc-11eb-ac01-36750594a888',
     'type': 'application/json'},
    'othername': 'Device Type'},
   'error': ''},
@@ -371,7 +406,7 @@ ise.get_device_group(name="Device Types")
    'name': 'Device Type#All Device Types#NXOS',
    'description': '',
    'link': {'rel': 'self',
-    'href': 'https://tst01-z0-vm-ise-01:9060/ers/config/networkdevicegroup/4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
+    'href': 'https://8.8.8.8:9060/ers/config/networkdevicegroup/4b26b5b0-71a6-11eb-b5e0-52cf9299494c',
     'type': 'application/json'},
    'othername': 'Device Type'},
   'error': ''},
@@ -412,7 +447,7 @@ ise.delete_device_group(name="Device Type#All Device Types#Python Device Type")
 
 ```python
 ise.add_device(name='testdevice03',
-               ip_address='192.168.10.10',
+               ip_address='8.8.8.8',
                radius_key='foo',
                snmp_ro='bar',
                dev_group='Stage#Stage#Closed',
