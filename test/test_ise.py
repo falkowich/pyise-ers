@@ -270,6 +270,21 @@ def test_delete_user_not_found():  # noqa D103
     assert r1["error"] == 404
 
 
+
+def test_get_admin_user():  # noqa D103
+    r1 = ise.get_admin_user("admin")
+    assert r1["success"] is True
+    assert ("name" and "description" and "adminGroups") in str(r1["response"])
+
+
+# @pytest.mark.vcr
+def test_get_admin_user_not_found():  # noqa D103
+    r1 = ise.get_admin_user("not_an_admin_user")
+    assert r1["success"] is False
+    assert r1["error"] == 404
+
+
+
 # @pytest.mark.vcr
 def test_add_device_group():
     r1 = ise.add_device_group(

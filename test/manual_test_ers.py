@@ -157,6 +157,14 @@ def delete_user(user):
         print("delete_user » OK")
 
 
+def get_admin_user(admin_user):
+    test = ise.get_admin_user(admin_user)
+    if test["error"]:
+        print(test["error"])
+    else:
+        print("get_admin_user » OK")
+
+
 def add_device_group(device_group):
     test = ise.add_device_group(
         name=device_group["name"], description=device_group["description"]
@@ -546,6 +554,9 @@ if __name__ == "__main__":
     get_users()
     get_user(user)
     delete_user(user)
+    
+    # Admin user tests
+    get_admin_user("admin")
 
     # Device group
     add_device_group(device_group)
