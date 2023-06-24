@@ -1393,6 +1393,45 @@ class ERS(object):
             result["error"] = resp.status_code
             return result
 
+    def get_user_by_email(self, user_email):
+        """
+        Get user detailed info.
+
+        :param user_email: User Email Address
+        :return: result dictionary
+        """
+        self.ise.headers.update(
+            {"ACCEPT": "application/json", "Content-Type": "application/json"}
+        )
+
+        result = {
+            "success": False,
+            "response": "",
+            "error": "",
+        }
+
+        resp = self.ise.get(
+            f"{self.url_base}/config/internaluser?filter=email.EQ.{user_email}",
+            timeout=self.timeout,
+        )
+        found_user = resp.json()
+
+        if found_user["SearchResult"]["total"] == 1:
+            result = self.get_object(
+                f"{self.url_base}/config/internaluser/",
+                found_user["SearchResult"]["resources"][0]["id"],
+                "InternalUser",
+            )
+            return result
+        elif found_user["SearchResult"]["total"] == 0:
+            result["response"] = f"{user_email} not found"
+            result["error"] = 404
+            return result
+        else:
+            result["response"] = "Unknown error"
+            result["error"] = resp.status_code
+            return result
+
     def get_admin_user(self, user_id):
         """
         Get admin user detailed info.
