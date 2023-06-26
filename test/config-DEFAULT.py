@@ -123,3 +123,5 @@ trustsec = {
     "emc_source_sgt": "Unknown",
     "emc_dest_sgt": "TrustSec_Devices",
 }
+
+debug = False

@@ -229,6 +229,7 @@ def test_add_user():  # noqa D103
         enable=user["enable"],
         first_name=user["first_name"],
         last_name=user["last_name"],
+        email=user["email"],
     )
     assert r2["success"] is True
     assert r2["response"] == "test-user Added Successfully"
@@ -254,6 +255,18 @@ def test_get_user_not_found():  # noqa D103
     assert r1["success"] is False
     assert r1["error"] == 404
 
+# @pytest.mark.vcr
+def test_get_user_by_email():  # noqa D103
+    r1 = ise.get_user_by_email(user["email"])
+    assert r1["success"] is True
+    assert ("Firstname" and "Lastname") in str(r1["response"])
+
+
+# @pytest.mark.vcr
+def test_get_user_by_email_not_found():  # noqa D103
+    r1 = ise.get_user_by_email("this.user@does.not.exist")
+    assert r1["success"] is False
+    assert r1["error"] == 404
 
 # @pytest.mark.vcr
 def test_delete_user():  # noqa D103
