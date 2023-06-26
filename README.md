@@ -226,8 +226,31 @@ ise.get_users()['response']
 
 #### Get details about an internal user
 
+By name
+
 ```python
 ise.get_user(user_id='test02')['response']
+
+{'changePassword': False,
+ 'customAttributes': {},
+ 'enablePassword': '*******',
+ 'enabled': True,
+ 'expiryDateEnabled': False,
+ 'id': '54fd1eb0-c5fb-54e5-b6b6-00204597b28b1',
+ 'identityGroups': '5f0b74f0-14e9-11e5-a7a6-00505683258b',
+ 'link': {'href': 'https://8.8.8.8:9060/ers/config/internaluser/a837bd55-f2b7-41e3-b0ff-c5ddf9af398c',
+          'rel': 'self',
+          'type': 'application/xml'},
+ 'name': 'test02',
+ 'password': '*******',
+ 'passwordIDStore': 'Internal Users'}
+
+```
+
+By email
+
+```python
+ise.get_user(user_email='test02@example.com')['response']
 
 {'changePassword': False,
  'customAttributes': {},
