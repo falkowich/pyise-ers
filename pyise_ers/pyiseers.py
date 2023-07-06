@@ -1581,6 +1581,8 @@ class ERS(object):
         """
         Get a list tuples of device groups.
 
+        :param filter: ISE style filter syntax. Default: None
+
         :return:
         """
         return self._get_groups(
