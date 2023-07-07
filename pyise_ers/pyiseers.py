@@ -1244,6 +1244,50 @@ class ERS(object):
             else:
                 return ERS._pass_ersresponse(result, resp)
 
+    def update_endpoint_group(
+        self,
+        endpoint_id,
+        group_id
+    ):
+        """
+        Updates an endpoint group assignment.
+
+        :param endpoint_id: Endpoint ID to update
+        :param group_id: New OID of group to add endpoint in
+
+        :return: result dictionary
+        """
+        
+        self.ise.headers.update(
+            {"ACCEPT": "application/json", "Content-Type": "application/json"}
+        )
+
+        result = {
+            "success": False,
+            "response": "",
+            "error": "",
+        }
+
+        data = {
+            "ERSEndPoint": {
+                "groupId": group_id,
+                "staticGroupAssignment": True
+            }
+        }
+
+        resp = self._request(
+            f"{self.url_base}/config/endpoint/{endpoint_id}",
+            method="put",
+            data=json.dumps(data),
+        )
+
+        if resp.status_code == 200:
+            result["success"] = True
+            result["response"] = resp.json()["UpdatedFieldsList"]
+            return result
+        else:
+            return CiscoISE._pass_ersresponse(result, resp)
+    
     def delete_endpoint(self, mac):
         """
         Delete an endpoint.
