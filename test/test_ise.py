@@ -337,6 +337,20 @@ def test_get_device_group_from_name_not_found():
 
 
 # @pytest.mark.vcr
+def test_get_device_groups_from_filter():
+    r1 = ise.get_device_groups(size=100, page=1, filter="description.CONTAINS.Python")
+    assert r1["success"] is True
+    assert "Device Type#All Device Types#Python Device Type" in str(r1["response"])
+
+
+# @pytest.mark.vcr
+def test_get_device_groups_from_filter_not_found():
+    r1 = ise.get_device_groups(size=100, page=1, filter="description.CONTAINS.xxXXxxxXXxx")
+    assert r1["success"] is True
+    assert r1["response"] == []
+
+
+# @pytest.mark.vcr
 def test_get_device_group():
     r1 = ise.get_device_group(name="Python")
     device_group_id = r1["response"]["id"]

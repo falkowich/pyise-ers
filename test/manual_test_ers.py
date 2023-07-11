@@ -251,7 +251,7 @@ def get_device_groups():
 
 
 def get_device_groups_from_filter():
-    test = ise.get_device_groups(size=100, page=1, filter="description.CONTAINS.Python")
+    test = ise.get_device_groups(size=100, page=1, filter="description.CONTAINS.sssPython")
     if not debug:
        print(f"get_device_groups_from_filter » {test}")
     else:
