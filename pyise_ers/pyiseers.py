@@ -1286,7 +1286,7 @@ class ERS(object):
             result["response"] = resp.json()["UpdatedFieldsList"]
             return result
         else:
-            return CiscoISE._pass_ersresponse(result, resp)
+            return ERS._pass_ersresponse(result, resp)
     
     def delete_endpoint(self, mac):
         """
