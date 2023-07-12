@@ -118,14 +118,14 @@ sys.path.append('/path/to/parent/pyise-ers/')
 
 ```python
 from pyiseers import ERS
-ise = ERS(ise_node='8.8.8.8', ers_user='ers', ers_pass='supersecret', ers_port='9060', verify=False, disable_warnings=True)
+ise = ERS(ise_node='8.8.8.8', ers_user='ers', ers_pass='supersecret', ers_port=9060, verify=False, disable_warnings=True)
 ```
 
 If ISE is configured to require CSRF for ERS requests for Enhanced Security, you can add the "use_csrf" tag:
 
 ```python
 from pyiseers import ERS
-ise = ERS(ise_node='8.8.8.8', ers_user='ers', ers_pass='supersecret', ers_port='9060', verify=False, disable_warnings=True, use_csrf=True)
+ise = ERS(ise_node='8.8.8.8', ers_user='ers', ers_pass='supersecret', ers_port=9060, verify=False, disable_warnings=True, use_csrf=True)
 ```
 
 #### Methods return a result dictionary
