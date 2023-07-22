@@ -1244,11 +1244,7 @@ class ERS(object):
             else:
                 return ERS._pass_ersresponse(result, resp)
 
-    def update_endpoint_group(
-        self,
-        endpoint_id,
-        group_id
-    ):
+    def update_endpoint_group(self, endpoint_id, group_id):
         """
         Updates an endpoint group assignment.
 
@@ -1257,7 +1253,7 @@ class ERS(object):
 
         :return: result dictionary
         """
-        
+
         self.ise.headers.update(
             {"ACCEPT": "application/json", "Content-Type": "application/json"}
         )
@@ -1268,12 +1264,7 @@ class ERS(object):
             "error": "",
         }
 
-        data = {
-            "ERSEndPoint": {
-                "groupId": group_id,
-                "staticGroupAssignment": True
-            }
-        }
+        data = {"ERSEndPoint": {"groupId": group_id, "staticGroupAssignment": True}}
 
         resp = self._request(
             f"{self.url_base}/config/endpoint/{endpoint_id}",
@@ -1287,7 +1278,7 @@ class ERS(object):
             return result
         else:
             return ERS._pass_ersresponse(result, resp)
-    
+
     def delete_endpoint(self, mac):
         """
         Delete an endpoint.
@@ -1633,7 +1624,7 @@ class ERS(object):
             f"{self.url_base}/config/networkdevicegroup",
             filter=filter,
             size=size,
-            page=page
+            page=page,
         )
 
     def get_device_group(self, device_group_oid=None, name=None):

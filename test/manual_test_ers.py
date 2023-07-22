@@ -37,7 +37,7 @@ def add_endpoint(endpoint):
         endpoint["name"], endpoint["mac"], endpoint["group-id"]
     )  # noqa: E501
     if debug:
-       print(f"add_endpoint » {test}")
+        print(f"add_endpoint » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -48,7 +48,7 @@ def add_endpoint(endpoint):
 def get_endpoints():
     test = ise.get_endpoints(size=100, page=1)
     if debug:
-       print(f"get_endpoints » {test}")
+        print(f"get_endpoints » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -59,7 +59,7 @@ def get_endpoints():
 def get_endpoint(endpoint):
     test = ise.get_endpoint(endpoint["mac"])
     if debug:
-       print(f"get_endpoint » {test}")
+        print(f"get_endpoint » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -70,7 +70,7 @@ def get_endpoint(endpoint):
 def delete_endpoint(endpoint):
     test = ise.delete_endpoint(endpoint["mac"])
     if debug:
-       print(f"delete_endpoint » {test}")
+        print(f"delete_endpoint » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -78,10 +78,27 @@ def delete_endpoint(endpoint):
             print("delete_endpoint » OK")
 
 
+def update_endpoint_group(endpoint):
+    endpoint_group_dict = ise.get_endpoint_group("Cisco-IP-Phone")
+    ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
+    r1 = ise.get_endpoint(endpoint["mac"])
+    test = ise.update_endpoint_group(
+        endpoint_id=r1["response"]["id"], group_id=endpoint_group_dict["response"]["id"]
+    )
+    if debug:
+        print(f"update_endpoint_group » {test}")
+    else:
+        if test["error"]:
+            print(test["response"])
+        else:
+            print("update_endpoint_group » OK")
+    ise.delete_endpoint(endpoint["mac"])
+
+
 def get_endpoint_groups(size):
     test = ise.get_endpoint_groups(size=100, page=1)
     if debug:
-       print(f"get_endpoint_groups » {test}")
+        print(f"get_endpoint_groups » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -92,7 +109,7 @@ def get_endpoint_groups(size):
 def add_endpoint_group(endpoint_group):
     test = ise.add_endpoint_group(endpoint_group["name"], endpoint_group["description"])
     if debug:
-       print(f"add_endpoint_group » {test}")
+        print(f"add_endpoint_group » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -104,7 +121,7 @@ def delete_endpoint_group(endpoint_group):
     r1 = ise.get_endpoint_group(endpoint_group["name"])
     test = ise.delete_endpoint_group(r1["response"]["id"])
     if debug:
-       print(f"delete_endpoint_group » {str(test)}")
+        print(f"delete_endpoint_group » {str(test)}")
     else:
         if test["error"]:
             print(test["response"])
@@ -115,7 +132,7 @@ def delete_endpoint_group(endpoint_group):
 def get_endpoint_group(endpoint_group):
     test = ise.get_endpoint_group(endpoint_group["name"])
     if debug:
-       print(f"get_endpoint_group » {test}")
+        print(f"get_endpoint_group » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -126,7 +143,7 @@ def get_endpoint_group(endpoint_group):
 def get_identity_groups():
     test = ise.get_identity_groups(size=100, page=1)
     if debug:
-       print(f"get_identity_groups » {test}")
+        print(f"get_identity_groups » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -137,7 +154,7 @@ def get_identity_groups():
 def get_identity_group(identity_group):
     test = ise.get_identity_group(identity_group["name"])
     if debug:
-       print(f"get_identity_group » {test}")
+        print(f"get_identity_group » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -160,7 +177,7 @@ def add_user(user, identity_group_id):
         email=user["email"],
     )
     if debug:
-       print(f"add_user » {test}")
+        print(f"add_user » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -171,7 +188,7 @@ def add_user(user, identity_group_id):
 def get_users():
     test = ise.get_users(size=100, page=1)
     if debug:
-       print(f"get_users » {test}")
+        print(f"get_users » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -182,7 +199,7 @@ def get_users():
 def get_user(user):
     test = ise.get_user(user["user_id"])
     if debug:
-       print(f"get_user » {test}")
+        print(f"get_user » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -193,7 +210,7 @@ def get_user(user):
 def get_user_by_email(user):
     test = ise.get_user_by_email(user["email"])
     if debug:
-       print(f"get_user_by_email » {test}")
+        print(f"get_user_by_email » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -204,7 +221,7 @@ def get_user_by_email(user):
 def delete_user(user):
     test = ise.delete_user(user["user_id"])
     if debug:
-       print(f"delete_user » {test}")
+        print(f"delete_user » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -215,7 +232,7 @@ def delete_user(user):
 def get_admin_user(admin_user):
     test = ise.get_admin_user(admin_user)
     if debug:
-       print(f"get_admin_user » {test}")
+        print(f"get_admin_user » {test}")
     else:
         if test["error"]:
             print(test["error"])
@@ -228,7 +245,7 @@ def add_device_group(device_group):
         name=device_group["name"], description=device_group["description"]
     )
     if debug:
-       print(f"add_device_group »{test}")
+        print(f"add_device_group »{test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -239,7 +256,7 @@ def add_device_group(device_group):
 def get_device_groups():
     test = ise.get_device_groups(size=100, page=1)
     if debug:
-       print(f"get_device_groups » {test}")
+        print(f"get_device_groups » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -251,9 +268,9 @@ def get_device_groups():
 
 
 def get_device_groups_from_filter():
-    test = ise.get_device_groups(size=100, page=1, filter="description.CONTAINS.sssPython")
-    if not debug:
-       print(f"get_device_groups_from_filter » {test}")
+    test = ise.get_device_groups(size=100, page=1, filter="description.CONTAINS.Python")
+    if debug:
+        print(f"get_device_groups_from_filter » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -267,7 +284,7 @@ def get_device_groups_from_filter():
 def get_device_group_from_name():
     test = ise.get_device_group(name="Python")
     if debug:
-       print(f"get_device_group_from_name » {test}")
+        print(f"get_device_group_from_name » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -281,7 +298,7 @@ def get_device_group_from_name():
 def get_device_group(device_group_id):
     test = ise.get_device_group(device_group_id)
     if debug:
-       print(f"get_device_group » {test}")
+        print(f"get_device_group » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -296,7 +313,7 @@ def update_device_group(device_group_id):
         description="Update Description",
     )
     if debug:
-       print(f"update_device_group » {test}")
+        print(f"update_device_group » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -310,7 +327,7 @@ def delete_device_group():
         name="Device Type#All Device Types#Updated Device Type"
     )
     if debug:
-       print(f"delete_device_group » {test}")
+        print(f"delete_device_group » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -347,7 +364,7 @@ def add_device(device):
         ],
     )
     if debug:
-       print(f"add_device » {test}")
+        print(f"add_device » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -356,7 +373,7 @@ def add_device(device):
 
     cleanup = ise.delete_device_group(name=device["dev_group"])
     if debug:
-       print(f"{cleanup}")
+        print(f"{cleanup}")
 
 
 def add_device_multi_ip(device):
@@ -388,7 +405,7 @@ def add_device_multi_ip(device):
         ],
     )
     if debug:
-       print(f"add_device_multi_ip » {test}")
+        print(f"add_device_multi_ip » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -397,16 +414,16 @@ def add_device_multi_ip(device):
 
     cleanup = ise.delete_device(device["name_mip"])
     if debug:
-       print(f"{cleanup}")
+        print(f"{cleanup}")
     cleanup = ise.delete_device_group(name=device["dev_group"])
     if debug:
-       print(f"{cleanup}")
+        print(f"{cleanup}")
 
 
 def update_device_name(device):
     test = ise.update_device(name=device["name"], new_name=device["new_name"])
     if debug:
-       print(f"update_device » {test}")
+        print(f"update_device » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -417,7 +434,7 @@ def update_device_name(device):
 def update_device_radius_key(device):
     test = ise.update_device(name=device["new_name"], radius_key="new-test-radius-key")
     if debug:
-       print(f"update_device_radius_key » {test}")
+        print(f"update_device_radius_key » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -428,7 +445,7 @@ def update_device_radius_key(device):
 def add_device_payload(device_payload):
     test = ise.add_device(device_payload=device_payload)
     if debug:
-       print(f"add_device_payload » {test}")
+        print(f"add_device_payload » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -439,7 +456,7 @@ def add_device_payload(device_payload):
 def get_devices():
     test = ise.get_devices(size=100, page=1)
     if debug:
-       print(f"get_devices » {test}")
+        print(f"get_devices » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -450,7 +467,7 @@ def get_devices():
 def get_device(device):
     test = ise.get_device(device["name"])
     if debug:
-       print(f"get_device » {test}")
+        print(f"get_device » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -461,7 +478,7 @@ def get_device(device):
 def get_updated_device(device):
     test = ise.get_device(device["new_name"])
     if debug:
-       print(f"get_device » {test}")
+        print(f"get_device » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -472,7 +489,7 @@ def get_updated_device(device):
 def delete_device(device):
     test = ise.delete_device(device["name"])
     if debug:
-       print(f"delete_device » {test}")
+        print(f"delete_device » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -483,7 +500,7 @@ def delete_device(device):
 def delete_updated_device(device):
     test = ise.delete_device(device["new_name"])
     if debug:
-       print(f"delete_updated_device » {test}")
+        print(f"delete_updated_device » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -494,7 +511,7 @@ def delete_updated_device(device):
 def get_sgts():
     test = ise.get_sgts(size=100, page=1)
     if debug:
-       print(f"get_sgts » {test}")
+        print(f"get_sgts » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -505,7 +522,7 @@ def get_sgts():
 def get_sgt(name):
     test = ise.get_sgt(name)
     if debug:
-       print(f"get_sgt » {test}")
+        print(f"get_sgt » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -521,7 +538,7 @@ def add_sgt(trustsec):
         return_object=True,
     )
     if debug:
-       print(f"add_sgt » {test}")
+        print(f"add_sgt » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -539,7 +556,7 @@ def update_sgt(id, trustsec):
         value=trustsec["test_sgt_value"],
     )
     if debug:
-       print(f"update_sgt » {test}")
+        print(f"update_sgt » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -550,7 +567,7 @@ def update_sgt(id, trustsec):
 def delete_sgt(id):
     test = ise.delete_sgt(id)
     if debug:
-       print(f"delete_sgt » {test}")
+        print(f"delete_sgt » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -561,7 +578,7 @@ def delete_sgt(id):
 def get_sgacls():
     test = ise.get_sgacls(size=100, page=1)
     if debug:
-       print(f"get_sgacls » {test}")
+        print(f"get_sgacls » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -572,7 +589,7 @@ def get_sgacls():
 def get_sgacl(name):
     test = ise.get_sgacl(name)
     if debug:
-       print(f"get_sgacl » {test}")
+        print(f"get_sgacl » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -589,7 +606,7 @@ def add_sgacl(trustsec):
         return_object=True,
     )
     if debug:
-       print(f"add_sgacl » {test}")
+        print(f"add_sgacl » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -608,7 +625,7 @@ def update_sgacl(id, trustsec):
         acl_content=["permit ip"],
     )
     if debug:
-       print(f"update_sgacl » {test}")
+        print(f"update_sgacl » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -619,7 +636,7 @@ def update_sgacl(id, trustsec):
 def delete_sgacl(id):
     test = ise.delete_sgacl(id)
     if debug:
-       print(f"delete_sgacl »  {test}")
+        print(f"delete_sgacl »  {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -630,7 +647,7 @@ def delete_sgacl(id):
 def get_emcs():
     test = ise.get_egressmatrixcells(size=100, page=1)
     if debug:
-       print(f"get_egressmatrixcells » {test}")
+        print(f"get_egressmatrixcells » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -641,13 +658,12 @@ def get_emcs():
 def get_emc(name):
     test = ise.get_egressmatrixcell(name)
     if debug:
-       print(f"get_egressmatrixcell » {test}")
+        print(f"get_egressmatrixcell » {test}")
     else:
         if test["error"]:
             print(test["response"])
         else:
             print("get_egressmatrixcell » OK")
-
 
 
 def add_emc(trustsec):
@@ -658,13 +674,13 @@ def add_emc(trustsec):
         return_object=True,
     )
     if debug:
-       print(f"add_egressmatrixcell » {test}")
+        print(f"add_egressmatrixcell » {test}")
     else:
         if test["error"]:
             print(test["response"])
         else:
             print("add_egressmatrixcell » OK")
-    
+
     return test["response"]["id"]
 
 
@@ -678,7 +694,7 @@ def update_emc(id, trustsec):
         acls=[trustsec["test_assign_acl"]],
     )
     if debug:
-       print(f"update_egressmatrixcell »  {test}")
+        print(f"update_egressmatrixcell »  {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -689,7 +705,7 @@ def update_emc(id, trustsec):
 def delete_emc(id):
     test = ise.delete_egressmatrixcell(id)
     if debug:
-       print(f"delete_egressmatrixcell » {test}")
+        print(f"delete_egressmatrixcell » {test}")
     else:
         if test["error"]:
             print(test["response"])
@@ -716,6 +732,7 @@ if __name__ == "__main__":
     get_endpoints()
     get_endpoint(endpoint)
     delete_endpoint(endpoint)
+    update_endpoint_group(endpoint)
 
     # EndpointGroup tests
     add_endpoint_group(endpoint_group)
