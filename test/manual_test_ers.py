@@ -9,6 +9,7 @@ sys.path.append("./pyise_ers/")
 from pprint import pprint  # noqa E402
 
 from config import (  # noqa E402
+    debug,
     device,
     device_group,
     device_payload,
@@ -18,9 +19,7 @@ from config import (  # noqa E402
     trustsec,
     uri,
     user,
-    debug,
 )
-
 from pyiseers import ERS  # noqa E402
 
 
