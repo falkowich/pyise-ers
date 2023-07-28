@@ -19,7 +19,6 @@ from config import (  # noqa E402
     uri,
     user,
 )
-
 from pyiseers import ERS  # noqa E402
 
 urllib3.disable_warnings()
@@ -133,6 +132,39 @@ def test_delete_endpoint_not_found():  # noqa D103
     assert r1["success"] is False
     assert r1["response"] == "00:00:00:00:00:00 not found"
     assert r1["error"] == 404
+
+
+def test_update_endpoint_group():  # noqa D103
+    epg = ise.get_endpoint_group("Cisco-IP-Phone")
+    ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
+    ep = ise.get_endpoint(endpoint["mac"])
+    r1 = ise.update_endpoint_group(ep["response"]["id"], epg["response"]["id"])
+    assert r1["success"] is True
+    assert "groupId" in str(r1["response"])
+    ise.delete_endpoint(endpoint["mac"])
+
+
+def test_update_endpoint_group_faulty_endpoint_id():  # noqa D103
+    epg = ise.get_endpoint_group("Cisco-IP-Phone")
+    r1 = ise.update_endpoint_group(
+        "fffffffff-fffff-ffff-ffff-ffffffffffff", epg["response"]["id"]
+    )
+    assert r1["success"] is False
+    assert (
+        "Canot find endpoint with ID 'fffffffff-fffff-ffff-ffff-ffffffffffff'"
+        in str(r1["response"])
+    )
+
+
+def test_update_endpoint_group_faulty_endpointgroup():  # noqa D103
+    ise.add_endpoint(endpoint["name"], endpoint["mac"], endpoint["group-id"])
+    ep = ise.get_endpoint(endpoint["mac"])
+    r1 = ise.update_endpoint_group(
+        ep["response"]["id"], "fffffffff-fffff-ffff-ffff-ffffffffffff"
+    )
+    assert r1["success"] is False
+    assert "UPDATE: DB internal error during CRUD operation" in str(r1["response"])
+    ise.delete_endpoint(endpoint["mac"])
 
 
 # @pytest.mark.vcr
@@ -255,6 +287,7 @@ def test_get_user_not_found():  # noqa D103
     assert r1["success"] is False
     assert r1["error"] == 404
 
+
 # @pytest.mark.vcr
 def test_get_user_by_email():  # noqa D103
     r1 = ise.get_user_by_email(user["email"])
@@ -267,6 +300,7 @@ def test_get_user_by_email_not_found():  # noqa D103
     r1 = ise.get_user_by_email("this.user@does.not.exist")
     assert r1["success"] is False
     assert r1["error"] == 404
+
 
 # @pytest.mark.vcr
 def test_delete_user():  # noqa D103
@@ -283,7 +317,6 @@ def test_delete_user_not_found():  # noqa D103
     assert r1["error"] == 404
 
 
-
 def test_get_admin_user():  # noqa D103
     r1 = ise.get_admin_user("admin")
     assert r1["success"] is True
@@ -295,7 +328,6 @@ def test_get_admin_user_not_found():  # noqa D103
     r1 = ise.get_admin_user("not_an_admin_user")
     assert r1["success"] is False
     assert r1["error"] == 404
-
 
 
 # @pytest.mark.vcr
@@ -345,7 +377,9 @@ def test_get_device_groups_from_filter():
 
 # @pytest.mark.vcr
 def test_get_device_groups_from_filter_not_found():
-    r1 = ise.get_device_groups(size=100, page=1, filter="description.CONTAINS.xxXXxxxXXxx")
+    r1 = ise.get_device_groups(
+        size=100, page=1, filter="description.CONTAINS.xxXXxxxXXxx"
+    )
     assert r1["success"] is True
     assert r1["response"] == []
 

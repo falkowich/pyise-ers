@@ -39,6 +39,11 @@ wheel = "^0.40.0"
 isort = "^5.12.0"
 bandit = "^1.7.5"
 safety = "^2.3.5"
+pyment = "^0.3.3"
+
+[tool.bandit]
+exclude_dirs = [".venv", "tests"]
+skips = ["B101", "B106", "B311"]
 
 [build-system]
 requires = ["poetry-core"]
