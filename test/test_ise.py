@@ -55,15 +55,28 @@ def test_fail_connection_401():  # noqa D103
     assert r1["error"] == 401
 
 
-ise = ERS(
-    ise_node=uri["ise_node"],
-    ers_user=uri["ers_user"],
-    ers_pass=uri["ers_pass"],
-    verify=False,
-    disable_warnings=True,
-    timeout=15,
-    use_csrf=uri["use_csrf"],
-)
+# For ISE 3.1 or later, ERS port can be changed
+if float(uri["ise_version"]) >= 3.1:
+    ise = ERS(
+        ise_node=uri["ise_node"],
+        ers_user=uri["ers_user"],
+        ers_pass=uri["ers_pass"],
+        ers_port=uri["ers_port"],
+        verify=False,
+        disable_warnings=True,
+        timeout=15,
+        use_csrf=uri["use_csrf"],
+    )
+else:
+    ise = ERS(
+        ise_node=uri["ise_node"],
+        ers_user=uri["ers_user"],
+        ers_pass=uri["ers_pass"],
+        verify=False,
+        disable_warnings=True,
+        timeout=15,
+        use_csrf=uri["use_csrf"],
+    )
 
 
 # @pytest.mark.vcr
