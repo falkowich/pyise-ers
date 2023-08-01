@@ -25,6 +25,7 @@ class ERS(object):
         ise_node,
         ers_user,
         ers_pass,
+        ers_port=9060,
         verify=False,
         disable_warnings=False,
         use_csrf=False,
@@ -45,8 +46,9 @@ class ERS(object):
         self.user_name = ers_user
         self.user_pass = ers_pass
         self.protocol = protocol
+        self.ers_port = ers_port
 
-        self.url_base = f"{self.protocol}://{self.ise_node}:9060/ers"
+        self.url_base = f"{self.protocol}://{self.ise_node}:{self.ers_port}/ers"
         self.ise = requests.sessions.Session()
         self.ise.auth = (self.user_name, self.user_pass)
         # http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification
