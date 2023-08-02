@@ -8,6 +8,18 @@
 
 Python module to manage Cisco ISE via the REST API.  
 
+
+## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Recent activity [![Time period](https://images.repography.com/40318014/falkowich/pyise-ers/recent-activity/8nHerXPThHSoRuaAcaHDP2lLz0EvzfqshE3KB2PqjLE/DZMNQ9aTZI17ApI0hq_AsBj0rIpPrPaxaIE71EwbtZM_badge.svg)](https://repography.com)
+[![Timeline graph](https://images.repography.com/40318014/falkowich/pyise-ers/recent-activity/8nHerXPThHSoRuaAcaHDP2lLz0EvzfqshE3KB2PqjLE/DZMNQ9aTZI17ApI0hq_AsBj0rIpPrPaxaIE71EwbtZM_timeline.svg)](https://github.com/falkowich/pyise-ers/commits)
+[![Issue status graph](https://images.repography.com/40318014/falkowich/pyise-ers/recent-activity/8nHerXPThHSoRuaAcaHDP2lLz0EvzfqshE3KB2PqjLE/DZMNQ9aTZI17ApI0hq_AsBj0rIpPrPaxaIE71EwbtZM_issues.svg)](https://github.com/falkowich/pyise-ers/issues)
+[![Pull request status graph](https://images.repography.com/40318014/falkowich/pyise-ers/recent-activity/8nHerXPThHSoRuaAcaHDP2lLz0EvzfqshE3KB2PqjLE/DZMNQ9aTZI17ApI0hq_AsBj0rIpPrPaxaIE71EwbtZM_prs.svg)](https://github.com/falkowich/pyise-ers/pulls)
+[![Trending topics](https://images.repography.com/40318014/falkowich/pyise-ers/recent-activity/8nHerXPThHSoRuaAcaHDP2lLz0EvzfqshE3KB2PqjLE/DZMNQ9aTZI17ApI0hq_AsBj0rIpPrPaxaIE71EwbtZM_words.svg)](https://github.com/falkowich/pyise-ers/commits)
+[![Top contributors](https://images.repography.com/40318014/falkowich/pyise-ers/recent-activity/8nHerXPThHSoRuaAcaHDP2lLz0EvzfqshE3KB2PqjLE/DZMNQ9aTZI17ApI0hq_AsBj0rIpPrPaxaIE71EwbtZM_users.svg)](https://github.com/falkowich/pyise-ers/graphs/contributors)
+[![Activity map](https://images.repography.com/40318014/falkowich/pyise-ers/recent-activity/8nHerXPThHSoRuaAcaHDP2lLz0EvzfqshE3KB2PqjLE/DZMNQ9aTZI17ApI0hq_AsBj0rIpPrPaxaIE71EwbtZM_map.svg)](https://github.com/falkowich/pyise-ers/commits)
+
+
+
+
 ## Information about the master branch
 
 ### As of May 6, 2023
