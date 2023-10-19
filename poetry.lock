@@ -477,13 +477,13 @@ smmap = ">=3.0.1,<6"
 
 [[package]]
 name = "gitpython"
-version = "3.1.38"
+version = "3.1.40"
 description = "GitPython is a Python library used to interact with Git repositories"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "GitPython-3.1.38-py3-none-any.whl", hash = "sha256:9e98b672ffcb081c2c8d5aa630d4251544fb040fb158863054242f24a2a2ba30"},
-    {file = "GitPython-3.1.38.tar.gz", hash = "sha256:4d683e8957c8998b58ddb937e3e6cd167215a180e1ffd4da769ab81c620a89fe"},
+    {file = "GitPython-3.1.40-py3-none-any.whl", hash = "sha256:cf14627d5a8049ffbf49915732e5eddbe8134c3bdb9d476e6182b676fc573f8a"},
+    {file = "GitPython-3.1.40.tar.gz", hash = "sha256:22b126e9ffb671fdd0c129796343a02bf67bf2994b35449ffc9321aa755e18a4"},
 ]
 
 [package.dependencies]
@@ -1168,20 +1168,20 @@ jupyter = ["ipywidgets (>=7.5.1,<9)"]
 
 [[package]]
 name = "ruamel-yaml"
-version = "0.17.35"
+version = "0.17.39"
 description = "ruamel.yaml is a YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order"
 optional = false
 python-versions = ">=3"
 files = [
-    {file = "ruamel.yaml-0.17.35-py3-none-any.whl", hash = "sha256:b105e3e6fc15b41fdb201ba1b95162ae566a4ef792b9f884c46b4ccc5513a87a"},
-    {file = "ruamel.yaml-0.17.35.tar.gz", hash = "sha256:801046a9caacb1b43acc118969b49b96b65e8847f29029563b29ac61d02db61b"},
+    {file = "ruamel.yaml-0.17.39-py3-none-any.whl", hash = "sha256:8df81a51384f2e6af73d88bede63ec437df4854a5a74841f40e7622471298457"},
+    {file = "ruamel.yaml-0.17.39.tar.gz", hash = "sha256:ee9a9178a231306d2b260e67ba497c136d4639d58b08775ab67f5fb0f21e73f0"},
 ]
 
 [package.dependencies]
 "ruamel.yaml.clib" = {version = ">=0.2.7", markers = "platform_python_implementation == \"CPython\" and python_version < \"3.13\""}
 
 [package.extras]
-docs = ["ryd"]
+docs = ["mercurial (>5.7)", "ryd"]
 jinja2 = ["ruamel.yaml.jinja2 (>=0.2)"]
 
 [[package]]
@@ -1368,13 +1368,13 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "2.0.6"
+version = "2.0.7"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "urllib3-2.0.6-py3-none-any.whl", hash = "sha256:7a7c7003b000adf9e7ca2a377c9688bbc54ed41b985789ed576570342a375cd2"},
-    {file = "urllib3-2.0.6.tar.gz", hash = "sha256:b19e1a85d206b56d7df1d5e683df4a7725252a964e3993648dd0fb5a1c157564"},
+    {file = "urllib3-2.0.7-py3-none-any.whl", hash = "sha256:fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e"},
+    {file = "urllib3-2.0.7.tar.gz", hash = "sha256:c97dfde1f7bd43a71c8d2a58e369e9b2bf692d1334ea9f9cae55add7d0dd0f84"},
 ]
 
 [package.extras]
