@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyise-ers"
-version = "0.3-dev2"
+version = "0.3.0.3"
 description = "Python wrapper for Cisco ISE ERS API"
 authors = ["Andreas Falk <falk@mockel.se>"]
 keywords=['poetry']
@@ -19,7 +19,7 @@ classifiers = [
 include = ['LICENSE']
 readme = "README.md"
 packages = [
-    { include = "pyise_ers" },
+    { include = "pyiseers" },
 ]
 
 [tool.poetry.dependencies]

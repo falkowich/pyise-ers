@@ -19,27 +19,12 @@ Python module to manage Cisco ISE via the REST API.
 
 
 
-
 ## Information about the master branch
 
 ### As of May 6, 2023
 
-The master branch is currently being developed towards a 0.3 release.  
-As a result, it is possible that some features may not work as expected until the 0.3 release is finalized and published as a package on PyPI.  
+The master branch is currently being in development.  
 Please keep this in mind when using the code from this branch.
-
-## Namechange information
-
-### After 0.2.0.1 information
-
-In 2021 I tried to publish the library to DevNet and beq modulname was just "ise" I had to do a rename on the package, module and repository.  
-
-* Repository is named pyise-ers,
-* The PyPI package is named pyise-ers.
-* The module is named pyiseers (for convenience of imports without dashes in them)
-
-If you use the "old 0.1.2.x" ise packages in PyPi, please update your requirements to pyise-ers to get continued updates.
-(after testing everything in your environment offcourse)
 
 ## History
 
@@ -51,8 +36,28 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
 * 2021-10-02 » Started work with namechange as of this [issue](https://github.com/falkowich/ise/issues/164) to pyise-ers
 * 2021-10-03 » Pushed pyise-ers 0.2.0-rc to test.pypi.com
 * 2021-10-05 » Pushed pyise-ers 0.2.0.1 to pypi.com
-  
+* 2023-10-27 » Pushed pyise-ers 0.3.0.1 - 0.3.0.3 to pypi-test
+* 2023-10-28 » Pushed pyise-ers 0.3.0.3 to pypi
+
+### Namechange information
+
+#### After 0.2.0.1 information
+
+In 2021 I tried to publish the library to DevNet and beq modulname was just "ise" I had to do a rename on the package, module and repository.  
+
+* Repository is named pyise-ers,
+* The PyPI package is named pyise-ers.
+* The module is named pyiseers (for convenience of imports without dashes in them)
+
+If you use the "old 0.1.2.x" ise packages in PyPi, please update your requirements to pyise-ers to get continued updates.
+(after testing everything in your environment offcourse)
+
 ## Status
+
+I am keeping this active until ISE 2.7 is out of support. And for you who have ISE 3.1 and above, I would recommend https://github.com/CiscoISE/ciscoisesdk project.  
+See this [discussion](https://github.com/falkowich/pyise-ers/discussions/231)
+
+Everything should work on 3.0.x train too, beq a few members uses that version. But in my test I only have access to 2.7.
 
 Tested and used in our environment at work. But as usual it's up to you to test this out in a test environment so everything works as intended.
 If you have any suggestions or find a bug, create a issue and we will try to fix it :)
@@ -69,8 +74,9 @@ These versions has been tested with pytest.
 |0.1.1|2.4.0.357|none|3.7.3|2019|deprecated|
 |0.1.2|2.7.0.356|11|3.7.7|2020|deprecated|
 |0.1.2|2.7.0.356|1|3.7.7|2020|deprecated|
-|0.2.0.1|2.7.0.356|none|3.7.12|2021-10-05|active|
-|0.2.0.1|3.0.0.458|none|3.7.12|2021-10-05|active|
+|0.2.0.1|2.7.0.356|none|3.7.12|2021-10-05|deprecated|
+|0.2.0.1|3.0.0.458|none|3.7.12|2021-10-05|deprecated|
+|0.3.0.3|2.7.0.356|none|3.10.2|2023-10-28|active|
 
 There are two tests available in tests/ directory.
 

@@ -4,7 +4,7 @@
 
 import sys
 
-sys.path.append("./pyise_ers/")
+sys.path.append("./pyiseers/")
 
 from pprint import pprint  # noqa E402
 
