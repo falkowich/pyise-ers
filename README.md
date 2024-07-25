@@ -6,6 +6,10 @@
 
 # ISE-ERS API Wrapper
 
+In September 2024 this repo will be set to archived,  
+[See discussion here »](https://github.com/falkowich/pyise-ers/discussions/231#discussioncomment-7406385)
+
+
 Python module to manage Cisco ISE via the REST API.  
 
 
