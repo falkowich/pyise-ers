@@ -1,8 +1,12 @@
 
-[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/falkowich/pyise-ers)
-![Discord](https://img.shields.io/discord/858319928703975454?logo=discord)
-[![CodeQL](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/falkowich/pyise-ers/actions/workflows/codeql-analysis.yml)
-[![codecov](https://codecov.io/gh/falkowich/pyise-ers/branch/master/graph/badge.svg?token=SX8BKVKZQL)](https://codecov.io/gh/falkowich/pyise-ers)
+# September 2024 - Repository goes into Archive mode
+As of 2024-09-24 this library goes in to Archive.  
+ISE 2.7 are marked as EoL, see » [End of Life Announcement for the Cisco Identity Services Engine Software Version 2.7](https://www.cisco.com/c/en/us/products/collateral/security/identity-services-engine/bulletin-c25-2943876.html)
+
+If anyone want to continue, just send me a note or fork the repository.
+
+--
+Kind Regards Falk
 
 # ISE-ERS API Wrapper
 
